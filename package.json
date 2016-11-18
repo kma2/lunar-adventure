@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "build-watch": "webpack -w",
-    "start": "nodemon app.js"
+    "build": "webpack",
+    "start": "nodemon app.js",
+    "test": "mocha --compilers js:babel-register --watch tests/{*,**/*}.spec.js"
   },
   "repository": {
     "type": "git",
