@@ -2,7 +2,7 @@
 //cant use require on browser side - if want this file bring it in another way
 
 function createShip(pixiObj) {
-	pixiObj.position = {x:0, y: -window.innerHeight / 1.5};
+	pixiObj.position = {x:5, y: -window.innerHeight / 1.5};
 	pixiObj.velocity = {x:0, y:0};
 	pixiObj.rotation = 0;
 	pixiObj.rotationSpeed = 6;
@@ -94,13 +94,7 @@ function init() {
 		ship.anchor.y = 0.5;
 		ship.width = 40;
 		ship.height = 100;
-		console.log('the ship', ship)
-		// rocket.velocity = {x:0, y:0}
-		// rocket.rotation = 0;
-		// rocket.rotationSpeed = 6;
-		// rocket.speed = 0.15;
-		// rocket.inertia = 0.99;
-		// rocket.gravity = 0.0005;
+		console.log('the ship', ship.velocity.y)
 
 		//radius will be very important to detect the collision
 		ship.radius = 10;
@@ -121,38 +115,40 @@ function init() {
 	    var key = e.keyCode;
 	    keyState[event.keyCode || event.which] = false;
 	})
-
+	//left = 37 65
+	//right = 39 68
+	//up = 38 or 87
 
 	function checkKeyStates () {
-		if (keyState[38] || keyState[87]) ship.position.y -= 10;
-		if (keyState[40] || keyState[83]) ship.position.y += 10;
-		if (keyState[37] || keyState[65]) {
-			if (ship.rotation > -0.5) ship.rotation -= 0.1;	
-			if (ship.position.x > -400)	{
-				// ship.velocity += 0.05;
-	  		ship.position.x -= 10;
-	  		// ship.position.x -= Math.abs(ship.velocity);
-	  	} else { 
-	  		planet.rotation += 0.01;
-	  	}    
-		}
-		if (keyState[39] || keyState[68]) {
-			if (ship.rotation < 0.5) ship.rotation += 0.1;
-			if (ship.position.x < 400)	{
-				// ship.velocity -= 0.05;
-	  		ship.position.x += 10
-	  		// ship.position.x += Math.abs(ship.velocity);
-	  	} else { 
-	  		stage.velocity = 0.01;
-	  		planet.rotation -= stage.velocity;
-	  	}
-		}
+		if (keyState[38] || keyState[87]) ship.accelerate();
+		// if (keyState[40] || keyState[83]) ship.position.y += 10;
+		// if (keyState[37] || keyState[65]) {
+		// 	if (ship.rotation > -0.5) ship.rotation -= 0.1;	
+		// 	if (ship.position.x > -400)	{
+		// 		// ship.velocity += 0.05;
+	 //  		ship.position.x -= 10;
+	 //  		// ship.position.x -= Math.abs(ship.velocity);
+	 //  	} else { 
+	 //  		planet.rotation += 0.01;
+	 //  	}    
+		// }
+		// if (keyState[39] || keyState[68]) {
+		// 	if (ship.rotation < 0.5) ship.rotation += 0.1;
+		// 	if (ship.position.x < 400)	{
+		// 		// ship.velocity -= 0.05;
+	 //  		ship.position.x += 10
+	 //  		// ship.position.x += Math.abs(ship.velocity);
+	 //  	} else { 
+	 //  		stage.velocity = 0.01;
+	 //  		planet.rotation -= stage.velocity;
+	 //  	}
+		// }
 
 		// make ship straight when all keys are up
-		if (ship.rotation !== 0 && (!keyState[37] && !keyState[65] && !keyState[39] && !keyState[68])) {
-			if (ship.rotation < 0) ship.rotation += 0.01;
-			else ship.rotation -= 0.01;
-		}
+		// if (ship.rotation !== 0 && (!keyState[37] && !keyState[65] && !keyState[39] && !keyState[68])) {
+		// 	if (ship.rotation < 0) ship.rotation += 0.01;
+		// 	else ship.rotation -= 0.01;
+		// }
 	};
 
 	//Loop this function 60 times per second
@@ -161,7 +157,12 @@ function init() {
 	  requestAnimationFrame(checkKeyStates);
 	  
 	  // gravity
-	  ship.position.y += 0.2;
+	  ship.position.x += ship.velocity.x
+	  ship.position.y += ship.velocity.y
+	  // console.log(ship.velocity.y)
+	  ship.velocity.x *= ship.inertia
+	  ship.velocity.y *= this.inertia
+	  // ship.position.y += 0.2;
 
 	  //Render the stage
 	  renderer.render(stage);
