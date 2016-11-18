@@ -5,10 +5,11 @@ function createShip(pixiObj) {
 	pixiObj.position = {x:5, y: -window.innerHeight / 1.5};
 	pixiObj.velocity = {x:0, y:0};
 	pixiObj.rotation = 0;
-	pixiObj.rotationSpeed = 6;
+	pixiObj.rotationSpeed = .15;
 	pixiObj.speed = 0.15;
 	pixiObj.inertia = 0.99;
-	pixiObj.gravity = 0.0005;
+	//was 0.035
+	pixiObj.gravity = 0.005;
 	pixiObj.radius = 20;
 	pixiObj.rotate = function(direction) {
 		if(direction === 'right') {
@@ -23,6 +24,8 @@ function createShip(pixiObj) {
 		this.velocity.y -= Math.cos(-1 *  this.rotation * (Math.PI/180)) * this.speed
 	}
 }
+// event.clientX and event.clientY to get coordinates on event of box item
+// Math.atan - returns angle in radians
 // Ship.prototype.rotate = function(direction) {
 // 	if(direction === 'right') {
 // 		this.rotation += this.rotationSpeed
@@ -66,7 +69,7 @@ function init() {
 
 
 	//This `setup` function will run when the image has loaded
-	var planet, rocket
+	var planet, ship
 	function setup() {
 
   	//Create the `planet` sprite from the texture
@@ -94,7 +97,7 @@ function init() {
 		ship.anchor.y = 0.5;
 		ship.width = 40;
 		ship.height = 100;
-		console.log('the ship', ship.velocity.y)
+		// console.log('the ship', ship.velocity.y)
 
 		//radius will be very important to detect the collision
 		ship.radius = 10;
@@ -120,7 +123,19 @@ function init() {
 	//up = 38 or 87
 
 	function checkKeyStates () {
-		if (keyState[38] || keyState[87]) ship.accelerate();
+		if (keyState[38] || keyState[87]) {
+			// console.log('up key pressed')
+			ship.accelerate()
+			// console.log(ship.velocity.y)
+		}
+		if (keyState[37] || keyState[65]) {
+			// console.log('left key pressed')
+			ship.rotate('left')
+		}
+		if (keyState[39] || keyState[68]) {
+			// console.log('right key pressed')
+			ship.rotate('right')
+		}
 		// if (keyState[40] || keyState[83]) ship.position.y += 10;
 		// if (keyState[37] || keyState[65]) {
 		// 	if (ship.rotation > -0.5) ship.rotation -= 0.1;	
@@ -153,6 +168,11 @@ function init() {
 
 	//Loop this function 60 times per second
 	function gameLoop(){
+
+	
+		console.log(ship.position)
+	
+
 	  requestAnimationFrame(gameLoop);
 	  requestAnimationFrame(checkKeyStates);
 	  
@@ -161,7 +181,8 @@ function init() {
 	  ship.position.y += ship.velocity.y
 	  // console.log(ship.velocity.y)
 	  ship.velocity.x *= ship.inertia
-	  ship.velocity.y *= this.inertia
+	  ship.velocity.y += ship.gravity
+	  ship.velocity.y *= ship.inertia
 	  // ship.position.y += 0.2;
 
 	  //Render the stage
