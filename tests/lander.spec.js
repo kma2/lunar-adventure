@@ -11,10 +11,10 @@ var expect = chai.expect;
 const Ship = require('../server/lander.js')
 
 describe('ship', () => {
-	let shipObj;
+	let shipObj, spy;
 
 	beforeEach('create a new ship object', () => {
-    let spy = chai.spy(Ship);
+    spy = chai.spy(Ship);
 		shipObj = new Ship({x: 0, y:0})
 	})
 
@@ -22,11 +22,11 @@ describe('ship', () => {
 		it('it is a constructor function', () => {
 			expect(typeof Ship).to.equal('function')
 		})
-		it('takes object as input', () => {
+		xit('takes object as input', () => {
 			expect(spy).to.have.been.called.with({x: 0, y:0})
       // expect(typeof arguments[0]).to.equal('object')
 		})
-		it('has x and y numbers on the input obj', () => {
+		xit('has x and y numbers on the input obj', () => {
       console.log(shipObj.arguments)
 			expect(arguments[0].x).to.be.a('number')
 			expect(arguments[0].y).to.be.a('number')
@@ -64,43 +64,43 @@ describe('ship', () => {
     it('has radius property set to 20', () => {
       expect(shipObj.radius).to.equal(20)
     })
+  })
 
   describe('ship methods', () => {
+    let velX, velY;
 
     beforeEach('create a new ship object', () => {
       shipObj = new Ship({x: 0, y: 0});
-      shipObj.rotate('left')
-	  })
+      velX = shipObj.velocity.x
+      velY = shipObj.velocity.y
+      shipObj.accelerate()
+    })
 
     describe('rotate', () => {
       xit('takes a direction as an argument',() =>{
         expect(typeof arguments[0]).to.equal('string')
       })
       it('subracts rotations speed from rotation if direction is left', () => {   
+        shipObj.rotate('left')
         expect(shipObj.rotation).to.equal(-6)
       })
       it('adds rotations speed to rotation if direction is right', () => {
-        shipObj.rotate('right')
         shipObj.rotate('right')
         expect(shipObj.rotation).to.equal(6)
       })
     })
 
     describe('accelerate', () => {
-      xit('subracts from velocity.x, rotation angle times speed', () => {
+
+      it('subracts from velocity.x, rotation angle times speed', () => {
         // calling with current rotation of 6
-        shipObj.accelerate();
-        expect(shipObj.velocity.x).to.equal((shipObj.velocity.x - (Math.sin(-1 * shipObj.rotation * (Math.PI/180)))* shipObj.speed))
+        expect(shipObj.velocity.x).to.equal((velX - (Math.sin(-1 * shipObj.rotation * (Math.PI/180)))* shipObj.speed))
       })
-      xit('subracts from velocity.y, rotation angle times speed', () => {
-        expect(shipObj.velocity.x).to.equal((shipObj.velocity.y - (Math.cos(-1 * shipObj.rotation * (Math.PI/180)))* shipObj.speed))
+      it('subracts from velocity.y, rotation angle times speed', () => {
+        expect(shipObj.velocity.y).to.equal((velY - (Math.cos(-1 * shipObj.rotation * (Math.PI/180)))* shipObj.speed))
       })
     })
   })
-
-
-  })
-
 })
 
 /*
@@ -121,14 +121,6 @@ what do we want to test
 - methods:
 	- rotate (takes direction)
 	- accelerate (takes value)
-	-
 -context.translate & context.rotate will be run in pixi/gameloop to change pos of ship
-
-
-
-
-
-
-
 
 */

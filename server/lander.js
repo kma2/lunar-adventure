@@ -9,8 +9,17 @@ function Ship(position) {
 	this.radius = 20;
 }
 Ship.prototype.rotate = function(direction) {
-	let change = direction === 'right' ? 6 : -6
-	this.rotation += change
+	if(direction === 'right') {
+		this.rotation += this.rotationSpeed
+	}
+	else if (direction === 'left') {
+		this.rotation -= this.rotationSpeed
+	}
+}
+
+Ship.prototype.accelerate = function() {
+	 this.velocity.x -= Math.sin(-1 *  this.rotation * (Math.PI/180)) * this.speed
+	 this.velocity.y -= Math.cos(-1 *  this.rotation * (Math.PI/180)) * this.speed
 }
 
 module.exports = Ship
