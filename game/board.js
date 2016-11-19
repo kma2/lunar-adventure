@@ -149,9 +149,6 @@ function init() {
 			ship.rotate('right')
 			// ship.position.x += ship.velocity.x
 		}
-		if (keyState[40] || keyState[83]) {
-			ship.accelerate()
-		}
 		// if (keyState[40] || keyState[83]) ship.position.y += 10;
 		// if (keyState[37] || keyState[65]) {
 		// 	if (ship.rotation > -0.5) ship.rotation -= 0.1;	
