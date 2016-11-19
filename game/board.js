@@ -5,22 +5,30 @@ function createShip(pixiObj) {
 	pixiObj.position = {x:5, y: -window.innerHeight / 1.5};
 	pixiObj.velocity = {x:0, y:0};
 	pixiObj.rotation = 0;
-	pixiObj.rotationSpeed = .15;
+	pixiObj.rotationSpeed = 0.05;
 	pixiObj.speed = 0.15;
 	pixiObj.inertia = 0.99;
 	//was 0.035
-	pixiObj.gravity = 0.005;
+	pixiObj.gravity = 0.04;
 	pixiObj.radius = 20;
 	pixiObj.rotate = function(direction) {
 		if(direction === 'right') {
-			this.rotation += this.rotationSpeed
+			// this.rotation += this.rotationSpeed
+			// if (this.rotation > 2 * Math.PI) this.rotation -= 2 * Math.PI
+			if (this.rotation < 1.5) {
+				this.rotation += this.rotationSpeed
+			}
 		}
 		else if (direction === 'left') {
-			this.rotation -= this.rotationSpeed
+			// this.rotation -= this.rotationSpeed
+			// if (this.rotation > 2 * Math.PI) this.rotation -= 2 * Math.PI
+			if (this.rotation > -1.5) {
+				this.rotation -= this.rotationSpeed
+			}
 		}
 	}
 	pixiObj.accelerate = function() {
-		this.velocity.x -= Math.sin(-1 *  this.rotation * (Math.PI/180)) * this.speed
+		this.velocity.x -= Math.sin(-1 *  this.rotation *100 * (Math.PI/180)) * this.speed;
 		this.velocity.y -= Math.cos(-1 *  this.rotation * (Math.PI/180)) * this.speed
 	}
 }
@@ -126,15 +134,23 @@ function init() {
 		if (keyState[38] || keyState[87]) {
 			// console.log('up key pressed')
 			ship.accelerate()
+			// ship.position.y += ship.velocity.y
 			// console.log(ship.velocity.y)
 		}
 		if (keyState[37] || keyState[65]) {
 			// console.log('left key pressed')
+			// ship.accelerateX('left')
 			ship.rotate('left')
+			// ship.position.y += ship.velocity.y
 		}
 		if (keyState[39] || keyState[68]) {
 			// console.log('right key pressed')
+			// ship.accelerateX('right')
 			ship.rotate('right')
+			// ship.position.x += ship.velocity.x
+		}
+		if (keyState[40] || keyState[83]) {
+			ship.accelerate()
 		}
 		// if (keyState[40] || keyState[83]) ship.position.y += 10;
 		// if (keyState[37] || keyState[65]) {
@@ -168,10 +184,6 @@ function init() {
 
 	//Loop this function 60 times per second
 	function gameLoop(){
-
-	
-		console.log(ship.position)
-	
 
 	  requestAnimationFrame(gameLoop);
 	  requestAnimationFrame(checkKeyStates);
