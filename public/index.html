@@ -19,7 +19,7 @@
 
         var graphics = new PIXI.Graphics();
 
-        // draws an octagon
+        // generates the coordinates of a octagon
         const octagon = function(radius, start_x, start_y) {
           const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
 
@@ -44,26 +44,26 @@
           return finalArray;
         }
 
-        var octagonNestedArray = octagon(180, 350, 350);
+        var octagonNestedArray = octagon(200, 200, 100);
 
+        // draws a planet shape edge by edge
         const createPlanet = function(array) {
           var points = [];
-          var height = 200;
+          var height = 150;
           var displace = height / 10;
-          var roughness = 0.6;
+          var roughness = 0.8;
           var numSegs = 10;
 
           let edgeLength = array[1][0] - array[0][0];
           const segLength = edgeLength/numSegs;
           let power = Math.pow(2, Math.ceil(Math.log(edgeLength) / (Math.log(2))));
 
-
           // TOP OF OCTAGON
           let x = array[0][0]
           let y = array[0][1];
           points.push(x)
           points.push(y)
-          for(var j = 0; j < numSegs; j++){
+          for(var j = 0; j < numSegs - 1; j++){
             x += segLength;
             y += (Math.random()*displace*2) - displace;
             points.push(x);
@@ -73,20 +73,16 @@
 
           // TOP RIGHT OF OCTAGON - work in progress
           displace = height / 10;
-          x = array[1][0];
-          y = array[1][1];
-          points.push(x)
-          points.push(y)
           for(j = 0; j < numSegs; j++){
-            x += (Math.random()*displace*2) + displace;
-            y += (Math.random()*displace*2) + displace/5;
+            x += (Math.random()*displace*2) + displace/2;
+            y += (Math.random()*displace*2) + displace/2;
             points.push(x);
             points.push(y);
             displace *= roughness;
           }
 
           // RIGHT SIDE OF OCTAGON
-          displace = height / 8;
+          displace = height / 10;
           x = array[2][0]
           y = array[2][1];
           points.push(x)
@@ -99,19 +95,19 @@
             displace *= roughness;
           }
 
-          // BOTTOM RIGHT OF OCTAGON
-          // displace = height / 10;
-          // x = array[3][0];
-          // y = array[3][1];
-          // points.push(x)
-          // points.push(y)
-          // for(j = 0; j < numSegs; j++){
-          //   x += (Math.random()*displace*2) - displace;
-          //   y += segLength;
-          //   points.push(x);
-          //   points.push(y);
-          //   displace *= roughness;
-          // }
+
+          // BOTTOM RIGHT OF OCTAGON - work in progress
+          displace = height / 10;
+          x = array[3][0];
+          y = array[3][1];
+          for(j = 0; j < numSegs; j++){
+            x -= segLength/1.6;
+            y += (Math.random()*displace*2) + displace/2;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
+
 
           // BOTTOM OF OCTAGON
           displace = height / 10;
@@ -127,11 +123,18 @@
             displace *= roughness;
           }
 
-          // BOTTOM LEFT of OCTAGON
-
+          // BOTTOM LEFT of OCTAGON - work in progress
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x -= segLength/2;
+            y -= (Math.random()*displace*2) - displace/2;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
 
           // LEFT SIDE OF OCTAGON
-          displace = height / 8;
+          displace = height / 10;
           x = array[6][0]
           y = array[6][1];
           points.push(x)
@@ -144,7 +147,15 @@
             displace *= roughness;
           }
 
-          // TOP LEFT OF OCTAGON
+          // TOP LEFT OF OCTAGON - work in progress
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x += segLength/2;
+            y -= (Math.random()*displace*2) - displace/10;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
 
           return points
         };
@@ -152,7 +163,7 @@
 
         var graphics = new PIXI.Graphics();
 
-        graphics.beginFill(0xffffff);
+        graphics.beginFill(0xeaeaea);
         graphics.drawPolygon(createPlanet(octagonNestedArray));
         graphics.endFill();
 
@@ -165,6 +176,7 @@
             renderer.render(stage);
             requestAnimationFrame(animate);
         }
+
     </script>
 
 
