@@ -14,10 +14,10 @@
         var renderer = PIXI.autoDetectRenderer(window.innerWidth-5, window.innerHeight-5, {antialias: false, transparent: false, resolution: 1});
         document.body.appendChild(renderer.view);
 
-        // Create the main stage for your display objects
+        // the main stage
         var stage = new PIXI.Container();
 
-        // generates the coordinates of a octagon
+        // generate the coordinates of a octagon
         const octagon = function(radius, start_x, start_y) {
           const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
 
@@ -48,9 +48,9 @@
         // draws a planet shape edge by edge
         const createPlanet = function(array) {
           var points = [];
-          var height = 150;
+          var height = 250;
           var displace = height / 8;
-          var roughness = 0.7;
+          var roughness = 0.8;
           var numSegs = 10;
 
           let edgeLength = array[1][0] - array[0][0];
@@ -157,10 +157,9 @@
           return points;
         };
 
-
+        // create terrain
         var terrain = new PIXI.Graphics();
-
-        terrain.beginFill(0xeaeaea);
+        terrain.beginFill(0xeaeaea); // light gray
         terrain.drawPolygon(createPlanet(octagonNestedArray));
         terrain.endFill();
 
@@ -172,13 +171,30 @@
         terrain.position.x = window.innerWidth/2;
         terrain.position.y = window.innerHeight + 200;
 
-        // add the terrain to the stage
+
+        // create launchpad (TEMPORARY MARKER)
+        var launchpad = new PIXI.Graphics();
+        launchpad.beginFill(0x68c3c0); // blue
+        launchpad.drawEllipse(window.innerWidth/2, window.innerHeight/2.5, 30, 10);
+        launchpad.endFill();
+
+        // create landingpad (TEMPORARY MARKER)
+        var landingpad = new PIXI.Graphics();
+        landingpad.beginFill(0xf4ce93); // yellow
+        landingpad.drawEllipse(window.innerWidth/2, window.innerHeight * 2, 30, 10);
+        landingpad.endFill();
+
+        // add launchpad and landingpad to the terrain
+        terrain.addChild(launchpad);
+        terrain.addChild(landingpad);
+
+        // add all elements to the stage
         stage.addChild(terrain);
 
         // Start animating
         animate();
         function animate() {
-            terrain.rotation += 0.015;
+            terrain.rotation += 0.01;
             renderer.render(stage);
             requestAnimationFrame(animate);
         }
