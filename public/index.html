@@ -5,7 +5,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.1.1/pixi.min.js"></script>
   </head>
 
-  <body onLoad='init()'>
+  <body>
     <!-- <script async dfer src=/bundle.js></script> -->
 
     <script>
@@ -16,8 +16,6 @@
 
         // Create the main stage for your display objects
         var stage = new PIXI.Container();
-
-        var graphics = new PIXI.Graphics();
 
         // generates the coordinates of a octagon
         const octagon = function(radius, start_x, start_y) {
@@ -44,14 +42,15 @@
           return finalArray;
         }
 
-        var octagonNestedArray = octagon(200, 200, 100);
+        //var octagonNestedArray = octagon(400, window.innerWidth/4, window.innerHeight/2);
+        var octagonNestedArray = octagon(500, window.innerWidth/3, window.innerHeight/2);
 
         // draws a planet shape edge by edge
         const createPlanet = function(array) {
           var points = [];
           var height = 150;
-          var displace = height / 10;
-          var roughness = 0.8;
+          var displace = height / 8;
+          var roughness = 0.7;
           var numSegs = 10;
 
           let edgeLength = array[1][0] - array[0][0];
@@ -75,7 +74,7 @@
           displace = height / 10;
           for(j = 0; j < numSegs; j++){
             x += (Math.random()*displace*2) + displace/2;
-            y += (Math.random()*displace*2) + displace/2;
+            y += (Math.random()*displace*2) + displace/10;
             points.push(x);
             points.push(y);
             displace *= roughness;
@@ -95,7 +94,6 @@
             displace *= roughness;
           }
 
-
           // BOTTOM RIGHT OF OCTAGON - work in progress
           displace = height / 10;
           x = array[3][0];
@@ -107,7 +105,6 @@
             points.push(y);
             displace *= roughness;
           }
-
 
           // BOTTOM OF OCTAGON
           displace = height / 10;
@@ -151,28 +148,37 @@
           displace = height / 10;
           for(j = 0; j < numSegs; j++){
             x += segLength/2;
-            y -= (Math.random()*displace*2) - displace/10;
+            y -= (Math.random()*displace*2) + displace/2;
             points.push(x);
             points.push(y);
             displace *= roughness;
           }
 
-          return points
+          return points;
         };
 
 
-        var graphics = new PIXI.Graphics();
+        var terrain = new PIXI.Graphics();
 
-        graphics.beginFill(0xeaeaea);
-        graphics.drawPolygon(createPlanet(octagonNestedArray));
-        graphics.endFill();
+        terrain.beginFill(0xeaeaea);
+        terrain.drawPolygon(createPlanet(octagonNestedArray));
+        terrain.endFill();
 
-        // Add the graphics to the stage
-        stage.addChild(graphics);
+        // set the pivot point of the terrain
+        terrain.pivot.x = 600;
+        terrain.pivot.y = 800;
+
+        // position the terrain in desired location
+        terrain.position.x = window.innerWidth/2;
+        terrain.position.y = window.innerHeight + 200;
+
+        // add the terrain to the stage
+        stage.addChild(terrain);
 
         // Start animating
         animate();
         function animate() {
+            terrain.rotation += 0.015;
             renderer.render(stage);
             requestAnimationFrame(animate);
         }
@@ -180,7 +186,9 @@
     </script>
 
 
-    <!-- <script>
+    <!--
+    <body onLoad='init()'>
+    <script>
         function init() {
         // keyState object to check keydown / keyup status
         var keyState = {};
