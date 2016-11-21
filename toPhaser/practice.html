@@ -1,169 +1,225 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-	<meta charset="UTF-8" />
-    <title>Phaser - Making your first game, part 9</title>
-	<script type="text/javascript" src="phaser.min.js"></script>
-    <style type="text/css">
-        body {
-            margin: 0;
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+	    <title>Lunar Adventure</title>
+		<script type="text/javascript" src="phaser.min.js"></script>
+	    <style type="text/css">
+	        body {
+	            margin: 0;
+	        }
+	    </style>
+	</head>
+	<body>
+
+		<script type="text/javascript">
+
+		var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+		//game.world.setBounds(0, 0, window.innerWidth, window.innerHeight * 2);
+
+		function preload() {
+			game.load.image('planet', 'planet2.png');
+			game.load.image('rocket', 'rocket.png');
+		}
+
+		var player;
+		var platforms;
+		var cursors;
+
+		function create() {
+
+		    //  We're going to be using physics, so enable the Arcade Physics system
+		    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+				//  Our controls.
+		    cursors = game.input.keyboard.createCursorKeys();
+
+		    // The rocket and its settings
+		    rocket = game.add.sprite(game.world.width/2, game.world.height/10, 'rocket');
+		    rocket.scale.setTo(0.05, 0.05)
+
+		    // enable physics on the rocket
+		    game.physics.arcade.enable(rocket);
+		    rocket.body.gravity.y = 300;
+		    rocket.body.collideWorldBounds = true;
+
+				//  The platforms group contains the planet and the 2 ledges we can jump on
+		    platforms = game.add.group();
+		    platforms.enableBody = true;
+
+				const octagon = function(radius, start_x, start_y) {
+          const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
+          const v1_x = start_x;
+          const v1_y = start_y;
+          const v2_x = start_x + edgeLength;
+          const v2_y = start_y;
+          let finalArray = [[v1_x, v1_y], [v2_x, v2_y]];
+          return finalArray;
         }
-    </style>
-</head>
-<body>
 
-<script type="text/javascript">
+				const createPlanet = function(array, numSegs, height) {
+          var points = [];
+          var height = 250;
+          var displace = height / 8;
+          var roughness = 0.8;
+          var numSegs = numSegs;
+          let edgeLength = array[1][0] - array[0][0];
+          const segLength = edgeLength/numSegs;
+          let power = Math.pow(2, Math.ceil(Math.log(edgeLength) / (Math.log(2))));
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+          // TOP OF OCTAGON
+          let x = array[0][0]
+          let y = array[0][1];
+          for(var j = 0; j < numSegs - 1; j++){
+            x += segLength;
+            y += (Math.random()*displace*2) - displace;
+						points.push(new Phaser.Point(x, y));
+            // points.push(x);
+            // points.push(y);
+            displace *= roughness;
+          }
 
-function preload() {
-	game.load.image('planet', 'planet2.png');
-	game.load.image('ship', 'rocket.png');
-	game.load.spritesheet('dude', 'dude.png', 32, 48);
-}
+          // TOP RIGHT OF OCTAGON - work in progress
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x += (Math.random()*displace*2) + displace/2;
+            y += (Math.random()*displace*2) + displace/10;
+            // points.push(x);
+            // points.push(y);
+						points.push(new Phaser.Point(x, y));
+            displace *= roughness;
+          }
 
-var player;
-var platforms;
-var cursors;
+          // RIGHT SIDE OF OCTAGON
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x += (Math.random()*displace*2) - displace;
+            y += segLength;
+            // points.push(x);
+            // points.push(y);
+						points.push(new Phaser.Point(x, y));
+            displace *= roughness;
+          }
 
-var stars;
-var score = 0;
-var scoreText;
+          // BOTTOM RIGHT OF OCTAGON - work in progress
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x -= segLength/1.6;
+            y += (Math.random()*displace*2) + displace/2;
+            // points.push(x);
+            // points.push(y);
+						points.push(new Phaser.Point(x, y));
+            displace *= roughness;
+          }
 
-function create() {
+          // BOTTOM OF OCTAGON
+          displace = height / 10;
+          // points.push(x)
+          // points.push(y)
+					points.push(new Phaser.Point(x, y));
+          for(j = 0; j < numSegs; j++){
+            x -= segLength;
+            y += (Math.random()*displace*2) - displace;
+            // points.push(x);
+            // points.push(y);
+						points.push(new Phaser.Point(x, y));
+            displace *= roughness;
+          }
 
-    //  We're going to be using physics, so enable the Arcade Physics system
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+          // BOTTOM LEFT of OCTAGON - work in progress
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x -= (Math.random()*displace*2) + displace/2;
+            y -= (Math.random()*displace*2) + displace/2;
+            // points.push(x);
+            // points.push(y);
+						points.push(new Phaser.Point(x, y));
+            displace *= roughness;
+          }
 
-    // //  A simple background for our game
-    // game.add.sprite(0, 0, 'planet');
+          // LEFT SIDE OF OCTAGON
+          displace = height / 10;
+          // points.push(x)
+          // points.push(y)
+					points.push(new Phaser.Point(x, y));
+          for(j = 0; j < numSegs; j++){
+            x -= (Math.random()*displace*2) - displace;
+            y -= segLength;
+            // points.push(x);
+            // points.push(y);
+						points.push(new Phaser.Point(x, y));
+            displace *= roughness;
+          }
 
-    //  The platforms group contains the planet and the 2 ledges we can jump on
-    platforms = game.add.group();
+          // TOP LEFT OF OCTAGON - work in progress
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x += segLength/2;
+            y -= (Math.random()*displace*2) + displace/2;
+            // points.push(x);
+            // points.push(y);
+						points.push(new Phaser.Point(x, y));
+            displace *= roughness;
+          }
 
-    //  We will enable physics for any object that is created in this group
-    platforms.enableBody = true;
+          x = (array[0][0] + x)/2;
+          y = (array[0][1] + y)/2;
+          console.log(x);
+          console.log(y);
+          // points.push(x);
+          // points.push(y);
+					points.push(new Phaser.Point(x, y));
+          return points;
+        };
 
-    // Here we create the planet.
-    var planet = platforms.create(0, game.world.height - 64, 'planet');
-
-    //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    planet.scale.setTo(4, 4);
-
-    //  This stops it from falling away when you jump on it
-    planet.body.immovable = true;
-
-    //  Now let's create two ledges
-    var ledge = platforms.create(-100, 400, 'planet');
-    ledge.scale.setTo(2, 2)
-    ledge.body.immovable = true;
-
-
-
-
-
+				var octagonArray = octagon(700, window.innerWidth/3, window.innerHeight/2);
 
 
+				poly = new Phaser.Polygon(createPlanet(octagonArray, 10));
+				graphics = game.add.graphics(100, 100);
 
-    // The player and its settings
-    player = game.add.sprite(32, game.world.height - 150, 'ship');
-    player.scale.setTo(0.05, 0.05)
+				console.log('graphics ', graphics);
+				console.log('poly ', poly.points);
 
-    //  We need to enable physics on the player
-    game.physics.arcade.enable(player);
+				graphics.beginFill(0xeaeaea); // light gray
+				graphics.drawPolygon(poly.points);
+		    graphics.endFill();
 
-    //  Player physics properties. Give the little guy a slight bounce.
-    player.body.bounce.y = 0.2;
-    player.body.gravity.y = 300;
-    player.body.collideWorldBounds = true;
+				terrain = game.add.sprite(window.innerWidth/2, window.innerHeight, graphics.generateTexture());
+				terrain.anchor.set(0.5);
+				graphics.destroy();
+		}
 
-    // //  Our two animations, walking left and right.
-    // player.animations.add('left', [0, 1, 2, 3], 10, true);
-    // player.animations.add('right', [5, 6, 7, 8], 10, true);
+		function update() {
 
-    //  Finally some stars to collect
-    stars = game.add.group();
+		    //  Collide the rocket and the stars with the platforms
+		    game.physics.arcade.collide(rocket, platforms);
 
-    //  We will enable physics for any star that is created in this group
-    stars.enableBody = true;
+		    //  Reset the rockets velocity (movement)
+		    rocket.body.velocity.x = 0;
 
-    //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < 6; i++)
-    {
-        //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 140, 0, 'planet');
-        star.scale.setTo(0.1, 0.1)
+		    if (cursors.left.isDown) {
+		        rocket.body.velocity.x = -150;
+		        rocket.animations.play('left');
+		    }
+		    else if (cursors.right.isDown) {
+		        rocket.body.velocity.x = 150;
+		        rocket.animations.play('right');
 
-        //  Let gravity do its thing
-        star.body.gravity.y = 300;
+						terrain.rotation += 0.05;
+		    }
+		    else {
+		        //  Stand still
+		        rocket.animations.stop();
+		        rocket.frame = 4;
+		    }
+		    //  Allow the rocket to jump if they are touching the planet.
+		    if (cursors.up.isDown) { // && rocket.body.touching.down)
+		        rocket.body.velocity.y = -350;
+		    }
+		}
 
-        //  This just gives each star a slightly random bounce value
-        star.body.bounce.y = 0.7 + Math.random() * 0.2;
-    }
 
-    //  The score
-    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
-
-    //  Our controls.
-    cursors = game.input.keyboard.createCursorKeys();
-    
-}
-
-function update() {
-
-    //  Collide the player and the stars with the platforms
-    game.physics.arcade.collide(player, platforms);
-    game.physics.arcade.collide(stars, platforms);
-
-    //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-    game.physics.arcade.overlap(player, stars, collectStar, null, this);
-
-    //  Reset the players velocity (movement)
-    player.body.velocity.x = 0;
-
-    if (cursors.left.isDown)
-    {
-        //  Move to the left
-        player.body.velocity.x = -150;
-
-        player.animations.play('left');
-    }
-    else if (cursors.right.isDown)
-    {
-        //  Move to the right
-        player.body.velocity.x = 150;
-
-        player.animations.play('right');
-    }
-    else
-    {
-        //  Stand still
-        player.animations.stop();
-
-        player.frame = 4;
-    }
-    
-    //  Allow the player to jump if they are touching the planet.
-    if (cursors.up.isDown && player.body.touching.down)
-    {
-        console.log(player)
-        player.body.velocity.y = -350;
-    }
-
-}
-
-function collectStar (player, star) {
-    
-    // Removes the star from the screen
-    star.kill();
-
-    //  Add and update the score
-    score += 10;
-    scoreText.text = 'Score: ' + score;
-
-}
-
-</script>
-
-</body>
+		</script>
+	</body>
 </html>
