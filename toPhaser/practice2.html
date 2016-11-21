@@ -22,10 +22,39 @@ function preload() {
 }
 
 function create() {
+
+  
 	game.physics.startSystem(Phaser.Physics.P2JS);
-	game.physics.p2.gravity.y = 60;
+	// game.physics.p2.gravity.y = 40;
 
 	cursors = game.input.keyboard.createCursorKeys();
+
+	var shipCollisionGroup = game.physics.p2.createCollisionGroup();
+  var starCollisionGroup = game.physics.p2.createCollisionGroup();
+
+
+	var stars = game.add.group();
+  stars.enableBody = true;
+  stars.physicsBodyType = Phaser.Physics.P2JS;
+
+	var graphics = game.add.graphics(0, 0);
+
+    // graphics.lineStyle(2, 0xffd900, 1);
+
+  graphics.beginFill(0xFF0000, 1);
+  graphics.drawCircle(300, 300, 100);
+
+  star = game.add.sprite(300, 300, graphics.generateTexture());
+
+
+
+  // var star = stars.create(game.world.width/4, game.world.height/4, 'planet');
+  // star.scale.setTo(0.1, 0.1)
+	game.physics.p2.enable(star);
+  star.body.setCollisionGroup(starCollisionGroup);
+  star.body.collides([starCollisionGroup, shipCollisionGroup]);
+  graphics.destroy()
+
 
 	//  ship
 	ship = game.add.sprite(game.world.width/2, game.world.height/5, 'car');
@@ -33,25 +62,24 @@ function create() {
 
 	game.physics.p2.enable(ship);
 	ship.body.collideWorldBounds = true;
+	ship.body.setCollisionGroup(shipCollisionGroup);
 
-
-	//  planet
-
-  // Here we create the planet.
-  var planets = game.add.physicsGroup(Phaser.Physics.P2JS)
-  var planet = planets.create(0, game.world.height - 64, 'planet');
-  //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  planet.scale.setTo(4, 4);
-
-  //  This stops it from falling away when you jump on it
-  planet.body.immovable = true;
-
-  //  Now let's create two ledges
-  var ledge = platforms.create(-800, 420, 'planet');
-  ledge.scale.setTo(5, 5)
-  ledge.body.immovable = true;
+	// ship.setCollisionGroup()
+  ship.body.collides(starCollisionGroup, hitStar, this);
 
 };
+
+
+function hitStar(body1, body2) {
+
+    //  body1 is the space ship (as it's the body that owns the callback)
+    //  body2 is the body it impacted with, in this case our panda
+    //  As body2 is a Phaser.Physics.P2.Body object, you access its own (the sprite) via the sprite property:
+    body2.sprite.alpha -= 0.1;
+
+}
+
+
 
 function update() {
 		// left key, rotate ship
