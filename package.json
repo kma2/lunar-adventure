@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "build-watch": "webpack -w",
-    "start": "nodemon app.js"
+    "build": "webpack",
+    "start": "nodemon app.js",
+    "test": "mocha --compilers js:babel-register --watch tests/{*,**/*}.spec.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,7 @@
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
+    "chai-spies": "^0.7.1",
     "express": "^4.14.0",
     "mocha": "^3.1.2",
     "nodemon": "^1.11.0",

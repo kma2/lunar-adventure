@@ -9,6 +9,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static(resolve(__dirname, 'public')));
+app.use(express.static(resolve(__dirname, 'game')))
 
 app.use('/api', require('./server/api'));
 
