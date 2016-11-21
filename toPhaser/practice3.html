@@ -17,8 +17,9 @@
 var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update:update });
 
 function preload() {
-	game.load.image('car', 'rocket.png');
+	game.load.image('ship', 'rocket.png');
 	game.load.image('planet', 'planet2.png');
+	game.load.physics('shipPhysics', 'tracedRocket.json');
 }
 
 function create() {
@@ -156,12 +157,11 @@ function create() {
 	game.physics.p2.enable(terrain);
 	terrain.body.setCollisionGroup(terrainCollisionGroup);
 	terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
-	terrain.body.immovable = true;
-	terrain.body.moves = false;
+	terrain.body.static = true;
 
 
 	// createing ship
-	ship = game.add.sprite(game.world.width/2, game.world.height/5, 'car');
+	ship = game.add.sprite(game.world.width/2, game.world.height/5, 'ship');
 	ship.scale.setTo(0.05, 0.05)
 
 	// var graphics = game.add.graphics(0, 0);
@@ -173,7 +173,12 @@ function create() {
 
 
 
-	game.physics.p2.enable(ship);
+	// game.physics.p2.enable(ship);
+	game.physics.p2.enable(ship, true);
+	// ship.body.clearShapes();
+	//this line throw error - can't read length of null
+	// ship.body.loadPolygon('shipPhysics', 'ship');
+
 	ship.body.collideWorldBounds = true;
 	ship.body.setCollisionGroup(shipCollisionGroup);
 
