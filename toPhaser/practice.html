@@ -47,12 +47,6 @@
 		    platforms = game.add.group();
 		    platforms.enableBody = true;
 
-		    // Here we create the planet.
-		    // var planet = platforms.create(game.world.width/3, game.world.height/4, 'planet');
-		    // planet.scale.setTo(1, 1);
-		    // planet.body.immovable = true;
-
-
 				const octagon = function(radius, start_x, start_y) {
           const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
           const v1_x = start_x;
@@ -194,16 +188,6 @@
 				terrain = game.add.sprite(window.innerWidth/2, window.innerHeight, graphics.generateTexture());
 				terrain.anchor.set(0.5);
 				graphics.destroy();
-
-				// terrain.moveTo(300, 300);
-				// window.graphics = graphics;
-        // set the pivot point of the terrain
-        // terrain.pivot.x = 600;
-        // terrain.pivot.y = 800;
-
-        // position the terrain in desired location
-        // terrain.position.x = window.innerWidth/2;
-        // terrain.position.y = window.innerHeight + 200;
 		}
 
 		function update() {
