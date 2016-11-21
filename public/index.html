@@ -5,131 +5,325 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.1.1/pixi.min.js"></script>
   </head>
 
-  <body onLoad='init()'>
+  <body>
     <!-- <script async dfer src=/bundle.js></script> -->
+
     <script>
-    function init() {
-    // keyState object to check keydown / keyup status
-    var keyState = {};
 
-    // create renderer
-    var renderer = PIXI.autoDetectRenderer(window.innerWidth-5, window.innerHeight-5, {antialias: false, transparent: false, resolution: 1});
-    renderer.backgroundColor = 0x444444;
-    // renderer.autoResize = true;
-		document.body.appendChild(renderer.view);
+        // Autodetect, create and append the renderer to the body element
+        var renderer = PIXI.autoDetectRenderer(window.innerWidth-5, window.innerHeight-5, {antialias: false, transparent: false, resolution: 1});
+        document.body.appendChild(renderer.view);
 
-		//Create a container object called the `stage` (camera)
-		var stage = new PIXI.Container();
-		stage.position.x = window.innerWidth / 2 ;
-		stage.position.y = window.innerHeight;
-		stage.velocity = 0;
+        // the main stage
+        var stage = new PIXI.Container();
+
+        // generate the coordinates of a octagon
+        const octagon = function(radius, start_x, start_y) {
+          const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
+
+          const v1_x = start_x;
+          const v1_y = start_y;
+          const v2_x = start_x + edgeLength;
+          const v2_y = start_y;
+          const v3_x = v2_x + edgeLength / Math.sqrt(2);
+          const v3_y = v2_y + edgeLength / Math.sqrt(2);
+          const v4_x = v3_x;
+          const v4_y = v3_y + edgeLength;
+          const v5_x = v4_x - edgeLength / Math.sqrt(2);
+          const v5_y = v4_y + edgeLength / Math.sqrt(2);
+          const v6_x = v5_x - edgeLength;
+          const v6_y = v5_y;
+          const v7_x = v6_x - edgeLength / Math.sqrt(2);
+          const v7_y = v6_y - edgeLength / Math.sqrt(2);
+          const v8_x = v7_x;
+          const v8_y = v7_y - edgeLength;
+          let finalArray = [[v1_x, v1_y], [v2_x, v2_y], [v3_x, v3_y], [v4_x, v4_y], [v5_x, v5_y], [v6_x, v6_y], [v7_x, v7_y], [v8_x, v8_y]];
+
+          return finalArray;
+        }
+
+        //var octagonNestedArray = octagon(400, window.innerWidth/4, window.innerHeight/2);
+        var octagonNestedArray = octagon(500, window.innerWidth/3, window.innerHeight/2);
+
+        // draws a planet shape edge by edge
+        const createPlanet = function(array) {
+          var points = [];
+          var height = 250;
+          var displace = height / 8;
+          var roughness = 0.8;
+          var numSegs = 10;
+
+          let edgeLength = array[1][0] - array[0][0];
+          const segLength = edgeLength/numSegs;
+          let power = Math.pow(2, Math.ceil(Math.log(edgeLength) / (Math.log(2))));
+
+          // TOP OF OCTAGON
+          let x = array[0][0]
+          let y = array[0][1];
+          points.push(x)
+          points.push(y)
+          for(var j = 0; j < numSegs - 1; j++){
+            x += segLength;
+            y += (Math.random()*displace*2) - displace;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
+
+          // TOP RIGHT OF OCTAGON - work in progress
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x += (Math.random()*displace*2) + displace/2;
+            y += (Math.random()*displace*2) + displace/10;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
+
+          // RIGHT SIDE OF OCTAGON
+          displace = height / 10;
+          x = array[2][0]
+          y = array[2][1];
+          points.push(x)
+          points.push(y)
+          for(j = 0; j < numSegs; j++){
+            x += (Math.random()*displace*2) - displace;
+            y += segLength;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
+
+          // BOTTOM RIGHT OF OCTAGON - work in progress
+          displace = height / 10;
+          x = array[3][0];
+          y = array[3][1];
+          for(j = 0; j < numSegs; j++){
+            x -= segLength/1.6;
+            y += (Math.random()*displace*2) + displace/2;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
+
+          // BOTTOM OF OCTAGON
+          displace = height / 10;
+          x = array[4][0]
+          y = array[4][1];
+          points.push(x)
+          points.push(y)
+          for(j = 0; j < numSegs; j++){
+            x -= segLength;
+            y += (Math.random()*displace*2) - displace;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
+
+          // BOTTOM LEFT of OCTAGON - work in progress
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x -= segLength/2;
+            y -= (Math.random()*displace*2) - displace/2;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
+
+          // LEFT SIDE OF OCTAGON
+          displace = height / 10;
+          x = array[6][0]
+          y = array[6][1];
+          points.push(x)
+          points.push(y)
+          for(j = 0; j < numSegs; j++){
+            x -= (Math.random()*displace*2) - displace;
+            y -= segLength;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
+
+          // TOP LEFT OF OCTAGON - work in progress
+          displace = height / 10;
+          for(j = 0; j < numSegs; j++){
+            x += segLength/2;
+            y -= (Math.random()*displace*2) + displace/2;
+            points.push(x);
+            points.push(y);
+            displace *= roughness;
+          }
+
+          return points;
+        };
+
+        // create terrain
+        var terrain = new PIXI.Graphics();
+        terrain.beginFill(0xeaeaea); // light gray
+        terrain.drawPolygon(createPlanet(octagonNestedArray));
+        terrain.endFill();
+
+        // set the pivot point of the terrain
+        terrain.pivot.x = 600;
+        terrain.pivot.y = 800;
+
+        // position the terrain in desired location
+        terrain.position.x = window.innerWidth/2;
+        terrain.position.y = window.innerHeight + 200;
 
 
+        // create launchpad (TEMPORARY MARKER)
+        var launchpad = new PIXI.Graphics();
+        launchpad.beginFill(0x68c3c0); // blue
+        launchpad.drawEllipse(window.innerWidth/2, window.innerHeight/2.5, 30, 10);
+        launchpad.endFill();
 
-		// load images
-		PIXI.loader
-  		.add('planet2.png')
-  		.add('rocket.png')
-  		.load(setup);
+        // create landingpad (TEMPORARY MARKER)
+        var landingpad = new PIXI.Graphics();
+        landingpad.beginFill(0xf4ce93); // yellow
+        landingpad.drawEllipse(window.innerWidth/2, window.innerHeight * 2, 30, 10);
+        landingpad.endFill();
 
+        // add launchpad and landingpad to the terrain
+        terrain.addChild(launchpad);
+        terrain.addChild(landingpad);
 
-		//This `setup` function will run when the image has loaded
-		var planet, rocket
-		function setup() {
+        // add all elements to the stage
+        stage.addChild(terrain);
 
-	  	//Create the `planet` sprite from the texture
-	  	planet = new PIXI.Sprite( PIXI.loader.resources["planet2.png"].texture );
-			planet.position.x = 0;
-			planet.position.y = 1700;
+        // Start animating
+        animate();
+        function animate() {
+            terrain.rotation += 0.01;
+            renderer.render(stage);
+            requestAnimationFrame(animate);
+        }
 
-			//anchor will be needed to calculate the axis of rotation
-			planet.anchor.x = 0.5;
-			planet.anchor.y = 0.5;
-
-			//size
-			planet.width = 4000;
-			planet.height = 4000;
-
-			//radius will be very important to detect the collision
-			planet.radius = 500;
-
-			//create rocket
-			rocket = new PIXI.Sprite( PIXI.loader.resources["rocket.png"].texture )
-			rocket.position.x = 0// window.innerWidth / 2 
-			rocket.position.y = -window.innerHeight / 1.5;
-			rocket.anchor.x = 0.5;
-			rocket.anchor.y = 0.5;
-			rocket.width = 40;
-			rocket.height = 100;
-			rocket.velocity = 0
-
-			//radius will be very important to detect the collision
-			rocket.radius = 10;
-
-		  //Add the planet and rocket to the stage
-		  stage.addChild(planet);
-		  stage.addChild(rocket)
-
-		  gameLoop()
-		}
-
-		window.addEventListener('keydown', function (e) {
-		    var key = e.keyCode;
-		    keyState[event.keyCode || event.which] = true;
-		})
-
-		window.addEventListener('keyup', function (e) {
-		    var key = e.keyCode;
-		    keyState[event.keyCode || event.which] = false;
-		})
-
-
-		function checkKeyStates () {
-			if (keyState[38] || keyState[87]) rocket.position.y -= 10;
-			if (keyState[40] || keyState[83]) rocket.position.y += 10;
-			if (keyState[37] || keyState[65]) {
-				if (rocket.rotation > -0.5) rocket.rotation -= 0.1;	
-				if (rocket.position.x > -400)	{
-					// rocket.velocity += 0.05;
-		  		rocket.position.x -= 10;
-		  		// rocket.position.x -= Math.abs(rocket.velocity);
-		  	} else { 
-		  		planet.rotation += 0.01;
-		  	}    
-			}
-			if (keyState[39] || keyState[68]) {
-				if (rocket.rotation < 0.5) rocket.rotation += 0.1;
-				if (rocket.position.x < 400)	{
-					// rocket.velocity -= 0.05;
-		  		rocket.position.x += 10
-		  		// rocket.position.x += Math.abs(rocket.velocity);
-		  	} else { 
-		  		stage.velocity = 0.01;
-		  		planet.rotation -= stage.velocity;
-		  	}
-			}
-
-			// make rocket straight when all keys are up
-			if (rocket.rotation !== 0 && (!keyState[37] && !keyState[65] && !keyState[39] && !keyState[68])) {
-				if (rocket.rotation < 0) rocket.rotation += 0.01;
-				else rocket.rotation -= 0.01;
-			}
-		};
-
-		//Loop this function 60 times per second
-		function gameLoop(){
-		  requestAnimationFrame(gameLoop);
-		  requestAnimationFrame(checkKeyStates);
-		  
-		  // gravity
-		  rocket.position.y += 0.2;
-
-		  //Render the stage
-		  renderer.render(stage);
-		}
-	}
     </script>
+
+
+    <!--
+    <body onLoad='init()'>
+    <script>
+        function init() {
+        // keyState object to check keydown / keyup status
+        var keyState = {};
+
+        // create renderer
+        var renderer = PIXI.autoDetectRenderer(window.innerWidth-5, window.innerHeight-5, {antialias: false, transparent: false, resolution: 1});
+        renderer.backgroundColor = 0x444444;
+        // renderer.autoResize = true;
+    		document.body.appendChild(renderer.view);
+
+    		//Create a container object called the `stage` (camera)
+    		var stage = new PIXI.Container();
+    		stage.position.x = window.innerWidth / 2 ;
+    		stage.position.y = window.innerHeight;
+    		stage.velocity = 0;
+
+    		// load images
+    		PIXI.loader
+      		.add('planet2.png')
+      		.add('rocket.png')
+      		.load(setup);
+
+    		//This `setup` function will run when the image has loaded
+    		var planet, rocket
+    		function setup() {
+
+    	  	//Create the `planet` sprite from the texture
+    	  	planet = new PIXI.Sprite( PIXI.loader.resources["planet2.png"].texture );
+    			planet.position.x = 0;
+    			planet.position.y = 1700;
+
+    			//anchor will be needed to calculate the axis of rotation
+    			planet.anchor.x = 0.5;
+    			planet.anchor.y = 0.5;
+
+    			//size
+    			planet.width = 4000;
+    			planet.height = 4000;
+
+    			//radius will be very important to detect the collision
+    			planet.radius = 500;
+
+    			//create rocket
+    			rocket = new PIXI.Sprite( PIXI.loader.resources["rocket.png"].texture )
+    			rocket.position.x = 0// window.innerWidth / 2
+    			rocket.position.y = -window.innerHeight / 1.5;
+    			rocket.anchor.x = 0.5;
+    			rocket.anchor.y = 0.5;
+    			rocket.width = 40;
+    			rocket.height = 100;
+    			rocket.velocity = 0
+
+    			//radius will be very important to detect the collision
+    			rocket.radius = 10;
+
+
+    		  //Add the planet and rocket to the stage
+    		  stage.addChild(planet);
+    		  stage.addChild(rocket)
+          stage.addChild(graphics);
+
+    		  gameLoop()
+    		}
+
+    		window.addEventListener('keydown', function (e) {
+    		    var key = e.keyCode;
+    		    keyState[event.keyCode || event.which] = true;
+    		})
+
+    		window.addEventListener('keyup', function (e) {
+    		    var key = e.keyCode;
+    		    keyState[event.keyCode || event.which] = false;
+    		})
+
+
+    		function checkKeyStates () {
+    			if (keyState[38] || keyState[87]) rocket.position.y -= 10;
+    			if (keyState[40] || keyState[83]) rocket.position.y += 10;
+    			if (keyState[37] || keyState[65]) {
+    				if (rocket.rotation > -0.5) rocket.rotation -= 0.1;
+    				if (rocket.position.x > -400)	{
+    					// rocket.velocity += 0.05;
+    		  		rocket.position.x -= 10;
+    		  		// rocket.position.x -= Math.abs(rocket.velocity);
+    		  	} else {
+    		  		planet.rotation += 0.01;
+    		  	}
+    			}
+    			if (keyState[39] || keyState[68]) {
+    				if (rocket.rotation < 0.5) rocket.rotation += 0.1;
+    				if (rocket.position.x < 400)	{
+    					// rocket.velocity -= 0.05;
+    		  		rocket.position.x += 10
+    		  		// rocket.position.x += Math.abs(rocket.velocity);
+    		  	} else {
+    		  		stage.velocity = 0.01;
+    		  		planet.rotation -= stage.velocity;
+    		  	}
+    			}
+
+    			// make rocket straight when all keys are up
+    			if (rocket.rotation !== 0 && (!keyState[37] && !keyState[65] && !keyState[39] && !keyState[68])) {
+    				if (rocket.rotation < 0) rocket.rotation += 0.01;
+    				else rocket.rotation -= 0.01;
+    			}
+    		};
+
+    		//Loop this function 60 times per second
+    		function gameLoop(){
+    		  requestAnimationFrame(gameLoop);
+    		  requestAnimationFrame(checkKeyStates);
+
+    		  // gravity
+    		  rocket.position.y += 0.2;
+
+    		  //Render the stage
+    		  renderer.render(stage);
+    		}
+    	}
+    </script> -->
   </body>
 </html>
-
-
