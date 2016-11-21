@@ -27,32 +27,24 @@
           const v1_y = start_y;
           const v2_x = start_x + edgeLength;
           const v2_y = start_y;
-          const v3_x = v2_x + edgeLength / Math.sqrt(2);
-          const v3_y = v2_y + edgeLength / Math.sqrt(2);
-          const v4_x = v3_x;
-          const v4_y = v3_y + edgeLength;
-          const v5_x = v4_x - edgeLength / Math.sqrt(2);
-          const v5_y = v4_y + edgeLength / Math.sqrt(2);
-          const v6_x = v5_x - edgeLength;
-          const v6_y = v5_y;
-          const v7_x = v6_x - edgeLength / Math.sqrt(2);
-          const v7_y = v6_y - edgeLength / Math.sqrt(2);
-          const v8_x = v7_x;
-          const v8_y = v7_y - edgeLength;
-          let finalArray = [[v1_x, v1_y], [v2_x, v2_y], [v3_x, v3_y], [v4_x, v4_y], [v5_x, v5_y], [v6_x, v6_y], [v7_x, v7_y], [v8_x, v8_y]];
+
+          let finalArray = [[v1_x, v1_y], [v2_x, v2_y]];
 
           return finalArray;
         }
 
-        var octagonNestedArray = octagon(200, 200, 100);
+        var mainPlanetArray = octagon(250, 500, 150);
+        var largeAsteroid = octagon(120, 1000, 300);
+        var mediumAsteroid = octagon(60, 200, 75);
+        var smallAsteroid = octagon(30, 900, 150);
 
         // draws a planet shape edge by edge
-        const createPlanet = function(array) {
+        const createPlanet = function(array, numSegs, height) {
           var points = [];
-          var height = 150;
+          var height = height || 180;
           var displace = height / 10;
           var roughness = 0.8;
-          var numSegs = 10;
+          var numSegs = numSegs;
 
           let edgeLength = array[1][0] - array[0][0];
           const segLength = edgeLength/numSegs;
@@ -61,8 +53,8 @@
           // TOP OF OCTAGON
           let x = array[0][0]
           let y = array[0][1];
-          points.push(x)
-          points.push(y)
+          // points.push(x)
+          // points.push(y)
           for(var j = 0; j < numSegs - 1; j++){
             x += segLength;
             y += (Math.random()*displace*2) - displace;
@@ -83,10 +75,10 @@
 
           // RIGHT SIDE OF OCTAGON
           displace = height / 10;
-          x = array[2][0]
-          y = array[2][1];
-          points.push(x)
-          points.push(y)
+          // x = array[2][0]
+          // y = array[2][1];
+          // points.push(x)
+          // points.push(y)
           for(j = 0; j < numSegs; j++){
             x += (Math.random()*displace*2) - displace;
             y += segLength;
@@ -98,8 +90,8 @@
 
           // BOTTOM RIGHT OF OCTAGON - work in progress
           displace = height / 10;
-          x = array[3][0];
-          y = array[3][1];
+          // x = array[3][0];
+          // y = array[3][1];
           for(j = 0; j < numSegs; j++){
             x -= segLength/1.6;
             y += (Math.random()*displace*2) + displace/2;
@@ -111,8 +103,8 @@
 
           // BOTTOM OF OCTAGON
           displace = height / 10;
-          x = array[4][0]
-          y = array[4][1];
+          // x = array[4][0]
+          // y = array[4][1];
           points.push(x)
           points.push(y)
           for(j = 0; j < numSegs; j++){
@@ -126,8 +118,8 @@
           // BOTTOM LEFT of OCTAGON - work in progress
           displace = height / 10;
           for(j = 0; j < numSegs; j++){
-            x -= segLength/2;
-            y -= (Math.random()*displace*2) - displace/2;
+            x -= (Math.random()*displace*2) + displace/2;
+            y -= (Math.random()*displace*2) + displace/2;
             points.push(x);
             points.push(y);
             displace *= roughness;
@@ -135,8 +127,8 @@
 
           // LEFT SIDE OF OCTAGON
           displace = height / 10;
-          x = array[6][0]
-          y = array[6][1];
+          // x = array[6][0]
+          // y = array[6][1];
           points.push(x)
           points.push(y)
           for(j = 0; j < numSegs; j++){
@@ -156,6 +148,12 @@
             points.push(y);
             displace *= roughness;
           }
+          x = (array[0][0] + x)/2;
+          y = (array[0][1] + y)/2;
+          console.log(x);
+          console.log(y);
+          points.push(x);
+          points.push(y);
 
           return points
         };
@@ -164,8 +162,14 @@
         var graphics = new PIXI.Graphics();
 
         graphics.beginFill(0xeaeaea);
-        graphics.drawPolygon(createPlanet(octagonNestedArray));
+
+        graphics.drawPolygon(createPlanet(mainPlanetArray, 10));
+        graphics.drawPolygon(createPlanet(largeAsteroid, 4));
+        graphics.drawPolygon(createPlanet(mediumAsteroid, 2, 90));
+        graphics.drawPolygon(createPlanet(smallAsteroid, 2, 45));
         graphics.endFill();
+
+
 
         // Add the graphics to the stage
         stage.addChild(graphics);
@@ -173,6 +177,7 @@
         // Start animating
         animate();
         function animate() {
+          // graphics.rotation += 0.05;
             renderer.render(stage);
             requestAnimationFrame(animate);
         }
