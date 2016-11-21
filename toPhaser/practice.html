@@ -146,6 +146,7 @@ function update() {
     //  Allow the player to jump if they are touching the planet.
     if (cursors.up.isDown && player.body.touching.down)
     {
+        console.log(player)
         player.body.velocity.y = -350;
     }
 
