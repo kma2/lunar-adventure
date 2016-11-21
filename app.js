@@ -13,8 +13,12 @@ app.use(express.static(resolve(__dirname, 'game')))
 
 app.use('/api', require('./server/api'));
 
-app.get('/*', (req, res, next) => {
+app.get('/', (req, res, next) => {
 	res.sendFile(resolve(__dirname, 'public', 'index.html'))
+})
+
+app.get('/practice', (req, res, next) => {
+	res.sendFile(resolve(__dirname, 'toPhaser', 'practice.html'))
 })
 
 app.listen(3000, () => {
