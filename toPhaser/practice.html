@@ -34,18 +34,10 @@
 				//  Our controls.
 		    cursors = game.input.keyboard.createCursorKeys();
 
-		    // The rocket and its settings
-		    rocket = game.add.sprite(game.world.width/2, game.world.height/10, 'rocket');
-		    rocket.scale.setTo(0.05, 0.05)
 
-		    // enable physics on the rocket
-		    game.physics.arcade.enable(rocket);
-		    rocket.body.gravity.y = 300;
-		    rocket.body.collideWorldBounds = true;
-
-				//  The platforms group contains the planet and the 2 ledges we can jump on
-		    platforms = game.add.group();
-		    platforms.enableBody = true;
+				// //  The platforms group contains the planet and the 2 ledges we can jump on
+		  //   platforms = game.add.group();
+		  //   platforms.enableBody = true;
 
 				const octagon = function(radius, start_x, start_y) {
           const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
@@ -164,10 +156,7 @@
 
           x = (array[0][0] + x)/2;
           y = (array[0][1] + y)/2;
-          console.log(x);
-          console.log(y);
-          // points.push(x);
-          // points.push(y);
+
 					points.push(new Phaser.Point(x, y));
           return points;
         };
@@ -185,37 +174,38 @@
 				graphics.drawPolygon(poly.points);
 		    graphics.endFill();
 
-				terrain = game.add.sprite(window.innerWidth/2, window.innerHeight, graphics.generateTexture());
+				terrain = game.add.sprite(window.innerWidth/2, window.innerHeight * 1.3, graphics.generateTexture());
 				terrain.anchor.set(0.5);
 				graphics.destroy();
 		}
 
 		function update() {
 
-		    //  Collide the rocket and the stars with the platforms
-		    game.physics.arcade.collide(rocket, platforms);
+		    // //  Collide the rocket and the stars with the platforms
+		    // game.physics.arcade.collide(rocket, platforms);
 
-		    //  Reset the rockets velocity (movement)
-		    rocket.body.velocity.x = 0;
+		    // //  Reset the rockets velocity (movement)
+		    // rocket.body.velocity.x = 0;
 
 		    if (cursors.left.isDown) {
-		        rocket.body.velocity.x = -150;
-		        rocket.animations.play('left');
+		        // rocket.body.velocity.x = -150;
+		        // rocket.animations.play('left');
+            terrain.rotation -= 0.05;
 		    }
 		    else if (cursors.right.isDown) {
-		        rocket.body.velocity.x = 150;
-		        rocket.animations.play('right');
+		        // rocket.body.velocity.x = 150;
+		        // rocket.animations.play('right');
 
 						terrain.rotation += 0.05;
 		    }
 		    else {
-		        //  Stand still
-		        rocket.animations.stop();
-		        rocket.frame = 4;
+		        // //  Stand still
+		        // rocket.animations.stop();
+		        // rocket.frame = 4;
 		    }
 		    //  Allow the rocket to jump if they are touching the planet.
 		    if (cursors.up.isDown) { // && rocket.body.touching.down)
-		        rocket.body.velocity.y = -350;
+		        // rocket.body.velocity.y = -350;
 		    }
 		}
 
