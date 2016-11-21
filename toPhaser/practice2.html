@@ -156,8 +156,8 @@ function create() {
 	game.physics.p2.enable(terrain);
 	terrain.body.setCollisionGroup(terrainCollisionGroup);
 	terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
-
-
+	terrain.body.immovable = true;
+	terrain.body.moves = false;
 
 
 	// createing ship
