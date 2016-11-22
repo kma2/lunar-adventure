@@ -30,6 +30,8 @@
 		game.physics.startSystem(Phaser.Physics.P2JS);
 		// game.physics.p2.gravity.y = 40;
 
+		//create game groups for grouping sprites
+		rotatingObjects = game.add.group();
 		// turn on impact events for the world so we have collision callbacks
 		game.physics.p2.setImpactEvents(true)
 		gameWidth = game.world.width
@@ -155,16 +157,25 @@
 		};
 
 		//var octagonArray = octagon(1000, window.innerWidth/3, window.innerHeight/2);
-		var octagonArray = octagon(window.innerWidth/1.4, 500, 150);
+		//**ORIGINAL SIZE OF TERRAIN**//
+		// var octagonArray = octagon(window.innerWidth/1.4, 500, 150);
 
-		poly = new Phaser.Polygon(createPlanet(octagonArray, 10, 250, 1.05));
+		var octagonArray = octagon(window.innerWidth/1000, 500, 150);
+
+
+		// poly = new Phaser.Polygon(createPlanet(octagonArray, 10, 250, 1.05));
+		poly = new Phaser.Polygon(createPlanet(octagonArray, 10, 100, 1.05));
+
 		graphics = game.add.graphics(100, 100);
 
 		graphics.beginFill(0xeaeaea); // light gray
 		graphics.drawPolygon(poly.points);
 		graphics.endFill();
 
-		terrain = game.add.sprite(window.innerWidth/2, window.innerHeight * 1.9, graphics.generateTexture());
+
+		// terrain = game.add.sprite(window.innerWidth/2, window.innerHeight * 1.9, graphics.generateTexture());
+		terrain = game.add.sprite(window.innerWidth/2, window.innerHeight/2, graphics.generateTexture());
+
 		terrain.anchor.set(0.5);
 		graphics.destroy();
 
@@ -172,23 +183,32 @@
 		game.physics.p2.enable(terrain, true);
 
 		//collisions
-		terrain.body.setCollisionGroup(terrainCollisionGroup);
-		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
+		// terrain.body.setCollisionGroup(terrainCollisionGroup);
+		// terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
+
+		rotatingObjects.add(terrain);
 
 		//terrain polygon
-		// terrain.body.clearShapes();
+		terrain.body.clearShapes();
 		// console.log('points', poly.points);
 		// console.log(createPlanet(octagonArray, 10, 250, 1.05));
+		// let pointsArray = poly.points.map((el, i) => [el.x, el.y])
 		let arrOfCoords = createPlanet(octagonArray, 10, 250, 1.05)
-		// console.log(arrOfCoords)
-		// terrain.body.addPolygon({}, arrOfCoords);
+		let fn = function(number) {
+			return Math.ceil(number)
+		}
+		// let coords = Array.prototype.slice.call(arrOfCoords).map(number => Math.ceil(number));
+		let coords = Array.from(arrOfCoords)
+		let coords2 = Object.keys(arrOfCoords).map(key => arrOfCoords[key]);
+		// console.log(Object.keys(coords))
+		// console.log(coords2)
+		terrain.body.addPolygon({}, coords);
 		// terrain.x = window.innerWidth/2;
 		// terrain.y = window.innerHeight * 1.7;
 
 		//collision - terrain won't move when hit
 		terrain.body.static = true;
 		console.log(terrain.body.world)
-		// let pointsArray = poly.points.map((el, i) => [el.x, el.y])
 		// game.load.physics('shipPhysics', 'tracedRocket.json');
 		// terrain.body.clearShapes();
 		// terrain.body.loadPolygon('shipPhysics', 'terrain')
@@ -208,10 +228,10 @@
 		// ship.body.loadPolygon('shipPhysics');
 
 		//collision
-		ship.body.collideWorldBounds = true;
-		ship.body.setCollisionGroup(shipCollisionGroup);
+		// ship.body.collideWorldBounds = true;
+		// ship.body.setCollisionGroup(shipCollisionGroup);
 
-		ship.body.collides(terrainCollisionGroup, hitTerrain, this);
+		// ship.body.collides(terrainCollisionGroup, hitTerrain, this);
 		
 
 		// set boundary
@@ -220,6 +240,21 @@
 		createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 
 		ship.body.onBeginContact.add(hitTerrain, this);
+
+		//landing pads
+		graphics1 = game.add.graphics(window.innerWidth/2, 100);
+
+		graphics1.beginFill(0xffd900);
+		graphics1.drawEllipse(100,100,40,15);
+		graphics1.endFill();
+		landingPadSprite = game.add.sprite(window.innerWidth/2, window.innerWidth/2, graphics.generateTexture());
+		// landingPad.anchor.set(0.5)
+		landingPad = rotatingObjects.create(window.innerWidth/3, window.innerHeight/3,landingPadSprite)
+		// terrain.addChild(landingPad)
+		// rotatingObjects.add(landingPad);
+
+
+
 
 	};
 
