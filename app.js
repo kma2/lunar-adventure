@@ -17,12 +17,12 @@ app.get('/', (req, res, next) => {
 	res.sendFile(resolve(__dirname, 'public', 'index.html'))
 })
 
-app.get('/practice4', (req, res, next) => {
-	res.sendFile(resolve(__dirname, 'toPhaser', 'practice4.html'))
-})
-
 app.get('/practice5', (req, res, next) => {
 	res.sendFile(resolve(__dirname, 'toPhaser', 'practice5.html'))
+})
+
+app.get('/practice6', (req, res, next) => {
+	res.sendFile(resolve(__dirname, 'toPhaser', 'practice6.html'))
 })
 
 app.listen(3000, () => {
