@@ -17,11 +17,10 @@
 var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update:update });
 
 function preload() {
-	game.load.image('ship', 'rocket.png');
-	game.load.image('planet', 'planet2.png');
+	game.load.image('ship', 'images/rocket.png');
+	game.load.image('explosion', 'images/explosion.jpg');
+	game.load.image('broom', 'images/broom.jpg');
 	game.load.physics('shipPhysics', 'tracedRocket.json');
-	game.load.image('explosion', 'explosion.jpg');
-	game.load.image('broom', 'broom.jpg');
 	game.load.physics('broomPhysics', 'broomjson.json');
 }
 
