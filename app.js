@@ -17,18 +17,6 @@ app.get('/', (req, res, next) => {
 	res.sendFile(resolve(__dirname, 'public', 'index.html'))
 })
 
-app.get('/practice', (req, res, next) => {
-	res.sendFile(resolve(__dirname, 'toPhaser', 'practice.html'))
-})
-
-app.get('/practice2', (req, res, next) => {
-	res.sendFile(resolve(__dirname, 'toPhaser', 'practice2.html'))
-})
-
-app.get('/practice3', (req, res, next) => {
-	res.sendFile(resolve(__dirname, 'toPhaser', 'practice3.html'))
-})
-
 app.get('/practice4', (req, res, next) => {
 	res.sendFile(resolve(__dirname, 'toPhaser', 'practice4.html'))
 })
