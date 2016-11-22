@@ -226,16 +226,20 @@
 		var terrainCollisionGroup = game.physics.p2.createCollisionGroup();
 		var shipCollisionGroup = game.physics.p2.createCollisionGroup();
 		var landingPadCollisionGroup = game.physics.p2.createCollisionGroup();
+		var boundsCollisionGroup = game.physics.p2.createCollisionGroup();
 
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
+		// customBounds.body.setCollisionGroup(boundsCollisionGroup);
 
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
 		landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
+		// customBounds.body.collides([boundsCollisionGroup, shipCollisionGroup]);
 
 		ship.body.collides(terrainCollisionGroup, hitTerrain, this);
 		ship.body.collides(landingPadCollisionGroup, landedShip, this);
+		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
 
 
 	};
@@ -243,9 +247,9 @@
 
 	//function that will be run when we hit the terrain
 	function hitTerrain(body1, body2) {
-			console.log('hit terrain')
-
-			console.log('landing pad body ', landingPad.body);
+			console.log('hit terrain');
+			alert('Oh no, you crashed into the terrain!');
+			console.log('customBounds ', customBounds)
 
 			//create explosion sprite for collision
 			if (body1) {
@@ -256,21 +260,29 @@
 
 				//create explosion sprite for collision
 				explosion = game.add.sprite(posX, posY, 'explosion')
-				explosion.scale.setTo(0.05, 0.05)
+				explosion.scale.setTo(0.05, 0.05);
 				// window.setTimeout(() => explosion.destroy(), 500)
 			}
+
 	}
 
 	function landedShip(body1, body2) {
 		console.log('ship has landed!')
+		alert('Yay, you have landed the ship!');
 
 		// when rocket touches the landing spot, it stops moving
 		if (body1) {
 			let posX = ship.x;
 			let posY = ship.y;
 
-			ship.immovable = true;
+			game.physics.p2.disable(ship);
+			//ship.immovable = true; // not sure why this doesn't work!
 		}
+	}
+
+	function hitBounds(body1, body2) {
+		console.log('hit boundary');
+
 	}
 
 	function createPreviewBounds(x, y, w, h) {
