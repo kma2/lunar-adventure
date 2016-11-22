@@ -29,6 +29,10 @@ app.get('/practice3', (req, res, next) => {
 	res.sendFile(resolve(__dirname, 'toPhaser', 'practice3.html'))
 })
 
+app.get('/practice4', (req, res, next) => {
+	res.sendFile(resolve(__dirname, 'toPhaser', 'practice4.html'))
+})
+
 app.get('/practice5', (req, res, next) => {
 	res.sendFile(resolve(__dirname, 'toPhaser', 'practice5.html'))
 })
