@@ -1,9 +1,9 @@
-const SpaceHipster = SpaceHipster || {};
+var LunarAdventure = LunarAdventure || {};
 
 //title screen
-SpaceHipster.Game = function(){};
+LunarAdventure.Game = function(){};
 
-SpaceHipster.Game.prototype = {
+LunarAdventure.Game.prototype = {
   create: function() {
   },
   update: function() {

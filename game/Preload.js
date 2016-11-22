@@ -1,4 +1,4 @@
-const LunarAdventure = LunarAdventure || {};
+var LunarAdventure = LunarAdventure || {};
 
 //loading the game assets
 LunarAdventure.Preload = function(){};
@@ -9,15 +9,15 @@ LunarAdventure.Preload.prototype = {
   	this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
     this.splash.anchor.setTo(0.5);
 
-    this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 128, 'preloadbar');
-    this.preloadBar.anchor.setTo(0.5);
+    // this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 128, 'preloadbar');
+    // this.preloadBar.anchor.setTo(0.5);
 
-    this.load.setPreloadSprite(this.preloadBar);
+    // this.load.setPreloadSprite(this.preloadBar);
 
   	//load game assets
     // this is where we will generate the planet and asteroids and load our sprites
 
-  	// this.load.image('space', 'assets/images/space.png');
+  	this.load.image('wallpaper', 'images/wallpaper.jpg');
   	// this.load.image('rock', 'assets/images/rock.png');
     // this.load.spritesheet('playership', 'assets/images/player.png', 12, 12);
     // this.load.spritesheet('power', 'assets/images/power.png', 12, 12);
