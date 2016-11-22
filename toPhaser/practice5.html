@@ -28,7 +28,7 @@
 
 	function create() {
 		game.physics.startSystem(Phaser.Physics.P2JS);
-		// game.physics.p2.gravity.y = 40;
+		game.physics.p2.gravity.y = 20;
 
 		// turn on impact events for the world so we have collision callbacks
 		game.physics.p2.setImpactEvents(true)
@@ -37,10 +37,8 @@
 		divide = 15
 		cursors = game.input.keyboard.createCursorKeys();
 
-		//collisions
-		var shipCollisionGroup = game.physics.p2.createCollisionGroup();
-		var terrainCollisionGroup = game.physics.p2.createCollisionGroup();
 
+		// create terrain
 		const octagon = function(radius, start_x, start_y) {
 			const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
 			const v1_x = start_x;
@@ -165,11 +163,7 @@
 		terrain = game.add.sprite(window.innerWidth/2, window.innerHeight * 1.9, graphics.generateTexture());
 		terrain.anchor.set(0.5);
 		graphics.destroy();
-		game.physics.p2.enable(terrain, true);
-
-		//collisions
-		// terrain.body.setCollisionGroup(terrainCollisionGroup);
-		// terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
+		game.physics.p2.enable(terrain, false);
 
 		//terrain polygon
 		// terrain.body.clearShapes();
@@ -204,42 +198,54 @@
 
 		//ship polygon
 
+		// === attempt at outlining the ship ====
 		// ship.body.clearShapes();
 		//this line throw error - can't read length of null
 		// ship.body.loadPolygon('shipPhysics', 'ship');
 		// ship.body.addPolygon('shipPhysics')
 		// ship.body.loadPolygon('shipPhysics');
 
-		//collision
-		// ship.body.collideWorldBounds = true;
-		// ship.body.setCollisionGroup(shipCollisionGroup);
 
-		// ship.body.collides(terrainCollisionGroup, hitTerrain, this);
-
-
-		// set boundary
+		// set boundaries on left and right of the screen
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
 		customBounds = { left: null, right: null, top: null, bottom: null };
 		createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 
-		ship.body.onBeginContact.add(hitTerrain, this);
 
-
-		//landing pad
-		landingPad = game.add.graphics(window.innerWidth/2.3, window.innerHeight/2.5);
+		// create landing pad
+		landingPad = game.add.graphics(window.innerWidth/2, window.innerHeight/2.5);
 		landingPad.beginFill(0xffd900);
-		landingPad.drawEllipse(100,100,35,10);
+		landingPad.drawEllipse(0,0,35,10);
 		landingPad.endFill();
 
 		game.physics.p2.enable(landingPad, false);
 		landingPad.body.static = true;
+
+
+		// set collision groups
+		var terrainCollisionGroup = game.physics.p2.createCollisionGroup();
+		var shipCollisionGroup = game.physics.p2.createCollisionGroup();
+		var landingPadCollisionGroup = game.physics.p2.createCollisionGroup();
+
+		terrain.body.setCollisionGroup(terrainCollisionGroup);
+		ship.body.setCollisionGroup(shipCollisionGroup);
+		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
+
+		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
+		landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
+
+		ship.body.collides(terrainCollisionGroup, hitTerrain, this);
+		ship.body.collides(landingPadCollisionGroup, landedShip, this);
+
+
 	};
 
 
 	//function that will be run when we hit the terrain
 	function hitTerrain(body1, body2) {
 			console.log('hit terrain')
-			console.log(body1);
+
+			console.log('landing pad body ', landingPad.body);
 
 			//create explosion sprite for collision
 			if (body1) {
@@ -322,7 +328,7 @@
 			}
 			// down key, reverse accelerate
 			else if (cursors.down.isDown){
-				//ship.body.reverse(200);
+				ship.body.reverse(200);
 			}
 	}
 
