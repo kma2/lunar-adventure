@@ -20,6 +20,7 @@ function preload() {
 	game.load.image('ship', 'rocket.png');
 	game.load.image('planet', 'planet2.png');
 	game.load.physics('shipPhysics', 'tracedRocket.json');
+	game.load.image('explosion', 'explosion.jpg');
 }
 
 function create() {
@@ -27,6 +28,10 @@ function create() {
 	
 	game.physics.startSystem(Phaser.Physics.P2JS);
 	// game.physics.p2.gravity.y = 40;
+
+	//turn on impact events for the world so we have collision callbacks
+	game.physics.p2.setImpactEvents(true)
+
 
 	cursors = game.input.keyboard.createCursorKeys();
 
@@ -160,7 +165,7 @@ function create() {
 	terrain.body.static = true;
 
 
-	// createing ship
+	// creating ship
 	ship = game.add.sprite(game.world.width/2, game.world.height/5, 'ship');
 	ship.scale.setTo(0.05, 0.05)
 
@@ -183,16 +188,32 @@ function create() {
 	ship.body.setCollisionGroup(shipCollisionGroup);
 
 	// ship.setCollisionGroup()
-	ship.body.collides(terrainCollisionGroup, null, this);
+	ship.body.collides(terrainCollisionGroup, hitTerrain, this);
 
 };
 
-
+//function that will be run when we hit the terrain
 function hitTerrain(body1, body2) {
 		//  body1 is the space ship (as it's the body that owns the callback)
 		//  body2 is the body it impacted with, in this case our panda
 		//  As body2 is a Phaser.Physics.P2.Body object, you access its own (the sprite) via the sprite property:
-		body2.sprite.alpha -= 0.1;
+		
+		//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
+		let posX = ship.x;
+		let posY = ship.y;
+		console.log('position of ship', posX, posY)
+		console.log('hit terrain')
+		ship.destroy();
+
+		//create explosion sprite for collision
+		explosion = game.add.sprite(posX, posY, 'explosion')
+		console.log('position of explosion', posX, posY)
+		explosion.scale.setTo(0.05, 0.05)
+		window.setTimeout(() => explosion.destroy(), 500)
+
+
+		// explosion.destroy();
+		// body2.sprite.alpha -= 0.1;
 
 }
 
