@@ -1,6 +1,6 @@
 // This is where we will have our preload screen
 
-const LunarAdventure = LunarAdventure || {};
+var LunarAdventure = LunarAdventure || {};
 
 LunarAdventure.Boot = function(){};
 
@@ -8,10 +8,11 @@ LunarAdventure.Boot = function(){};
 LunarAdventure.Boot.prototype = {
   preload: function() {
   	//example assets we'll use in the loading screen
-    // this.load.image('logo', 'assets/images/logo.png');
-    // this.load.image('preloadbar', 'assets/images/preloader-bar.png');
+    this.load.image('logo', 'images/TheAstronautWhite.png');
+    // this.load.image('preloadbar', 'images/preloader-bar.png');
   },
   create: function() {
+    console.log(this);
   	//loading screen will have a white background
     this.game.stage.backgroundColor = '#fff';
 
@@ -26,7 +27,7 @@ LunarAdventure.Boot.prototype = {
 	this.scale.pageAlignHorizontally = true;
 
 	//screen size will be set automatically
-	this.scale.setScreenSize(true);
+	// this.scale.setScreenSize(true);
 
 	//physics system for movement
 	this.game.physics.startSystem(Phaser.Physics.P2);

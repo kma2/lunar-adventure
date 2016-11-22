@@ -4,8 +4,7 @@ LunarAdventure.MainMenu.prototype = {
   create: function() {
   	//show the space tile, repeated
     // example
-    // this.background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
-
+    this.background = this.game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'wallpaper');
     // //give it speed in x
     // this.background.autoScroll(-20, 0);
 
