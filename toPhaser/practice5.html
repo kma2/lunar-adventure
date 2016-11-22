@@ -20,7 +20,10 @@
 	function preload() {
 		game.load.image('ship', 'images/rocket.png');
 		// game.load.physics('shipPhysics', 'tracedRocket.json');
-		game.load.image('explosion', 'explosion.jpg');
+		game.load.image('explosion', 'images/explosion.jpg');
+		game.load.image('broom', 'images/broom.jpg');
+		game.load.physics('shipPhysics', 'tracedRocket.json');
+		game.load.physics('broomPhysics', 'broomjson.json');
 	}
 
 	function create() {
@@ -34,8 +37,9 @@
 		divide = 15
 		cursors = game.input.keyboard.createCursorKeys();
 
-		// var shipCollisionGroup = game.physics.p2.createCollisionGroup();
-		// var terrainCollisionGroup = game.physics.p2.createCollisionGroup();
+		//collisions
+		var shipCollisionGroup = game.physics.p2.createCollisionGroup();
+		var terrainCollisionGroup = game.physics.p2.createCollisionGroup();
 
 		const octagon = function(radius, start_x, start_y) {
 			const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
@@ -166,8 +170,22 @@
 
 		// set terrain collision
 		game.physics.p2.enable(terrain, true);
-		// terrain.body.setCollisionGroup(terrainCollisionGroup);
-		// terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
+
+		//collisions
+		terrain.body.setCollisionGroup(terrainCollisionGroup);
+		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
+
+		//terrain polygon
+		// terrain.body.clearShapes();
+		// console.log('points', poly.points);
+		// console.log(createPlanet(octagonArray, 10, 250, 1.05));
+		let arrOfCoords = createPlanet(octagonArray, 10, 250, 1.05)
+		// console.log(arrOfCoords)
+		// terrain.body.addPolygon({}, arrOfCoords);
+		// terrain.x = window.innerWidth/2;
+		// terrain.y = window.innerHeight * 1.7;
+
+		//collision - terrain won't move when hit
 		terrain.body.static = true;
 		console.log(terrain.body.world)
 		// let pointsArray = poly.points.map((el, i) => [el.x, el.y])
@@ -175,15 +193,26 @@
 		// terrain.body.clearShapes();
 		// terrain.body.loadPolygon('shipPhysics', 'terrain')
 
-		// createing ship
+		// creating ship
 		ship = game.add.sprite(gameWidth/2, gameHeight/5, 'ship');
 		ship.scale.setTo(0.05, 0.05)
 
 		game.physics.p2.enable(ship, true);
-		
-		// ship.body.setCollisionGroup(shipCollisionGroup);
-		// ship.body.collides(terrainCollisionGroup, hitTerrain, this);
 
+		//ship polygon
+
+		// ship.body.clearShapes();
+		//this line throw error - can't read length of null
+		// ship.body.loadPolygon('shipPhysics', 'ship');
+		// ship.body.addPolygon('shipPhysics')
+		// ship.body.loadPolygon('shipPhysics');
+
+		//collision
+		ship.body.collideWorldBounds = true;
+		ship.body.setCollisionGroup(shipCollisionGroup);
+
+		ship.body.collides(terrainCollisionGroup, hitTerrain, this);
+		
 
 		// set boundary
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
@@ -205,6 +234,8 @@ function hitTerrain(body1, body2) {
 			let posX = ship.x;
 			let posY = ship.y;
 			ship.destroy();
+
+			//create explosion sprite for collision
 			explosion = game.add.sprite(posX, posY, 'explosion')
 			explosion.scale.setTo(0.05, 0.05)
 			// window.setTimeout(() => explosion.destroy(), 500)
