@@ -136,6 +136,14 @@ LunarAdventure.Game.prototype = {
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 		
 		//******end static terrain
+
+		rotatingGroup = this.add.group();
+		rotatingGroup.x = 500;
+		rotatingGroup.y = 500;
+		rotatingGroup.pivot.x = 300;
+		rotatingGroup.pivot.y = 300;
+		rotatingGroup.create(50,50, 'rectangle')
+		rotatingGroup.create(10,10,'broom')
 		//terrain polygon
 		// terrain.body.clearShapes();
 		// console.log('points', poly.points);
@@ -265,7 +273,7 @@ LunarAdventure.Game.prototype = {
     // left key, rotate ship
   if(ship.body){
     if (cursors.left.isDown) {
-
+    	rotatingGroup.rotation += 0.2
       ship.body.rotateLeft(100);
     }
     // right key, rotate ship
