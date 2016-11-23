@@ -17,9 +17,7 @@ LunarAdventure.Preload.prototype = {
     this.load.image('astronaut', 'images/TheAstronautWhite.png');
     this.load.image('ship', 'images/rocket.png');
 		this.load.image('explosion', 'images/explosion.png');
-		this.load.image('broom', 'images/broom.jpg');
 		this.load.physics('tracedTerrain', 'terrainPolygon.json');
-		this.load.physics('broomPhysics', 'broomjson.json');
     this.load.image('terrain', 'images/terrain.png');
     this.load.image('starfield', 'images/starfield.jpg');
     this.load.image('rectangle', 'images/Rectangle.png');
