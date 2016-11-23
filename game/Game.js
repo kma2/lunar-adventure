@@ -188,7 +188,7 @@ LunarAdventure.Game.prototype = {
 
   hitTerrain: function(body1, body2) {
 			console.log('hit terrain');
-			alert('Oh no, you crashed into the terrain!');
+			// alert('Oh no, you crashed into the terrain!');
 			console.log('customBounds ', customBounds)
 			//create explosion sprite for collision
 			if (body1) {
@@ -200,17 +200,21 @@ LunarAdventure.Game.prototype = {
 				explosion = this.add.sprite(posX, posY, 'explosion')
 				explosion.scale.setTo(0.05, 0.05);
 				// window.setTimeout(() => explosion.destroy(), 500)
+      this.game.time.events.add(Phaser.Timer.SECOND * 4, this.gameOver, this);
 			}
 	},
 
 	landedShip: function(body1, body2) {
 		console.log('ship has landed!')
-		alert('Yay, you have landed the ship!');
+		// alert('Yay, you have landed the ship!');
 		// when rocket touches the landing spot, it stops moving
 		if (body1) {
 			let posX = ship.x;
 			let posY = ship.y;
-			this.physics.p2.disable(ship);
+      if(ship.physicsType){
+			  this.physics.p2.disable(ship);
+      }
+      this.game.time.events.add(Phaser.Timer.SECOND * 4, this.gameOver, this);
 			//ship.immovable = true; // not sure why this doesn't work!
 		}
 	},
@@ -241,9 +245,17 @@ LunarAdventure.Game.prototype = {
 			// sim.world.addBody(customBounds.bottom);
 	},
 
+  gameOver: function() {
+      //pass it the score as a parameter
+      console.log("WE SHOULD BE STARTING OVER!!!")
+      this.game.state.start('MainMenu', true, false);
+  },
+
   update: function() {
     // left key, rotate ship
+  if(ship.body){
     if (cursors.left.isDown) {
+
       ship.body.rotateLeft(100);
     }
     // right key, rotate ship
@@ -256,16 +268,23 @@ LunarAdventure.Game.prototype = {
     }
     // up key, accelerate
     if (cursors.up.isDown){
-      if (ship.world.x <= gameWidth/divide + 50) {
-        terrain.body.rotation += 0.01;
-      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60) {
-        terrain.body.rotation -= 0.01;
-      }
       ship.body.thrust(200);
     }
     // down key, reverse accelerate
     else if (cursors.down.isDown){
       ship.body.reverse(200);
     }
+    // planet rotation
+    if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
+      terrain.body.rotation += 0.004;
+    } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
+      terrain.body.rotation -= 0.004;
+    }
+    if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
+      terrain.body.rotation += 0.004;
+    } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
+      terrain.body.rotation -= 0.004;
+    }
+  }
   },
 };
