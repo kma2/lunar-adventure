@@ -2,19 +2,21 @@ LunarAdventure.MainMenu = function(){};
 
 LunarAdventure.MainMenu.prototype = {
   create: function() {
-  	//show the space tile, repeated
-    // example
     this.background = this.game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'wallpaper');
-    // //give it speed in x
-    // this.background.autoScroll(-20, 0);
+    this.splash = this.add.sprite(this.game.world.centerX - 100, this.game.world.centerY - 180, 'astronaut');
 
-    // Here we can show the whole planet and obstacles as a background
+    var gameTitle = "Lunar Adventure";
+    var gameTitleStyle = { font: "37px Arial", fill: "#fff", align: "center" };
+    var heading = this.game.add.text(this.game.width/2, this.game.height/1.75, gameTitle, gameTitleStyle);
+    heading.anchor.set(0.5);
 
-    //start game text
-    var text = "Tap to begin";
-    var style = { font: "30px Arial", fill: "#fff", align: "center" };
-    var t = this.game.add.text(this.game.width/2, this.game.height/2, text, style);
-    t.anchor.set(0.5);
+    // Katy: bitmapText will render the text in higher quality, but I couldn't get it to work
+    //var heading = this.game.add.bitmapText(this.game.width/2, this.game.height/1.75, "Arial", "Lunar Adventure", 37);
+
+    var subtext = "Tap to begin";
+    var subtextStyle = { font: "22px Arial", fill: "#fff", align: "center" };
+    var text2 = this.game.add.text(this.game.width/2, this.game.height/1.55, subtext, subtextStyle);
+    text2.anchor.set(0.5);
 
   },
   update: function() {

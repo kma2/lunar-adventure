@@ -8,8 +8,8 @@ LunarAdventure.Boot = function(){};
 LunarAdventure.Boot.prototype = {
   preload: function() {
   	//example assets we'll use in the loading screen
-    this.load.image('logo', 'images/TheAstronautWhite.png');
-    // this.load.image('preloadbar', 'images/preloader-bar.png');
+    this.load.image('astronaut', 'images/TheAstronautWhite.png');
+    this.load.image('wallpaper', 'images/terrainPattern.png');
   },
   create: function() {
     console.log(this);
