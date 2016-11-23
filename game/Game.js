@@ -191,13 +191,16 @@ LunarAdventure.Game.prototype = {
 		var boundsCollisionGroup = this.physics.p2.createCollisionGroup();
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
-		
+
 		// landingEllipse.setCollisionGroup(landingPadCollisionGroup)
 		// customBounds.body.setCollisionGroup(boundsCollisionGroup);
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
 		// customBounds.body.collides([boundsCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(terrainCollisionGroup, this.hitTerrain, this);
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
+
+		//create bounds on sides of screen
+		game.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
   },
 
