@@ -200,7 +200,7 @@ LunarAdventure.Game.prototype = {
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
 
 		//create bounds on sides of screen
-		game.physics.p2.setBoundsToWorld(true, true, true, true, true);
+		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
   },
 
