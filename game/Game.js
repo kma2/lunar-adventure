@@ -174,14 +174,6 @@ LunarAdventure.Game.prototype = {
 		customBounds = { left: null, right: null, top: null, bottom: null };
 		this.createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 
-		// create landing pad
-		landingPad = this.add.graphics(window.innerWidth/2, window.innerHeight/2.5);
-		landingPad.beginFill(0xffd900);
-		landingPad.drawEllipse(0,0,35,10);
-		landingPad.endFill();
-		this.physics.p2.enable(landingPad, true);
-		landingPad.body.static = true;
-
 		//create sprite landing pad
 		landingEllipse = this.add.sprite(gameWidth/2, gameHeight/9, 'landingPad');
 		landingEllipse.scale.setTo(0.5, 0.5);
@@ -199,10 +191,9 @@ LunarAdventure.Game.prototype = {
 		var boundsCollisionGroup = this.physics.p2.createCollisionGroup();
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
-		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
+		landingEllipse.setCollisionGroup(landingPadCollisionGroup)
 		// customBounds.body.setCollisionGroup(boundsCollisionGroup);
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
-		landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
 		// customBounds.body.collides([boundsCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(terrainCollisionGroup, this.hitTerrain, this);
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
