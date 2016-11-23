@@ -298,18 +298,18 @@ LunarAdventure.Game.prototype = {
     // }
     // planet rotation
     if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
-      // terrain.body.rotation += 0.002;
-      terrain.body.rotation += 0.05;
+      terrain.body.rotation += 0.002;
+      // terrain.body.rotation += 0.05;
 
     } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
       terrain.body.rotation -= 0.002;
     }
     if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
-      // terrain.body.rotation += 0.002;
-      terrain.body.rotation += 0.05;
+      terrain.body.rotation += 0.002;
+      // terrain.body.rotation += 0.05;
     } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
-      // terrain.body.rotation -= 0.002;
-      terrain.body.rotation -= 0.05;
+      terrain.body.rotation -= 0.002;
+      // terrain.body.rotation -= 0.05;
     }
   }
   },
