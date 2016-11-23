@@ -13,6 +13,7 @@ LunarAdventure.Game.prototype = {
 		gameHeight = this.world.height
 		divide = 15
 		cursors = this.input.keyboard.createCursorKeys();
+		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
 		// create terrain
 		const octagon = function(radius, start_x, start_y) {
 			const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
@@ -115,22 +116,32 @@ LunarAdventure.Game.prototype = {
 			points.push(y);
 			return points
 		};
-		var octagonArray = octagon(window.innerWidth/1.4, 500, 150);
-		poly = new Phaser.Polygon(createPlanet(octagonArray, 10, 250, 1.05));
-		graphics = this.add.graphics(100, 100);
-		graphics.beginFill(0xeaeaea); // light gray
-		graphics.drawPolygon(poly.points);
-		graphics.endFill();
-		terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.9, graphics.generateTexture());
-		terrain.anchor.set(0.5);
-		graphics.destroy();
-		this.physics.p2.enable(terrain, false);
+		// var octagonArray = octagon(window.innerWidth/1.4, 500, 150);
+		// poly = new Phaser.Polygon(createPlanet(octagonArray, 10, 250, 1.05));
+		// graphics = this.add.graphics(100, 100);
+		// graphics.beginFill(0xeaeaea); // light gray
+		// graphics.drawPolygon(poly.points);
+		// graphics.endFill();
+		// terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.9, graphics.generateTexture());
+		// terrain.anchor.set(0.5);
+		// graphics.destroy();
+		// this.physics.p2.enable(terrain, false);
+
+		//*****static terrain
+		terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.6, 'terrain');
+		terrain.anchor.set(0.5)
+		this.physics.p2.enable(terrain, false)
+		terrain.body.static = true;
+		terrain.body.clearShapes();
+		terrain.body.loadPolygon('tracedTerrain', 'terrain');
+		
+		//******end static terrain
 		//terrain polygon
 		// terrain.body.clearShapes();
 		// console.log('points', poly.points);
 		// console.log(createPlanet(octagonArray, 10, 250, 1.05));
 		// let pointsArray = poly.points.map((el, i) => [el.x, el.y])
-		let arrOfCoords = createPlanet(octagonArray, 10, 250, 1.05)
+		// let arrOfCoords = createPlanet(octagonArray, 10, 250, 1.05)
 		// let fn = function(number) {
 		// 	return Math.ceil(number)
 		// }
@@ -143,7 +154,6 @@ LunarAdventure.Game.prototype = {
 		// terrain.x = window.innerWidth/2;
 		// terrain.y = window.innerHeight * 1.7;
 		//collision - terrain won't move when hit
-		terrain.body.static = true;
 		// game.load.physics('shipPhysics', 'tracedRocket.json');
 		// terrain.body.clearShapes();
 		// terrain.body.loadPolygon('shipPhysics', 'terrain')
@@ -271,19 +281,19 @@ LunarAdventure.Game.prototype = {
       ship.body.thrust(200);
     }
     // down key, reverse accelerate
-    else if (cursors.down.isDown){
-      ship.body.reverse(200);
-    }
+    // else if (cursors.down.isDown){
+    //   ship.body.reverse(200);
+    // }
     // planet rotation
     if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
-      terrain.body.rotation += 0.004;
+      terrain.body.rotation += 0.002;
     } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
-      terrain.body.rotation -= 0.004;
+      terrain.body.rotation -= 0.002;
     }
     if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
-      terrain.body.rotation += 0.004;
+      terrain.body.rotation += 0.002;
     } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
-      terrain.body.rotation -= 0.004;
+      terrain.body.rotation -= 0.002;
     }
   }
   },
