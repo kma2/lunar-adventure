@@ -45,6 +45,7 @@
     "redux-logger": "^2.7.4",
     "redux-thunk": "^2.1.0",
     "sequelize": "^3.25.0",
+    "trianglify": "^1.0.1",
     "volleyball": "^1.4.1",
     "webpack": "^1.13.3"
   },
