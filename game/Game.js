@@ -137,13 +137,6 @@ LunarAdventure.Game.prototype = {
 		
 		//******end static terrain
 
-		rotatingGroup = this.add.group();
-		rotatingGroup.x = 500;
-		rotatingGroup.y = 500;
-		rotatingGroup.pivot.x = 300;
-		rotatingGroup.pivot.y = 300;
-		rotatingGroup.create(50,50, 'rectangle')
-		rotatingGroup.create(10,10,'broom')
 		//terrain polygon
 		// terrain.body.clearShapes();
 		// console.log('points', poly.points);
@@ -180,13 +173,25 @@ LunarAdventure.Game.prototype = {
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
 		customBounds = { left: null, right: null, top: null, bottom: null };
 		this.createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+
 		// create landing pad
 		landingPad = this.add.graphics(window.innerWidth/2, window.innerHeight/2.5);
 		landingPad.beginFill(0xffd900);
 		landingPad.drawEllipse(0,0,35,10);
 		landingPad.endFill();
-		this.physics.p2.enable(landingPad, false);
+		this.physics.p2.enable(landingPad, true);
 		landingPad.body.static = true;
+
+		//create sprite landing pad
+		landingEllipse = this.add.sprite(gameWidth/2, gameHeight/9, 'landingPad');
+		landingEllipse.scale.setTo(0.5, 0.5);
+		landingEllipse.anchor.setTo(0,0);
+		// this.physics.p2.enable(landingEllipse, true);
+		// landingEllipse.body.rotation = 0.8
+
+		terrain.addChild(landingEllipse)
+
+
 		// set collision groups
 		var terrainCollisionGroup = this.physics.p2.createCollisionGroup();
 		var shipCollisionGroup = this.physics.p2.createCollisionGroup();
@@ -273,7 +278,6 @@ LunarAdventure.Game.prototype = {
     // left key, rotate ship
   if(ship.body){
     if (cursors.left.isDown) {
-    	rotatingGroup.rotation += 0.2
       ship.body.rotateLeft(100);
     }
     // right key, rotate ship
@@ -294,14 +298,18 @@ LunarAdventure.Game.prototype = {
     // }
     // planet rotation
     if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
-      terrain.body.rotation += 0.002;
+      // terrain.body.rotation += 0.002;
+      terrain.body.rotation += 0.05;
+
     } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
       terrain.body.rotation -= 0.002;
     }
     if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
-      terrain.body.rotation += 0.002;
+      // terrain.body.rotation += 0.002;
+      terrain.body.rotation += 0.05;
     } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
-      terrain.body.rotation -= 0.002;
+      // terrain.body.rotation -= 0.002;
+      terrain.body.rotation -= 0.05;
     }
   }
   },
