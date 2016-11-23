@@ -243,21 +243,6 @@ function createPreviewBounds(x, y, w, h) {
 			else if (cursors.down.isDown){
 				//ship.body.reverse(200);
 			}
-
-      if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
-					terrain.body.rotation += 0.004;
-					tilesprite.tilePosition.x += 4;
-					tilesprite.tilePosition.y -= 1;
-				} else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
-					terrain.body.rotation -= 0.004;
-					tilesprite.tilePosition.x -= 4;
-					tilesprite.tilePosition.y -= 1;
-				}
-        if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
-					terrain.body.rotation += 0.004;
-				} else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
-					terrain.body.rotation -= 0.004;
-				}
 	}
 	</script>
 
