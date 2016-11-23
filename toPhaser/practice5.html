@@ -13,31 +13,24 @@
 <body>
 
 <script type="text/javascript">
-
 	var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update:update });
-
-
 	function preload() {
 		game.load.image('ship', 'images/rocket.png');
 		// game.load.physics('shipPhysics', 'tracedRocket.json');
-		game.load.image('explosion', 'images/explosion.jpg');
+		game.load.image('explosion', 'images/explosion.png');
 		game.load.image('broom', 'images/broom.jpg');
 		game.load.physics('shipPhysics', 'tracedRocket.json');
 		game.load.physics('broomPhysics', 'broomjson.json');
 	}
-
 	function create() {
 		game.physics.startSystem(Phaser.Physics.P2JS);
 		game.physics.p2.gravity.y = 20;
-
 		// turn on impact events for the world so we have collision callbacks
 		game.physics.p2.setImpactEvents(true)
 		gameWidth = game.world.width
 		gameHeight = game.world.height
 		divide = 15
 		cursors = game.input.keyboard.createCursorKeys();
-
-
 		// create terrain
 		const octagon = function(radius, start_x, start_y) {
 			const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
@@ -48,18 +41,15 @@
 			let finalArray = [[v1_x, v1_y], [v2_x, v2_y]];
 			return finalArray;
 		}
-
 		const createPlanet = function(array, numSegs, height, roughness) {
 			var points = [];
 			var height = height || 180;
 			var displace = height / 10;
 			var roughness = roughness || 1;
 			var numSegs = numSegs;
-
 			let edgeLength = array[1][0] - array[0][0];
 			const segLength = edgeLength/numSegs;
 			let power = Math.pow(2, Math.ceil(Math.log(edgeLength) / (Math.log(2))));
-
 			// TOP OF OCTAGON
 			let x = array[0][0]
 			let y = array[0][1];
@@ -70,7 +60,6 @@
 				points.push(y);
 				displace *= roughness;
 			}
-
 			// TOP RIGHT OF OCTAGON - work in progress
 			displace = height / 10;
 			for(j = 0; j < numSegs; j++){
@@ -80,7 +69,6 @@
 				points.push(y);
 				displace *= roughness;
 			}
-
 			// RIGHT SIDE OF OCTAGON
 			displace = height / 10;
 			for(j = 0; j < numSegs; j++){
@@ -90,7 +78,6 @@
 				points.push(y);
 				displace *= roughness;
 			}
-
 			// BOTTOM RIGHT OF OCTAGON - work in progress
 			displace = height / 10;
 			for(j = 0; j < numSegs; j++){
@@ -100,7 +87,6 @@
 				points.push(y);
 				displace *= roughness;
 			}
-
 			// BOTTOM OF OCTAGON
 			displace = height / 10;
 			points.push(x)
@@ -112,7 +98,6 @@
 				points.push(y);
 				displace *= roughness;
 			}
-
 			// BOTTOM LEFT of OCTAGON - work in progress
 			displace = height / 10;
 			for(j = 0; j < numSegs; j++){
@@ -122,7 +107,6 @@
 				points.push(y);
 				displace *= roughness;
 			}
-
 			// LEFT SIDE OF OCTAGON
 			displace = height / 10;
 			points.push(x)
@@ -134,7 +118,6 @@
 				points.push(y);
 				displace *= roughness;
 			}
-
 			// TOP LEFT OF OCTAGON - work in progress
 			displace = height / 10;
 			for(j = 0; j < numSegs; j++){
@@ -146,25 +129,20 @@
 			}
 			x = (array[0][0] + x)/2;
 			y = (array[0][1] + y)/2;
-
 			points.push(x);
 			points.push(y);
 			return points
 		};
-
 		var octagonArray = octagon(window.innerWidth/1.4, 500, 150);
 		poly = new Phaser.Polygon(createPlanet(octagonArray, 10, 250, 1.05));
 		graphics = game.add.graphics(100, 100);
-
 		graphics.beginFill(0xeaeaea); // light gray
 		graphics.drawPolygon(poly.points);
 		graphics.endFill();
-
 		terrain = game.add.sprite(window.innerWidth/2, window.innerHeight * 1.9, graphics.generateTexture());
 		terrain.anchor.set(0.5);
 		graphics.destroy();
 		game.physics.p2.enable(terrain, false);
-
 		//terrain polygon
 		// terrain.body.clearShapes();
 		// console.log('points', poly.points);
@@ -182,140 +160,101 @@
 		//terrain.body.addPolygon({}, coords);
 		// terrain.x = window.innerWidth/2;
 		// terrain.y = window.innerHeight * 1.7;
-
 		//collision - terrain won't move when hit
 		terrain.body.static = true;
-
 		// game.load.physics('shipPhysics', 'tracedRocket.json');
 		// terrain.body.clearShapes();
 		// terrain.body.loadPolygon('shipPhysics', 'terrain')
-
 		// creating ship
 		ship = game.add.sprite(gameWidth/2, gameHeight/5, 'ship');
 		ship.scale.setTo(0.05, 0.05)
-
 		game.physics.p2.enable(ship, false);
-
 		//ship polygon
-
 		// === attempt at outlining the ship ====
 		// ship.body.clearShapes();
 		//this line throw error - can't read length of null
 		// ship.body.loadPolygon('shipPhysics', 'ship');
 		// ship.body.addPolygon('shipPhysics')
 		// ship.body.loadPolygon('shipPhysics');
-
-
 		// set boundaries on left and right of the screen
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
 		customBounds = { left: null, right: null, top: null, bottom: null };
 		createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
-
-
 		// create landing pad
 		landingPad = game.add.graphics(window.innerWidth/2, window.innerHeight/2.5);
 		landingPad.beginFill(0xffd900);
 		landingPad.drawEllipse(0,0,35,10);
 		landingPad.endFill();
-
 		game.physics.p2.enable(landingPad, false);
 		landingPad.body.static = true;
-
-
 		// set collision groups
 		var terrainCollisionGroup = game.physics.p2.createCollisionGroup();
 		var shipCollisionGroup = game.physics.p2.createCollisionGroup();
 		var landingPadCollisionGroup = game.physics.p2.createCollisionGroup();
 		var boundsCollisionGroup = game.physics.p2.createCollisionGroup();
-
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
 		// customBounds.body.setCollisionGroup(boundsCollisionGroup);
-
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
 		landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
 		// customBounds.body.collides([boundsCollisionGroup, shipCollisionGroup]);
-
 		ship.body.collides(terrainCollisionGroup, hitTerrain, this);
 		ship.body.collides(landingPadCollisionGroup, landedShip, this);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
-
-
 	};
-
-
 	//function that will be run when we hit the terrain
 	function hitTerrain(body1, body2) {
 			console.log('hit terrain');
 			alert('Oh no, you crashed into the terrain!');
 			console.log('customBounds ', customBounds)
-
 			//create explosion sprite for collision
 			if (body1) {
 				//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
 				let posX = ship.x;
 				let posY = ship.y;
 				ship.destroy();
-
 				//create explosion sprite for collision
 				explosion = game.add.sprite(posX, posY, 'explosion')
 				explosion.scale.setTo(0.05, 0.05);
 				// window.setTimeout(() => explosion.destroy(), 500)
 			}
-
 	}
-
 	function landedShip(body1, body2) {
 		console.log('ship has landed!')
 		alert('Yay, you have landed the ship!');
-
 		// when rocket touches the landing spot, it stops moving
 		if (body1) {
 			let posX = ship.x;
 			let posY = ship.y;
-
 			game.physics.p2.disable(ship);
 			//ship.immovable = true; // not sure why this doesn't work!
 		}
 	}
-
 	function hitBounds(body1, body2) {
 		console.log('hit boundary');
-
 	}
-
 	function createPreviewBounds(x, y, w, h) {
-
 			var sim = game.physics.p2;
-
 			//  If you want to use your own collision group then set it here and un-comment the lines below
 			var mask = sim.boundsCollisionGroup.mask;
-
 			customBounds.left = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y) ], angle: 1.5707963267948966 });
 			customBounds.left.addShape(new p2.Plane());
 			// customBounds.left.shapes[0].collisionGroup = mask;
-
 			customBounds.right = new p2.Body({ mass: 0, position: [ sim.pxmi(x + w), sim.pxmi(y) ], angle: -1.5707963267948966 });
 			customBounds.right.addShape(new p2.Plane());
 			// customBounds.right.shapes[0].collisionGroup = mask;
-
 			// customBounds.top = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y) ], angle: -3.141592653589793 });
 			// customBounds.top.addShape(new p2.Plane());
 			// // customBounds.top.shapes[0].collisionGroup = mask;
-
 			// customBounds.bottom = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y + h) ] });
 			// customBounds.bottom.addShape(new p2.Plane());
 			// // customBounds.bottom.shapes[0].collisionGroup = mask;
-
 			sim.world.addBody(customBounds.left);
 			sim.world.addBody(customBounds.right);
 			// sim.world.addBody(customBounds.top);
 			// sim.world.addBody(customBounds.bottom);
-
 	}
-
-
 	function update() {
 			// left key, rotate ship
 			if (cursors.left.isDown) {
@@ -343,7 +282,6 @@
 				ship.body.reverse(200);
 			}
 	}
-
 	</script>
 
 	</body>

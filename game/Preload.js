@@ -5,26 +5,23 @@ LunarAdventure.Preload = function(){};
 
 LunarAdventure.Preload.prototype = {
   preload: function() {
-  	//show logo in loading screen
-  	this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
-    this.splash.anchor.setTo(0.5);
 
+    // loading progress bar
     // this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 128, 'preloadbar');
     // this.preloadBar.anchor.setTo(0.5);
 
     // this.load.setPreloadSprite(this.preloadBar);
 
   	//load game assets
-    // this is where we will generate the planet and asteroids and load our sprites
-
-  	this.load.image('wallpaper', 'images/wallpaper.jpg');
-  	// this.load.image('rock', 'assets/images/rock.png');
-    // this.load.spritesheet('playership', 'assets/images/player.png', 12, 12);
-    // this.load.spritesheet('power', 'assets/images/power.png', 12, 12);
-  	// this.load.image('playerParticle', 'assets/images/player-particle.png');
-    // this.load.audio('collect', 'assets/audio/collect.ogg');
-    // this.load.audio('explosion', 'assets/audio/explosion.ogg');
+  	this.load.image('wallpaper', 'images/terrainPattern.png');
+    this.load.image('astronaut', 'images/TheAstronautWhite.png');
+    this.load.image('ship', 'images/rocket.png');
+		this.load.image('explosion', 'images/explosion.png');
+		this.load.image('broom', 'images/broom.jpg');
+		this.load.physics('shipPhysics', 'tracedRocket.json');
+		this.load.physics('broomPhysics', 'broomjson.json');
   },
+
   create: function() {
   	this.state.start('MainMenu');
   }
