@@ -134,7 +134,7 @@ LunarAdventure.Game.prototype = {
 		terrain.body.static = true;
 		terrain.body.clearShapes();
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
-		
+
 		//******end static terrain
 		//terrain polygon
 		// terrain.body.clearShapes();
