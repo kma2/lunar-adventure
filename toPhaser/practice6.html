@@ -1,6 +1,6 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
+<!doctype html>
+<html lang="en">
+<head>
 	<meta charset="UTF-8" />
 		<title>Phaser - Making your first game, part 9</title>
 	<script type="text/javascript" src="phaser.min.js"></script>
@@ -209,7 +209,7 @@
 		// ship.body.setCollisionGroup(shipCollisionGroup);
 
 		// ship.body.collides(terrainCollisionGroup, hitTerrain, this);
-		
+
 
 		// set boundary
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
@@ -285,21 +285,27 @@ function createPreviewBounds(x, y, w, h) {
 			}
 			// up key, accelerate
 			if (cursors.up.isDown){
-				if (ship.world.x <= gameWidth/divide + 50) { 
-					terrain.body.rotation += 0.02; 
-					tilesprite.tilePosition.x += 4;
-					tilesprite.tilePosition.y -= 1;
-				} else if (ship.world.x >= gameWidth/divide * (divide-1) - 60) {
-					terrain.body.rotation -= 0.02;
-					tilesprite.tilePosition.x -= 4;
-					tilesprite.tilePosition.y -= 1;
-				}
 				ship.body.thrust(400);
 			}
 			// down key, reverse accelerate
 			else if (cursors.down.isDown){
 				//ship.body.reverse(200);
 			}
+
+      if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
+					terrain.body.rotation += 0.004;
+					tilesprite.tilePosition.x += 4;
+					tilesprite.tilePosition.y -= 1;
+				} else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
+					terrain.body.rotation -= 0.004;
+					tilesprite.tilePosition.x -= 4;
+					tilesprite.tilePosition.y -= 1;
+				}
+        if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
+					terrain.body.rotation += 0.004;
+				} else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
+					terrain.body.rotation -= 0.004;
+				}
 	}
 
 	</script>
