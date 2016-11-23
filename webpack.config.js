@@ -3,7 +3,7 @@
 var webpack = require('webpack');
 
 module.exports = {
-  entry: './client/main.js',
+  entry: './game/main.js',
   output: {
     path: __dirname,
     filename: './public/bundle.js'

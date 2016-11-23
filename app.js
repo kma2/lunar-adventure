@@ -6,6 +6,9 @@ const {resolve} = require('path');
 const express = require('express');
 const app = express();
 
+// SOCKET
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 const PORT = process.env.PORT || 3000
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -19,14 +22,14 @@ app.get('/', (req, res, next) => {
 	res.sendFile(resolve(__dirname, 'public', 'index.html'))
 })
 
-app.get('/practice5', (req, res, next) => {
-	res.sendFile(resolve(__dirname, 'toPhaser', 'practice5.html'))
-})
+io.on('connection', (socket) => {
+    console.log('a user connected');
 
-app.get('/practice6', (req, res, next) => {
-	res.sendFile(resolve(__dirname, 'toPhaser', 'practice6.html'))
-})
+    socket.on('disconnect', function(msg) {
+    	console.log('user disconnected')
+    });
+});
 
-app.listen(PORT, () => {
+http.listen(PORT, () => {
 	console.log("Server is listening on port 3000");
 })
