@@ -178,7 +178,7 @@ LunarAdventure.Game.prototype = {
 
 
 		// create sprite landing pad
-    landingPad = this.add.sprite(gameWidth/2.5, window.innerHeight/4, 'landingPad');
+    landingPad = this.add.sprite(gameWidth/1.5, window.innerHeight/4, 'landingPad');
     landingPad.scale.setTo(0.2, 0.2);
     this.physics.p2.enable(landingPad, false);
     landingPad.body.static = true;
@@ -198,9 +198,11 @@ LunarAdventure.Game.prototype = {
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
 
+    // ship and terrain collision
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(terrainCollisionGroup, this.hitTerrain, this);
 
+    // ship and landing pad collision
     landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
 
@@ -208,6 +210,14 @@ LunarAdventure.Game.prototype = {
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
 
+    // fades in the landingPad after a given amount of time
+    this.time.events.add(Phaser.Timer.SECOND * 6, this.showLandingPad, this);
+    landingPad.alpha = 0;
+  },
+
+  // fade in landingPad
+  showLandingPad: function() {
+    this.game.add.tween(landingPad).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true);
   },
 
   hitTerrain: function(body1, body2) {
@@ -230,7 +240,7 @@ LunarAdventure.Game.prototype = {
 
 		// when rocket touches the landing spot, it stops moving and the game ends
 		if (body1) {
-			this.physics.p2.disable(ship);
+      ship.body = null; // disables the ship from moving
       this.game.time.events.add(Phaser.Timer.SECOND * 3, this.gameOver, this);
 		}
 	},
@@ -268,36 +278,36 @@ LunarAdventure.Game.prototype = {
 
   update: function() {
     // left key, rotate ship
-  if(ship.body){
-    if (cursors.left.isDown) {
-      ship.body.rotateLeft(100);
+    if(ship.body){
+      if (cursors.left.isDown) {
+        ship.body.rotateLeft(100);
+      }
+      // right key, rotate ship
+      else if (cursors.right.isDown){
+        ship.body.rotateRight(100);
+      }
+      // stop rotating if key is not pressed
+      else {
+        ship.body.setZeroRotation();
+      }
+      // up key, accelerate
+      if (cursors.up.isDown){
+        ship.body.thrust(200);
+      }
+      // planet rotation
+      if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
+        terrain.body.rotation += 0.002;
+        // terrain.body.rotation += 0.05;
+      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
+        terrain.body.rotation -= 0.002;
+      }
+      if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
+        terrain.body.rotation += 0.002;
+        // terrain.body.rotation += 0.05;
+      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
+        terrain.body.rotation -= 0.002;
+        // terrain.body.rotation -= 0.05;
+      }
     }
-    // right key, rotate ship
-    else if (cursors.right.isDown){
-      ship.body.rotateRight(100);
-    }
-    // stop rotating if key is not pressed
-    else {
-      ship.body.setZeroRotation();
-    }
-    // up key, accelerate
-    if (cursors.up.isDown){
-      ship.body.thrust(200);
-    }
-    // planet rotation
-    if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
-      terrain.body.rotation += 0.002;
-      // terrain.body.rotation += 0.05;
-    } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
-      terrain.body.rotation -= 0.002;
-    }
-    if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
-      terrain.body.rotation += 0.002;
-      // terrain.body.rotation += 0.05;
-    } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
-      terrain.body.rotation -= 0.002;
-      // terrain.body.rotation -= 0.05;
-    }
-  }
   },
 };
