@@ -211,7 +211,7 @@ LunarAdventure.Game.prototype = {
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
 
     // fades in the landingPad after a given amount of time
-    this.time.events.add(Phaser.Timer.SECOND * 6, this.showLandingPad, this);
+    this.time.events.add(Phaser.Timer.SECOND * 10, this.showLandingPad, this);
     landingPad.alpha = 0;
   },
 
