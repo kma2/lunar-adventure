@@ -1,19 +1,18 @@
 var LunarAdventure = LunarAdventure || {};
 
-//title screen
 LunarAdventure.Game = function(){};
 
 LunarAdventure.Game.prototype = {
   create: function() {
     this.physics.startSystem(Phaser.Physics.P2JS);
 		this.physics.p2.gravity.y = 20;
-		// turn on impact events for the world so we have collision callbacks
-		this.physics.p2.setImpactEvents(true)
-		gameWidth = this.world.width
-		gameHeight = this.world.height
-		divide = 15
+		this.physics.p2.setImpactEvents(true);
+		gameWidth = this.world.width;
+		gameHeight = this.world.height;
+		divide = 15;
 		cursors = this.input.keyboard.createCursorKeys();
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
+
 		// create terrain
 		const octagon = function(radius, start_x, start_y) {
 			const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
@@ -24,6 +23,7 @@ LunarAdventure.Game.prototype = {
 			let finalArray = [[v1_x, v1_y], [v2_x, v2_y]];
 			return finalArray;
 		}
+
 		const createPlanet = function(array, numSegs, height, roughness) {
 			var points = [];
 			var height = height || 180;
@@ -127,16 +127,6 @@ LunarAdventure.Game.prototype = {
 		// graphics.destroy();
 		// this.physics.p2.enable(terrain, false);
 
-		//*****static terrain
-		terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.6, 'terrain');
-		terrain.anchor.set(0.5)
-		this.physics.p2.enable(terrain, false)
-		terrain.body.static = true;
-		terrain.body.clearShapes();
-		terrain.body.loadPolygon('tracedTerrain', 'terrain');
-
-		//******end static terrain
-
 		//terrain polygon
 		// terrain.body.clearShapes();
 		// console.log('points', poly.points);
@@ -157,80 +147,91 @@ LunarAdventure.Game.prototype = {
 		//collision - terrain won't move when hit
 		// game.load.physics('shipPhysics', 'tracedRocket.json');
 		// terrain.body.clearShapes();
-		// terrain.body.loadPolygon('shipPhysics', 'terrain')
-		// creating ship
-		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
-		ship.scale.setTo(0.05, 0.05)
-		this.physics.p2.enable(ship, false);
-		//ship polygon
+		// terrain.body.loadPolygon('shipPhysics', 'terrain');
+
 		// === attempt at outlining the ship ====
 		// ship.body.clearShapes();
 		//this line throw error - can't read length of null
 		// ship.body.loadPolygon('shipPhysics', 'ship');
 		// ship.body.addPolygon('shipPhysics')
 		// ship.body.loadPolygon('shipPhysics');
+
 		// set boundaries on left and right of the screen
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
 		customBounds = { left: null, right: null, top: null, bottom: null };
 		this.createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 
-		//create sprite landing pad
-		landingEllipse = this.add.sprite(gameWidth/2, window.innerHeight - 200, 'landingPad');
-		landingEllipse.scale.setTo(0.25, 0.25);
-    landingEllipse.angle += 50;
 
-		terrain.addChild(landingEllipse);
+    // creating static terrain
+		terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.6, 'terrain');
+		terrain.anchor.set(0.5)
+		this.physics.p2.enable(terrain, false)
+		terrain.body.static = true;
+		terrain.body.clearShapes();
+		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
 
-		// set collision groups
+    // creating ship
+		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
+		ship.scale.setTo(0.06, 0.06);
+		this.physics.p2.enable(ship, false);
+
+
+		// create sprite landing pad
+    landingPad = this.add.sprite(gameWidth/2.5, window.innerHeight/4, 'landingPad');
+    landingPad.scale.setTo(0.2, 0.2);
+    this.physics.p2.enable(landingPad, false);
+    landingPad.body.static = true;
+
+    // add landingPad as a child of terrain (allows them to rotate together)
+    // ISSUE: when landingPad is a child of terrain, we aren't able to create a collision between the landingPad and ship
+		//terrain.addChild(landingPad);
+
+
+		// create and set collision groups
 		var terrainCollisionGroup = this.physics.p2.createCollisionGroup();
 		var shipCollisionGroup = this.physics.p2.createCollisionGroup();
-		//var landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
+		var landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
 		var boundsCollisionGroup = this.physics.p2.createCollisionGroup();
 
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
-		//landingEllipse.body.setCollisionGroup(landingPadCollisionGroup);
+		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
 
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(terrainCollisionGroup, this.hitTerrain, this);
-		//ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
+
+    landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
+		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
 
 		//create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
+
   },
 
   hitTerrain: function(body1, body2) {
 			console.log('hit terrain');
-			// alert('Oh no, you crashed into the terrain!');
-			console.log('customBounds ', customBounds)
+
 			//create explosion sprite for collision
 			if (body1) {
 				//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
 				let posX = ship.x;
 				let posY = ship.y;
 				ship.destroy();
-				//create explosion sprite for collision
 				explosion = this.add.sprite(posX, posY, 'explosion')
 				explosion.scale.setTo(0.05, 0.05);
-				// window.setTimeout(() => explosion.destroy(), 500)
-      this.game.time.events.add(Phaser.Timer.SECOND * 4, this.gameOver, this);
+        this.game.time.events.add(Phaser.Timer.SECOND * 3, this.gameOver, this);
 			}
 	},
 
 	landedShip: function(body1, body2) {
-		console.log('ship has landed!')
-		// alert('Yay, you have landed the ship!');
-		// when rocket touches the landing spot, it stops moving
+		console.log('ship has landed!');
+
+		// when rocket touches the landing spot, it stops moving and the game ends
 		if (body1) {
-			let posX = ship.x;
-			let posY = ship.y;
-      if(ship.physicsType){
-			  this.physics.p2.disable(ship);
-      }
-      this.game.time.events.add(Phaser.Timer.SECOND * 4, this.gameOver, this);
-			//ship.immovable = true; // not sure why this doesn't work!
+			this.physics.p2.disable(ship);
+      this.game.time.events.add(Phaser.Timer.SECOND * 3, this.gameOver, this);
 		}
 	},
 
@@ -262,7 +263,6 @@ LunarAdventure.Game.prototype = {
 
   gameOver: function() {
       //pass it the score as a parameter
-      console.log("WE SHOULD BE STARTING OVER!!!")
       this.game.state.start('MainMenu', true, false);
   },
 
@@ -284,15 +284,10 @@ LunarAdventure.Game.prototype = {
     if (cursors.up.isDown){
       ship.body.thrust(200);
     }
-    // down key, reverse accelerate
-    // else if (cursors.down.isDown){
-    //   ship.body.reverse(200);
-    // }
     // planet rotation
     if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
       terrain.body.rotation += 0.002;
       // terrain.body.rotation += 0.05;
-
     } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
       terrain.body.rotation -= 0.002;
     }
