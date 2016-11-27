@@ -20,8 +20,6 @@ LunarAdventure.Preload.prototype = {
 		this.load.physics('tracedTerrain', 'terrainPolygon.json');
     this.load.image('terrain', 'images/terrain1.png');
     this.load.image('starfield', 'images/starfield.png');
-    this.load.image('rectangle', 'images/Rectangle.png');
-    this.load.image('ellipse', 'images/ellipse.png')
     this.load.image('landingPad', 'images/landingPad.png');
 
 

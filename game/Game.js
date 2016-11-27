@@ -188,7 +188,15 @@ LunarAdventure.Game.prototype = {
 		//terrain.addChild(landingPad);
 
 
-		// create and set collision groups
+		//create bounds on sides of screen
+		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
+		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
+
+    // fades in the landingPad after a given amount of time
+    this.time.events.add(Phaser.Timer.SECOND * 10, this.showLandingPad, this);
+    landingPad.alpha = 0;
+
+    // create and set collision groups
 		var terrainCollisionGroup = this.physics.p2.createCollisionGroup();
 		var shipCollisionGroup = this.physics.p2.createCollisionGroup();
 		var landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
@@ -205,14 +213,6 @@ LunarAdventure.Game.prototype = {
     // ship and landing pad collision
     landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
-
-		//create bounds on sides of screen
-		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
-		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
-
-    // fades in the landingPad after a given amount of time
-    this.time.events.add(Phaser.Timer.SECOND * 10, this.showLandingPad, this);
-    landingPad.alpha = 0;
   },
 
   // fade in landingPad
@@ -236,13 +236,25 @@ LunarAdventure.Game.prototype = {
 	},
 
 	landedShip: function(body1, body2) {
-		console.log('ship has landed!');
-
-		// when rocket touches the landing spot, it stops moving and the game ends
-		if (body1) {
+    // if ship lands carefully, the landing is successful
+    if (ship.angle < 30 && ship.angle > -30) {
       ship.body = null; // disables the ship from moving
       this.game.time.events.add(Phaser.Timer.SECOND * 3, this.gameOver, this);
-		}
+    // else, ship crashes :(
+    } else {
+      let posX = ship.x;
+      let posY = ship.y;
+      ship.destroy();
+      explosion = this.add.sprite(posX, posY, 'explosion')
+      explosion.scale.setTo(0.05, 0.05);
+      this.game.time.events.add(Phaser.Timer.SECOND * 3, this.gameOver, this);
+    }
+
+		// when rocket touches the landing spot, it stops moving and the game ends
+		// if (body1) {
+    //   ship.body = null; // disables the ship from moving
+    //   this.game.time.events.add(Phaser.Timer.SECOND * 3, this.gameOver, this);
+		// }
 	},
 
 	hitBounds: function(body1, body2) {
@@ -277,8 +289,8 @@ LunarAdventure.Game.prototype = {
   },
 
   update: function() {
-    // left key, rotate ship
     if(ship.body){
+      // left key, rotate ship
       if (cursors.left.isDown) {
         ship.body.rotateLeft(100);
       }
@@ -294,19 +306,17 @@ LunarAdventure.Game.prototype = {
       if (cursors.up.isDown){
         ship.body.thrust(200);
       }
-      // planet rotation
+      // terrain spins when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
         terrain.body.rotation += 0.002;
-        // terrain.body.rotation += 0.05;
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
         terrain.body.rotation -= 0.002;
       }
+      // terrain spins FASTER when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
         terrain.body.rotation += 0.002;
-        // terrain.body.rotation += 0.05;
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
         terrain.body.rotation -= 0.002;
-        // terrain.body.rotation -= 0.05;
       }
     }
   },
