@@ -13,15 +13,13 @@ LunarAdventure.Preload.prototype = {
     // this.load.setPreloadSprite(this.preloadBar);
 
   	//load game assets
-  	this.load.image('wallpaper', 'images/terrainPattern.png');
+  	this.load.image('wallpaper', 'images/pattern1.png');
     this.load.image('astronaut', 'images/TheAstronautWhite.png');
     this.load.image('ship', 'images/rocket.png');
 		this.load.image('explosion', 'images/explosion.png');
 		this.load.physics('tracedTerrain', 'terrainPolygon.json');
-    this.load.image('terrain', 'images/terrain.png');
-    this.load.image('starfield', 'images/starfield.jpg');
-    this.load.image('rectangle', 'images/Rectangle.png');
-    this.load.image('ellipse', 'images/ellipse.png')
+    this.load.image('terrain', 'images/terrain1.png');
+    this.load.image('starfield', 'images/starfield.png');
     this.load.image('landingPad', 'images/landingPad.png');
 
 
