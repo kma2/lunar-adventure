@@ -284,10 +284,14 @@ LunarAdventure.Game.prototype = {
 
   update: function() {
 
-    // debug info in top left
-    this.game.debug.text('velocity x: ' + Math.floor(ship.body.velocity.x), 32, 32);
-    this.game.debug.text('velocity y: ' + Math.floor(ship.body.velocity.y), 32, 52);
-    this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 72);
+    // if the ship hasn't crashed or landed yet, show debug info in top left corner
+    if (ship.body) {
+      var timeElapsed = this.game.time.now.toString();
+      this.game.debug.text('time elapsed: ' + timeElapsed.slice(0, timeElapsed.length - 3) + "s", 32, 32);
+      this.game.debug.text('velocity x: ' + Math.floor(ship.body.velocity.x), 32, 52);
+      this.game.debug.text('velocity y: ' + Math.floor(ship.body.velocity.y), 32, 72);
+      this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
+    }
 
     if(ship.body){
       // left key, rotate ship
