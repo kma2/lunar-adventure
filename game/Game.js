@@ -230,7 +230,7 @@ LunarAdventure.Game.prototype = {
 				ship.destroy();
 				explosion = this.add.sprite(posX - 30, posY, 'explosion')
 				explosion.scale.setTo(0.05, 0.05);
-        this.game.time.events.add(Phaser.Timer.SECOND * 3, this.gameOver, this);
+        this.game.time.events.add(Phaser.Timer.SECOND * 3, this.gameOverCrash, this);
 			}
 	},
 
@@ -239,7 +239,7 @@ LunarAdventure.Game.prototype = {
     if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
       console.log('ship landing successful');
       ship.body = null; // disables the ship from moving
-      this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOver, this);
+      this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverSuccess, this);
     // else, ship crashes :(
     } else {
       console.log('ship landing unsuccessful');
@@ -248,7 +248,7 @@ LunarAdventure.Game.prototype = {
       ship.destroy();
       explosion = this.add.sprite(posX - 30, posY, 'explosion')
       explosion.scale.setTo(0.05, 0.05);
-      this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOver, this);
+      this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
     }
 	},
 
@@ -278,9 +278,14 @@ LunarAdventure.Game.prototype = {
 			// sim.world.addBody(customBounds.bottom);
 	},
 
-  gameOver: function() {
+  gameOverCrash: function() {
       //pass it the score as a parameter
-      this.game.state.start('MainMenu', true, false);
+      this.game.state.start('Crash', true, false);
+  },
+
+  gameOverSuccess: function() {
+      //pass it the score as a parameter
+      this.game.state.start('Success', true, false);
   },
 
   update: function() {
