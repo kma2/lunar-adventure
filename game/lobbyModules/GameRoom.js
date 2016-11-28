@@ -22,14 +22,14 @@ LunarAdventure.GameRoom.prototype = {
 		heading.anchor.set(0.5);
 
 		// add start button
-		this.startGameButton = this.game.add.graphics(width/4 , height/10 * 8);
+		this.startGameButton = this.game.add.graphics(width/3.8 , height/10 * 8);
 		this.startGameButton.beginFill(0x333333, 1);
 		this.startGameButton.drawRoundedRect(0,0, width/5, height/13, 10)
 		let text1 = this.game.add.text(this.startGameButton.centerX, this.startGameButton.centerY, 'Start', textStyle(height/25, 'white'));
 		text1.anchor.set(0.5)
 
 		// add leaveGame button
-		this.leaveGameButton = this.game.add.graphics(width/2 , height/10 * 8);
+		this.leaveGameButton = this.game.add.graphics(width/1.85 , height/10 * 8);
 		this.leaveGameButton.beginFill(0x2222aa, 1);
 		this.leaveGameButton.drawRoundedRect(0,0, width/5, height/13, 10)
 		let text2 = this.game.add.text(this.leaveGameButton.centerX, this.leaveGameButton.centerY, 'Leave Game', textStyle(height/25, 'white'));
@@ -53,7 +53,7 @@ LunarAdventure.GameRoom.prototype = {
 
 	drawCharacterSquares: function(numOpenings) {
 		let characterSquares = [];
-		let xOffset, yOffset
+		// let xOffset, yOffset
 
 		for(let i = 0; i < numOpenings; i++) {
 			// // for 6 squares
@@ -65,9 +65,10 @@ LunarAdventure.GameRoom.prototype = {
 			// 	yOffset = height/10 * 5;
 			// }
 			// let frame = this.game.add.graphics(xOffset, yOffset);
-			let frame = this.game.add.graphics(width/7 * (i * 2 +2), height/3)
+
+			let frame = this.game.add.graphics(width/7 * (i * 2 +2), height/4)
 			frame.beginFill(0x222222, 0.8);
-			frame.drawRoundedRect(0,0, width/7, width/7, 10)
+			frame.drawRoundedRect(0,0, width/7, height/3, 10)
 			characterSquares[i] = frame
 		}
 
@@ -82,9 +83,18 @@ LunarAdventure.GameRoom.prototype = {
 	populateCharacterSquares: function(data) {
 		this.numPlayersInGame = 0;
 		for(let playerId in data.players) {
-			let userCharacter = this.game.add.image(this.characterSquares[this.numPlayersInGame].position.x, this.characterSquares[this.numPlayersInGame].position.y, 'astronaut');
-			userCharacter.scale.setTo(0.7);
-			this.characterImages[playerId] = userCharacter
+			let square = this.characterSquares[this.numPlayersInGame]
+			let userCharacter = this.game.add.image(square.position.x, square.position.y, 'astronaut');
+			userCharacter.scale.setTo(height/950);
+			userCharacter.anchor.set(-0.13)
+
+			let text = this.game.add.text(square.position.x + square.width/2, square.position.y + square.height * 0.8, 'user name', textStyle(height/40, 'white'));
+			text.anchor.set(0.5)
+			
+			this.characterImages[playerId] = {
+				userCharacter: userCharacter,
+				text: text
+			}
 			this.numPlayersInGame++;
 		}
 
@@ -95,10 +105,18 @@ LunarAdventure.GameRoom.prototype = {
 	playerJoined: function(data) {
 		this.numPlayersInGame++;
 		let index = this.numPlayersInGame - 1;
-		let userCharacter = this.game.add.image(this.characterSquares[index].position.x, this.characterSquares[index].position.y, 'astronaut');
-			userCharacter.scale.setTo(0.7);
-			this.characterImages[data.id] = userCharacter
+		let square = this.characterSquares[index]
+		let userCharacter = this.game.add.image(square.position.x, square.position.y, 'astronaut');
+		userCharacter.scale.setTo(height/950);
+		userCharacter.anchor.set(-0.13);
+		
+		let text = this.game.add.text(square.position.x + square.width/2, square.position.y + square.height * 0.8, 'user name', textStyle(height/40, 'white'));
+		text.anchor.set(0.5)
 
+		this.characterImages[data.id] = {
+			userCharacter: userCharacter,
+			text: text
+		}
 		if(this.numPlayersInGame == 2) { this.activateStartGameButton(); }
 	},
 
@@ -125,7 +143,8 @@ LunarAdventure.GameRoom.prototype = {
 		if(this.numPlayersInGame == 1) { this.deactivateStartGameButton(); }
 
 		for(let playerId in this.characterImages) {
-			this.characterImages[playerId].destroy();
+			this.characterImages[playerId].userCharacter.destroy();
+			this.characterImages[playerId].text.destroy();
 		}
 		this.populateCharacterSquares(data);
 	},

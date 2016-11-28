@@ -56,9 +56,10 @@ LunarAdventure.Lobby.prototype = {
 			bar.beginFill(0xffffff, 0.8);
 			bar.drawRoundedRect(width/3, height/10 * (i+2), width/3 , height/15, 10)
 			bar.endFill()
-			bar.inputEnabled = true;
-			bar.events.onInputDown.add(settings.callback, {gameId: i})
-
+			if (!!settings.callback) {
+				bar.inputEnabled = true;
+				bar.events.onInputDown.add(settings.callback, {gameId: i})
+			}
 			var text = this.game.add.text(width/2, height/10 * (i+2) + 5, settings.text, textStyle(height/25, 'black'));
 			text.anchor.setTo(.5, 0);
 
@@ -92,6 +93,7 @@ LunarAdventure.Lobby.prototype = {
 
 		// Change callback of button
 		button.events.onInputDown.removeAll();
+		console.log(settings.callback)
 		if (!!settings.callback) {
 			button.events.onInputDown.add(settings.callback, {gameId: id})
 		}

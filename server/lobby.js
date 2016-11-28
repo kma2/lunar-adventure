@@ -38,7 +38,7 @@ let Lobby = {
 		this.emit("show current players", {players: gameRoom.players});
 		this.broadcast.to(data.gameId).emit("player joined", {id: this.id, color: gameRoom.players[this.id].color});
 	
-		if(gameRoom.getNumPlayers() >= 6) {
+		if(gameRoom.getNumPlayers() >= 2) {
 			gameRoom.state = "full";
 			broadcastSlotStateUpdate(data.gameId, "full", io);
 		}
