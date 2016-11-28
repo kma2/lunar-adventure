@@ -2,9 +2,10 @@ var LunarAdventure = LunarAdventure || {};
 
 LunarAdventure.Game = function(){};
 
+var timeElaspedBeforeLanding = 10;
+
 LunarAdventure.Game.prototype = {
   create: function() {
-    this.physics.startSystem(Phaser.Physics.P2JS);
 		this.physics.p2.gravity.y = 20;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
@@ -14,108 +15,108 @@ LunarAdventure.Game.prototype = {
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
 
 		// create terrain
-		const octagon = function(radius, start_x, start_y) {
-			const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
-			const v1_x = start_x;
-			const v1_y = start_y;
-			const v2_x = start_x + edgeLength;
-			const v2_y = start_y;
-			let finalArray = [[v1_x, v1_y], [v2_x, v2_y]];
-			return finalArray;
-		}
-
-		const createPlanet = function(array, numSegs, height, roughness) {
-			var points = [];
-			var height = height || 180;
-			var displace = height / 10;
-			var roughness = roughness || 1;
-			var numSegs = numSegs;
-			let edgeLength = array[1][0] - array[0][0];
-			const segLength = edgeLength/numSegs;
-			let power = Math.pow(2, Math.ceil(Math.log(edgeLength) / (Math.log(2))));
-			// TOP OF OCTAGON
-			let x = array[0][0]
-			let y = array[0][1];
-			for(var j = 0; j < numSegs - 1; j++){
-				x += segLength;
-				y += (Math.random()*displace*2) - displace;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// TOP RIGHT OF OCTAGON - work in progress
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x += (Math.random()*displace*2) + displace/2;
-				y += (Math.random()*displace*2) + displace/2;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// RIGHT SIDE OF OCTAGON
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x += (Math.random()*displace*2) - displace;
-				y += segLength;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// BOTTOM RIGHT OF OCTAGON - work in progress
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x -= segLength/1.6;
-				y += (Math.random()*displace*2) + displace/2;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// BOTTOM OF OCTAGON
-			displace = height / 10;
-			points.push(x)
-			points.push(y)
-			for(j = 0; j < numSegs; j++){
-				x -= segLength;
-				y += (Math.random()*displace*2) - displace;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// BOTTOM LEFT of OCTAGON - work in progress
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x -= (Math.random()*displace*2) + displace/2;
-				y -= (Math.random()*displace*2) + displace/2;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// LEFT SIDE OF OCTAGON
-			displace = height / 10;
-			points.push(x)
-			points.push(y)
-			for(j = 0; j < numSegs; j++){
-				x -= (Math.random()*displace*2) - displace;
-				y -= segLength;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// TOP LEFT OF OCTAGON - work in progress
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x += segLength/2;
-				y -= (Math.random()*displace*2) - displace/10;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			x = (array[0][0] + x)/2;
-			y = (array[0][1] + y)/2;
-			points.push(x);
-			points.push(y);
-			return points
-		};
+		// const octagon = function(radius, start_x, start_y) {
+		// 	const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
+		// 	const v1_x = start_x;
+		// 	const v1_y = start_y;
+		// 	const v2_x = start_x + edgeLength;
+		// 	const v2_y = start_y;
+		// 	let finalArray = [[v1_x, v1_y], [v2_x, v2_y]];
+		// 	return finalArray;
+		// }
+    //
+		// const createPlanet = function(array, numSegs, height, roughness) {
+		// 	var points = [];
+		// 	var height = height || 180;
+		// 	var displace = height / 10;
+		// 	var roughness = roughness || 1;
+		// 	var numSegs = numSegs;
+		// 	let edgeLength = array[1][0] - array[0][0];
+		// 	const segLength = edgeLength/numSegs;
+		// 	let power = Math.pow(2, Math.ceil(Math.log(edgeLength) / (Math.log(2))));
+		// 	// TOP OF OCTAGON
+		// 	let x = array[0][0]
+		// 	let y = array[0][1];
+		// 	for(var j = 0; j < numSegs - 1; j++){
+		// 		x += segLength;
+		// 		y += (Math.random()*displace*2) - displace;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// TOP RIGHT OF OCTAGON - work in progress
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x += (Math.random()*displace*2) + displace/2;
+		// 		y += (Math.random()*displace*2) + displace/2;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// RIGHT SIDE OF OCTAGON
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x += (Math.random()*displace*2) - displace;
+		// 		y += segLength;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// BOTTOM RIGHT OF OCTAGON - work in progress
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x -= segLength/1.6;
+		// 		y += (Math.random()*displace*2) + displace/2;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// BOTTOM OF OCTAGON
+		// 	displace = height / 10;
+		// 	points.push(x)
+		// 	points.push(y)
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x -= segLength;
+		// 		y += (Math.random()*displace*2) - displace;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// BOTTOM LEFT of OCTAGON - work in progress
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x -= (Math.random()*displace*2) + displace/2;
+		// 		y -= (Math.random()*displace*2) + displace/2;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// LEFT SIDE OF OCTAGON
+		// 	displace = height / 10;
+		// 	points.push(x)
+		// 	points.push(y)
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x -= (Math.random()*displace*2) - displace;
+		// 		y -= segLength;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// TOP LEFT OF OCTAGON - work in progress
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x += segLength/2;
+		// 		y -= (Math.random()*displace*2) - displace/10;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	x = (array[0][0] + x)/2;
+		// 	y = (array[0][1] + y)/2;
+		// 	points.push(x);
+		// 	points.push(y);
+		// 	return points
+		// };
 		// var octagonArray = octagon(window.innerWidth/1.4, 500, 150);
 		// poly = new Phaser.Polygon(createPlanet(octagonArray, 10, 250, 1.05));
 		// graphics = this.add.graphics(100, 100);
@@ -163,7 +164,7 @@ LunarAdventure.Game.prototype = {
 
 
     // creating static terrain
-		terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.8, 'terrain');
+		terrain = this.add.sprite(window.innerWidth/2, this.game.height/0.65 + 200, 'terrain');
 		terrain.anchor.set(0.5)
 		this.physics.p2.enable(terrain, false)
 		terrain.body.static = true;
@@ -178,23 +179,21 @@ LunarAdventure.Game.prototype = {
 
 
 		// create sprite landing pad
-    landingPad = this.add.sprite(gameWidth/1.5, window.innerHeight/3, 'landingPad');
+    landingPad = this.add.sprite(gameWidth/1.5, this.game.height/2, 'landingPad');
     landingPad.scale.setTo(0.2, 0.2);
     this.physics.p2.enable(landingPad, false);
     landingPad.body.static = true;
-
-    // add landingPad as a child of terrain (allows them to rotate together)
-    // ISSUE: when landingPad is a child of terrain, we aren't able to create a collision between the landingPad and ship
-		//terrain.addChild(landingPad);
 
 
 		//create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
 
-    // fades in the landingPad after a given amount of time
-    this.time.events.add(Phaser.Timer.SECOND * 10, this.showLandingPad, this);
+
+    // add event to fade in landingPad
+    this.time.events.add(Phaser.Timer.SECOND * timeElaspedBeforeLanding, this.showLandingPad, this);
     landingPad.alpha = 0;
+
 
     // create and set collision groups
 		var terrainCollisionGroup = this.physics.p2.createCollisionGroup();
@@ -231,23 +230,34 @@ LunarAdventure.Game.prototype = {
 				ship.destroy();
 				explosion = this.add.sprite(posX - 30, posY, 'explosion')
 				explosion.scale.setTo(0.05, 0.05);
-        this.game.time.events.add(Phaser.Timer.SECOND * 3, this.gameOver, this);
+        this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
 			}
 	},
 
 	landedShip: function(body1, body2) {
-    // if ship lands carefully, the landing is successful
-    if (ship.angle < 30 && ship.angle > -30 && Math.abs(ship.body.velocity.x) < 30 && Math.abs(ship.body.velocity.y) < 30) {
-      ship.body = null; // disables the ship from moving
-      this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOver, this);
-    // else, ship crashes :(
+    var timeElapsed = this.game.time.now.toString();
+    var timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
+
+    // ship cannot crash into landing pad before it appears
+    // bug: ship still bounces off the invisible landing pad
+    if (timeElapsedInSeconds < timeElaspedBeforeLanding) {
+      landingPad.body = null;
     } else {
-      let posX = ship.x;
-      let posY = ship.y;
-      ship.destroy();
-      explosion = this.add.sprite(posX - 30, posY, 'explosion')
-      explosion.scale.setTo(0.05, 0.05);
-      this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOver, this);
+      // if ship lands carefully, the landing is successful
+      if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
+        console.log('ship landing successful');
+        ship.body = null; // disables the ship from moving
+        this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
+      // else, ship crashes :(
+      } else {
+        console.log('ship landing unsuccessful');
+        let posX = ship.x;
+        let posY = ship.y;
+        ship.destroy();
+        explosion = this.add.sprite(posX - 30, posY, 'explosion')
+        explosion.scale.setTo(0.05, 0.05);
+        this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+      }
     }
 	},
 
@@ -277,23 +287,26 @@ LunarAdventure.Game.prototype = {
 			// sim.world.addBody(customBounds.bottom);
 	},
 
-  gameOver: function() {
-      //pass it the score as a parameter
-      this.game.state.start('MainMenu', true, false);
+  gameOverCrash: function() {
+      this.game.state.start('Crash', true, false);
+  },
+
+  gameOverSuccess: function() {
+      this.game.state.start('Success', true, false);
   },
 
   update: function() {
 
-    // if the ship hasn't crashed or landed yet, show debug info in top left corner
+    var timeElapsed = this.game.time.now.toString();
+    var timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
+
     if (ship.body) {
-      var timeElapsed = this.game.time.now.toString();
-      this.game.debug.text('time elapsed: ' + timeElapsed.slice(0, timeElapsed.length - 3) + "s", 32, 32);
+      // debug info in top left corner
+      this.game.debug.text('time elapsed: ' + timeElapsedInSeconds + "s", 32, 32);
       this.game.debug.text('velocity x: ' + Math.floor(ship.body.velocity.x), 32, 52);
       this.game.debug.text('velocity y: ' + Math.floor(ship.body.velocity.y), 32, 72);
       this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
-    }
 
-    if(ship.body){
       // left key, rotate ship
       if (cursors.left.isDown) {
         ship.body.rotateLeft(100);
