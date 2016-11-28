@@ -4,7 +4,6 @@ LunarAdventure.Game = function(){};
 
 LunarAdventure.Game.prototype = {
   create: function() {
-    this.physics.startSystem(Phaser.Physics.P2JS);
 		this.physics.p2.gravity.y = 20;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
@@ -237,11 +236,13 @@ LunarAdventure.Game.prototype = {
 
 	landedShip: function(body1, body2) {
     // if ship lands carefully, the landing is successful
-    if (ship.angle < 30 && ship.angle > -30 && Math.abs(ship.body.velocity.x) < 30 && Math.abs(ship.body.velocity.y) < 30) {
+    if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
+      console.log('ship landing successful');
       ship.body = null; // disables the ship from moving
       this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOver, this);
     // else, ship crashes :(
     } else {
+      console.log('ship landing unsuccessful');
       let posX = ship.x;
       let posY = ship.y;
       ship.destroy();
@@ -284,16 +285,14 @@ LunarAdventure.Game.prototype = {
 
   update: function() {
 
-    // if the ship hasn't crashed or landed yet, show debug info in top left corner
     if (ship.body) {
+      // debug info in top left corner
       var timeElapsed = this.game.time.now.toString();
       this.game.debug.text('time elapsed: ' + timeElapsed.slice(0, timeElapsed.length - 3) + "s", 32, 32);
       this.game.debug.text('velocity x: ' + Math.floor(ship.body.velocity.x), 32, 52);
       this.game.debug.text('velocity y: ' + Math.floor(ship.body.velocity.y), 32, 72);
       this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
-    }
 
-    if(ship.body){
       // left key, rotate ship
       if (cursors.left.isDown) {
         ship.body.rotateLeft(100);

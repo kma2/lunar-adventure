@@ -2,24 +2,30 @@ LunarAdventure.MainMenu = function(){};
 
 LunarAdventure.MainMenu.prototype = {
   create: function() {
-    this.background = this.game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'wallpaper');
-    this.splash = this.add.sprite(this.game.world.centerX - 100, this.game.world.centerY - 180, 'astronaut');
 
-    var gameTitle = "Lunar Adventure";
-    var gameTitleStyle = { font: "37px Arial", fill: "#fff", align: "center" };
-    var heading = this.game.add.text(this.game.width/2, this.game.height/1.75, gameTitle, gameTitleStyle);
-    heading.anchor.set(0.5);
+    this.physics.startSystem(Phaser.Physics.P2JS);
 
-    // Katy: bitmapText will render the text in higher quality, but I couldn't get it to work
-    //var heading = this.game.add.bitmapText(this.game.width/2, this.game.height/1.75, "Arial", "Lunar Adventure", 37);
+    this.background = this.game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'starfield');
 
-    var subtext = "Tap to begin";
-    var subtextStyle = { font: "22px Arial", fill: "#fff", align: "center" };
-    var text2 = this.game.add.text(this.game.width/2, this.game.height/1.55, subtext, subtextStyle);
-    text2.anchor.set(0.5);
+    astronaut = this.add.sprite(window.innerWidth/2 - 50, this.game.height/4.5, 'astronaut');
+    astronaut.scale.setTo(0.5, 0.5);
 
+    logo = this.add.sprite(window.innerWidth/2 - 240, this.game.height/2.5, 'logo');
+    logo.scale.setTo(0.8, 0.8);
+
+    // creating static terrain
+		terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.9, 'terrain');
+		terrain.anchor.set(0.5)
+		this.physics.p2.enable(terrain, false)
+		terrain.body.static = true;
+		terrain.body.clearShapes();
+		terrain.body.loadPolygon('tracedTerrain', 'terrain');
+
+    this.game.debug.text('click to begin', this.game.width/2 - 70, this.game.height/1.9);
   },
   update: function() {
+    terrain.body.rotation -= 0.003;
+
     if(this.game.input.activePointer.justPressed()) {
       this.game.state.start('Game');
     }

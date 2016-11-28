@@ -15,6 +15,7 @@ LunarAdventure.Preload.prototype = {
   	//load game assets
   	this.load.image('wallpaper', 'images/pattern1.png');
     this.load.image('astronaut', 'images/TheAstronautWhite.png');
+    this.load.image('logo', 'images/logo.png');
     this.load.image('ship', 'images/rocket.png');
 		this.load.image('explosion', 'images/explosion.png');
 		this.load.physics('tracedTerrain', 'terrainPolygon.json');
