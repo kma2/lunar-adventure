@@ -326,8 +326,12 @@ LunarAdventure.Game.prototype = {
       // terrain spins when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
         terrain.body.rotation += 0.002;
+        tilesprite.tilePosition.x += 4;
+        tilesprite.tilePosition.y -= 1;
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
         terrain.body.rotation -= 0.002;
+        tilesprite.tilePosition.x -= 4;
+        tilesprite.tilePosition.y -= 1;
       }
       // terrain spins FASTER when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
