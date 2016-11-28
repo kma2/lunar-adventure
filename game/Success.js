@@ -11,7 +11,7 @@ LunarAdventure.Success.prototype = {
     message.scale.setTo(0.6, 0.6);
 
     // creating static terrain
-		terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.9, 'terrain');
+		terrain = this.add.sprite(window.innerWidth/2, this.game.height/0.65 + 200, 'terrain');
 		terrain.anchor.set(0.5)
 		this.physics.p2.enable(terrain, false)
 		terrain.body.static = true;

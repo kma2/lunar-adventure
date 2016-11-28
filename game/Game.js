@@ -164,7 +164,7 @@ LunarAdventure.Game.prototype = {
 
 
     // creating static terrain
-		terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.8, 'terrain');
+		terrain = this.add.sprite(window.innerWidth/2, this.game.height/0.65 + 200, 'terrain');
 		terrain.anchor.set(0.5)
 		this.physics.p2.enable(terrain, false)
 		terrain.body.static = true;
@@ -179,7 +179,7 @@ LunarAdventure.Game.prototype = {
 
 
 		// create sprite landing pad
-    landingPad = this.add.sprite(gameWidth/1.5, window.innerHeight/3, 'landingPad');
+    landingPad = this.add.sprite(gameWidth/1.5, this.game.height/2, 'landingPad');
     landingPad.scale.setTo(0.2, 0.2);
     this.physics.p2.enable(landingPad, false);
     landingPad.body.static = true;
