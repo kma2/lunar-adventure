@@ -15,108 +15,108 @@ LunarAdventure.Game.prototype = {
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
 
 		// create terrain
-		const octagon = function(radius, start_x, start_y) {
-			const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
-			const v1_x = start_x;
-			const v1_y = start_y;
-			const v2_x = start_x + edgeLength;
-			const v2_y = start_y;
-			let finalArray = [[v1_x, v1_y], [v2_x, v2_y]];
-			return finalArray;
-		}
-
-		const createPlanet = function(array, numSegs, height, roughness) {
-			var points = [];
-			var height = height || 180;
-			var displace = height / 10;
-			var roughness = roughness || 1;
-			var numSegs = numSegs;
-			let edgeLength = array[1][0] - array[0][0];
-			const segLength = edgeLength/numSegs;
-			let power = Math.pow(2, Math.ceil(Math.log(edgeLength) / (Math.log(2))));
-			// TOP OF OCTAGON
-			let x = array[0][0]
-			let y = array[0][1];
-			for(var j = 0; j < numSegs - 1; j++){
-				x += segLength;
-				y += (Math.random()*displace*2) - displace;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// TOP RIGHT OF OCTAGON - work in progress
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x += (Math.random()*displace*2) + displace/2;
-				y += (Math.random()*displace*2) + displace/2;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// RIGHT SIDE OF OCTAGON
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x += (Math.random()*displace*2) - displace;
-				y += segLength;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// BOTTOM RIGHT OF OCTAGON - work in progress
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x -= segLength/1.6;
-				y += (Math.random()*displace*2) + displace/2;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// BOTTOM OF OCTAGON
-			displace = height / 10;
-			points.push(x)
-			points.push(y)
-			for(j = 0; j < numSegs; j++){
-				x -= segLength;
-				y += (Math.random()*displace*2) - displace;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// BOTTOM LEFT of OCTAGON - work in progress
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x -= (Math.random()*displace*2) + displace/2;
-				y -= (Math.random()*displace*2) + displace/2;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// LEFT SIDE OF OCTAGON
-			displace = height / 10;
-			points.push(x)
-			points.push(y)
-			for(j = 0; j < numSegs; j++){
-				x -= (Math.random()*displace*2) - displace;
-				y -= segLength;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			// TOP LEFT OF OCTAGON - work in progress
-			displace = height / 10;
-			for(j = 0; j < numSegs; j++){
-				x += segLength/2;
-				y -= (Math.random()*displace*2) - displace/10;
-				points.push(x);
-				points.push(y);
-				displace *= roughness;
-			}
-			x = (array[0][0] + x)/2;
-			y = (array[0][1] + y)/2;
-			points.push(x);
-			points.push(y);
-			return points
-		};
+		// const octagon = function(radius, start_x, start_y) {
+		// 	const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
+		// 	const v1_x = start_x;
+		// 	const v1_y = start_y;
+		// 	const v2_x = start_x + edgeLength;
+		// 	const v2_y = start_y;
+		// 	let finalArray = [[v1_x, v1_y], [v2_x, v2_y]];
+		// 	return finalArray;
+		// }
+    //
+		// const createPlanet = function(array, numSegs, height, roughness) {
+		// 	var points = [];
+		// 	var height = height || 180;
+		// 	var displace = height / 10;
+		// 	var roughness = roughness || 1;
+		// 	var numSegs = numSegs;
+		// 	let edgeLength = array[1][0] - array[0][0];
+		// 	const segLength = edgeLength/numSegs;
+		// 	let power = Math.pow(2, Math.ceil(Math.log(edgeLength) / (Math.log(2))));
+		// 	// TOP OF OCTAGON
+		// 	let x = array[0][0]
+		// 	let y = array[0][1];
+		// 	for(var j = 0; j < numSegs - 1; j++){
+		// 		x += segLength;
+		// 		y += (Math.random()*displace*2) - displace;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// TOP RIGHT OF OCTAGON - work in progress
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x += (Math.random()*displace*2) + displace/2;
+		// 		y += (Math.random()*displace*2) + displace/2;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// RIGHT SIDE OF OCTAGON
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x += (Math.random()*displace*2) - displace;
+		// 		y += segLength;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// BOTTOM RIGHT OF OCTAGON - work in progress
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x -= segLength/1.6;
+		// 		y += (Math.random()*displace*2) + displace/2;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// BOTTOM OF OCTAGON
+		// 	displace = height / 10;
+		// 	points.push(x)
+		// 	points.push(y)
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x -= segLength;
+		// 		y += (Math.random()*displace*2) - displace;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// BOTTOM LEFT of OCTAGON - work in progress
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x -= (Math.random()*displace*2) + displace/2;
+		// 		y -= (Math.random()*displace*2) + displace/2;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// LEFT SIDE OF OCTAGON
+		// 	displace = height / 10;
+		// 	points.push(x)
+		// 	points.push(y)
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x -= (Math.random()*displace*2) - displace;
+		// 		y -= segLength;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	// TOP LEFT OF OCTAGON - work in progress
+		// 	displace = height / 10;
+		// 	for(j = 0; j < numSegs; j++){
+		// 		x += segLength/2;
+		// 		y -= (Math.random()*displace*2) - displace/10;
+		// 		points.push(x);
+		// 		points.push(y);
+		// 		displace *= roughness;
+		// 	}
+		// 	x = (array[0][0] + x)/2;
+		// 	y = (array[0][1] + y)/2;
+		// 	points.push(x);
+		// 	points.push(y);
+		// 	return points
+		// };
 		// var octagonArray = octagon(window.innerWidth/1.4, 500, 150);
 		// poly = new Phaser.Polygon(createPlanet(octagonArray, 10, 250, 1.05));
 		// graphics = this.add.graphics(100, 100);
@@ -184,21 +184,13 @@ LunarAdventure.Game.prototype = {
     this.physics.p2.enable(landingPad, false);
     landingPad.body.static = true;
 
-    // add landingPad as a child of terrain (allows them to rotate together)
-    // ISSUE: when landingPad is a child of terrain, we aren't able to create a collision between the landingPad and ship
-		//terrain.addChild(landingPad);
-
 
 		//create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
 
-    // fades in the landingPad after a given amount of time
-    // if (this.game.time.now < timeElaspedBeforeLanding) {
-    //   console.log('still not time')
-    //   landingPad.body = null;
-    // }
 
+    // add event to fade in landingPad
     this.time.events.add(Phaser.Timer.SECOND * timeElaspedBeforeLanding, this.showLandingPad, this);
     landingPad.alpha = 0;
 
@@ -296,12 +288,10 @@ LunarAdventure.Game.prototype = {
 	},
 
   gameOverCrash: function() {
-      //pass it the score as a parameter
       this.game.state.start('Crash', true, false);
   },
 
   gameOverSuccess: function() {
-      //pass it the score as a parameter
       this.game.state.start('Success', true, false);
   },
 
