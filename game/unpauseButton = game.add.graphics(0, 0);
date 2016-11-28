@@ -1,0 +1,26 @@
+unpauseButton = game.add.graphics(0, 0);
+
+unpauseButton.beginFill(0x81DEED, 1);
+
+unpauseButton.drawRect(SIZE_X * 0.55, SIZE_Y * 0.65, SIZE_X * 0.1, SIZE_Y * 0.06);
+
+unpauseButton.hitArea = new Phaser.Rectangle(SIZE_X * 0.55, SIZE_Y * 0.65, SIZE_X * 0.1, SIZE_Y * 0.06);
+
+unpauseButtonText = game.add.text(SIZE_X * 0.55, SIZE_Y * 0.65, quitButton2Text, {fontSize: '16px', fill : '#000'});
+
+unpauseButton.hitArea.inputEnabled = true;
+
+// Error here :unpauseButton.hitArea.events.onInputUp.add(function () {unpauseGame(game, gameBoard, showQuitMessage, unpauseButton, darkScreen, quitTitleSprite, quitMessageSprite)});
+
+
+
+
+
+// play button            var g = this.add.graphics(0, 0);
+// draw a rectangle            g.lineStyle(2, 0x0000FF, 0.5);
+g.beginFill(0xFF8080, 1);
+g.drawRect(this.world.centerX - 50, this.world.centerY - 50, 100, 100);
+g.endFill();
+// input            g.inputEnabled = true;
+g.events.onInputDown.add(function () {                console.log("Pressed ...");
+ 

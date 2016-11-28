@@ -207,15 +207,15 @@ LunarAdventure.Game.prototype = {
 			console.log('customBounds ', customBounds)
 			//create explosion sprite for collision
 			if (body1) {
-				//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
-				let posX = ship.x;
-				let posY = ship.y;
-				ship.destroy();
-				//create explosion sprite for collision
-				explosion = this.add.sprite(posX, posY, 'explosion')
-				explosion.scale.setTo(0.05, 0.05);
-				// window.setTimeout(() => explosion.destroy(), 500)
-      this.game.time.events.add(Phaser.Timer.SECOND * 4, this.gameOver, this);
+				// //get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
+				// let posX = ship.x;
+				// let posY = ship.y;
+				// ship.destroy();
+				// //create explosion sprite for collision
+				// explosion = this.add.sprite(posX, posY, 'explosion')
+				// explosion.scale.setTo(0.05, 0.05);
+				// // window.setTimeout(() => explosion.destroy(), 500)
+    //   	this.game.time.events.add(Phaser.Timer.SECOND * 4, this.gameOver, this);
 			}
 	},
 
