@@ -7,7 +7,7 @@ LunarAdventure.Success.prototype = {
 
     this.background = this.game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'starfield');
 
-    message = this.add.sprite(window.innerWidth/2 - 220, this.game.height/3, 'success');
+    message = this.add.sprite(window.innerWidth/2 - 230, this.game.height/3, 'success');
     message.scale.setTo(0.6, 0.6);
 
     // creating static terrain
