@@ -25,14 +25,14 @@ LunarAdventure.Lobby.prototype = {
 			}
 		};
 
-		this.background = this.game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'starfield');
+		this.background = this.game.add.tileSprite(0, 0, width, height, 'starfield');
 
 		var board = this.game.add.graphics();
-		board.beginFill(0x333, 0.5);
-		board.drawRoundedRect(this.game.width/6, this.game.height/10 * 1.5, this.game.width/6 * 4, this.game.height/10 * 8, 15)
+		board.beginFill(0xdddddd, 0.5);
+		board.drawRoundedRect(width/6, height/10 * 1.5, width/6 * 4, height/10 * 8, 15)
 		board.endFill()
 
-		var heading = this.game.add.text(this.game.width/2, this.game.height/10, "Lobby", textStyle(this.game.height/15, 'black'));
+		var heading = this.game.add.text(width/2, height/10, "Lobby", textStyle(height/15, 'white'));
 		heading.anchor.set(0.5);
 		
 		this.slots = [];
@@ -54,12 +54,12 @@ LunarAdventure.Lobby.prototype = {
 
 			var bar = this.game.add.graphics();
 			bar.beginFill(0xffffff, 0.8);
-			bar.drawRoundedRect(this.game.width/3, this.game.height/10 * (i+2), this.game.width/3 , this.game.height/15, 10)
+			bar.drawRoundedRect(width/3, height/10 * (i+2), width/3 , height/15, 10)
 			bar.endFill()
 			bar.inputEnabled = true;
 			bar.events.onInputDown.add(settings.callback, {gameId: i})
 
-			var text = this.game.add.text(this.game.width/2, this.game.height/10 * (i+2) + 5, settings.text, textStyle(this.game.height/25, 'black'));
+			var text = this.game.add.text(width/2, height/10 * (i+2) + 5, settings.text, textStyle(height/25, 'black'));
 			text.anchor.setTo(.5, 0);
 
 			this.slots[i] = bar;
@@ -67,15 +67,20 @@ LunarAdventure.Lobby.prototype = {
 		}
 	},
 
+	update: function() {
+		this.background.tilePosition.x += 0.5;
+		this.background.tilePosition.y -= 0.5;
+	},
+
 	hostGameAction: function(gameId) {
 		socket.emit("host game", {gameId: this.gameId});
 		socket.removeAllListeners();
-		LunarAdventure.game.state.start("Gameroom", true, false, this.gameId);
+		LunarAdventure.game.state.start("GameRoom", true, false, this.gameId);
 	},
 
 	joinGameAction: function(gameId) {
 		socket.removeAllListeners();
-		LunarAdventure.game.state.start("Gameroom", true, false, this.gameId);
+		LunarAdventure.game.state.start("GameRoom", true, false, this.gameId);
 	},
 
 	updateSlot: function(updateInfo) {
