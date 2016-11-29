@@ -257,7 +257,7 @@ LunarAdventure.Game.prototype = {
         terrain.body.rotation += 0.002;
         this.rotateLandingPadRight(775, centerX, 1200);
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 210 && ship.body.rotation > 0) {
-        this.rotateLandingPadRight(775, centerX, 1200);
+        this.rotateLandingPadLeft(775, centerX, 1200);
         terrain.body.rotation -= 0.002;
       }
       // terrain spins FASTER when rocket nears the edges
@@ -265,7 +265,7 @@ LunarAdventure.Game.prototype = {
         this.rotateLandingPadRight(775, centerX, 1200);
         terrain.body.rotation += 0.002;
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 160 && ship.body.rotation > 0) {
-        this.rotateLandingPadRight(775, centerX, 1200);
+        this.rotateLandingPadLeft(775, centerX, 1200);
         terrain.body.rotation -= 0.002;
       }
     }
