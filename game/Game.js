@@ -13,6 +13,7 @@ LunarAdventure.Game.prototype = {
 		divide = 15;
 		cursors = this.input.keyboard.createCursorKeys();
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
+    angle = 5;
 
 		// create terrain
 		// const octagon = function(radius, start_x, start_y) {
@@ -162,9 +163,10 @@ LunarAdventure.Game.prototype = {
 		customBounds = { left: null, right: null, top: null, bottom: null };
 		this.createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 
-
+    centerX = window.innerWidth/2
+    centerY = this.game.height/0.65 + 200
     // creating static terrain
-		terrain = this.add.sprite(window.innerWidth/2, this.game.height/0.65 + 200, 'terrain');
+		terrain = this.add.sprite(centerX, centerY, 'terrain');
 		terrain.anchor.set(0.5)
 		this.physics.p2.enable(terrain, false)
 		terrain.body.static = true;
@@ -179,10 +181,13 @@ LunarAdventure.Game.prototype = {
 
 
 		// create sprite landing pad
-    landingPad = this.add.sprite(gameWidth/1.5, this.game.height/2, 'landingPad');
+    landingPad = this.add.sprite(centerX, 200, 'landingPad');
     landingPad.scale.setTo(0.2, 0.2);
-    this.physics.p2.enable(landingPad, false);
+    // landingPad.anchor.setTo(1, 0)
+    // landingPad.pivot.setTo(500, 0);
+    this.physics.p2.enable(landingPad, true);
     landingPad.body.static = true;
+    console.log(landingPad);
 
 
 		//create bounds on sides of screen
@@ -191,8 +196,8 @@ LunarAdventure.Game.prototype = {
 
 
     // add event to fade in landingPad
-    this.time.events.add(Phaser.Timer.SECOND * timeElaspedBeforeLanding, this.showLandingPad, this);
-    landingPad.alpha = 0;
+    // this.time.events.add(Phaser.Timer.SECOND * timeElaspedBeforeLanding, this.showLandingPad, this);
+    // landingPad.alpha = 0;
 
 
     // create and set collision groups
@@ -212,11 +217,24 @@ LunarAdventure.Game.prototype = {
     // ship and landing pad collision
     landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
+
   },
 
   // fade in landingPad
-  showLandingPad: function() {
-    this.game.add.tween(landingPad).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true);
+  // showLandingPad: function() {
+  //   this.game.add.tween(landingPad).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true);
+  // },
+  rotateLandingPad: function(radius, startX, startY){
+    console.log(this)
+    var x = startX + Math.cos(this.angle) * radius;
+    var y = startY + Math.sin(this.angle) * radius
+    landingPad.body.x = x;
+    landingPad.body.y = y;
+    if(this.angle <= 360){
+      this.angle += 0.05;
+    }else {
+      this.angle = 0;
+    }
   },
 
   hitTerrain: function(body1, body2) {
@@ -296,9 +314,10 @@ LunarAdventure.Game.prototype = {
   },
 
   update: function() {
-
     var timeElapsed = this.game.time.now.toString();
     var timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
+
+    this.rotateLandingPad(500, centerX, 200)
 
     if (ship.body) {
       // debug info in top left corner
@@ -324,16 +343,20 @@ LunarAdventure.Game.prototype = {
         ship.body.thrust(200);
       }
       // terrain spins when rocket nears the edges
-      if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
+      if (ship.world.x <= gameWidth/divide + 100) {
         terrain.body.rotation += 0.002;
-      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
+        landingPad.body.rotation += 0.002;
+      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110) {
         terrain.body.rotation -= 0.002;
+        landingPad.body.rotation -= 0.002;
       }
       // terrain spins FASTER when rocket nears the edges
-      if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
+      if (ship.world.x <= gameWidth/divide + 50) {
         terrain.body.rotation += 0.002;
-      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
+        landingPad.body.rotation += 0.002;
+      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60) {
         terrain.body.rotation -= 0.002;
+        landingPad.body.rotation -= 0.002;
       }
     }
   },
