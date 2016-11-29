@@ -1,17 +1,11 @@
 var LunarAdventure = LunarAdventure || {};
 
-LunarAdventure.Game = function(){};
+LunarAdventure.Game = function(){
+};
 
 var timeElaspedBeforeLanding = 10;
-var obstacle
-var i = 0;
 
 LunarAdventure.Game.prototype = {
-	init: function(players, id) {
-		this.players = players;
-		this.playerId = id;
-	},
-
 	create: function() {
 		this.physics.p2.gravity.y = 20;
 		this.physics.p2.setImpactEvents(true);
@@ -19,159 +13,20 @@ LunarAdventure.Game.prototype = {
 		gameHeight = this.world.height;
 		divide = 15;
 		cursors = this.input.keyboard.createCursorKeys();
-		this.background = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
+		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
 
-		// create terrain
-		// const octagon = function(radius, start_x, start_y) {
-		// 	const edgeLength = radius/Math.sqrt(4+(2 * Math.sqrt(2))) * 2;
-		// 	const v1_x = start_x;
-		// 	const v1_y = start_y;
-		// 	const v2_x = start_x + edgeLength;
-		// 	const v2_y = start_y;
-		// 	let finalArray = [[v1_x, v1_y], [v2_x, v2_y]];
-		// 	return finalArray;
-		// }
-		//
-		// const createPlanet = function(array, numSegs, height, roughness) {
-		// 	var points = [];
-		// 	var height = height || 180;
-		// 	var displace = height / 10;
-		// 	var roughness = roughness || 1;
-		// 	var numSegs = numSegs;
-		// 	let edgeLength = array[1][0] - array[0][0];
-		// 	const segLength = edgeLength/numSegs;
-		// 	let power = Math.pow(2, Math.ceil(Math.log(edgeLength) / (Math.log(2))));
-		// 	// TOP OF OCTAGON
-		// 	let x = array[0][0]
-		// 	let y = array[0][1];
-		// 	for(var j = 0; j < numSegs - 1; j++){
-		// 		x += segLength;
-		// 		y += (Math.random()*displace*2) - displace;
-		// 		points.push(x);
-		// 		points.push(y);
-		// 		displace *= roughness;
-		// 	}
-		// 	// TOP RIGHT OF OCTAGON - work in progress
-		// 	displace = height / 10;
-		// 	for(j = 0; j < numSegs; j++){
-		// 		x += (Math.random()*displace*2) + displace/2;
-		// 		y += (Math.random()*displace*2) + displace/2;
-		// 		points.push(x);
-		// 		points.push(y);
-		// 		displace *= roughness;
-		// 	}
-		// 	// RIGHT SIDE OF OCTAGON
-		// 	displace = height / 10;
-		// 	for(j = 0; j < numSegs; j++){
-		// 		x += (Math.random()*displace*2) - displace;
-		// 		y += segLength;
-		// 		points.push(x);
-		// 		points.push(y);
-		// 		displace *= roughness;
-		// 	}
-		// 	// BOTTOM RIGHT OF OCTAGON - work in progress
-		// 	displace = height / 10;
-		// 	for(j = 0; j < numSegs; j++){
-		// 		x -= segLength/1.6;
-		// 		y += (Math.random()*displace*2) + displace/2;
-		// 		points.push(x);
-		// 		points.push(y);
-		// 		displace *= roughness;
-		// 	}
-		// 	// BOTTOM OF OCTAGON
-		// 	displace = height / 10;
-		// 	points.push(x)
-		// 	points.push(y)
-		// 	for(j = 0; j < numSegs; j++){
-		// 		x -= segLength;
-		// 		y += (Math.random()*displace*2) - displace;
-		// 		points.push(x);
-		// 		points.push(y);
-		// 		displace *= roughness;
-		// 	}
-		// 	// BOTTOM LEFT of OCTAGON - work in progress
-		// 	displace = height / 10;
-		// 	for(j = 0; j < numSegs; j++){
-		// 		x -= (Math.random()*displace*2) + displace/2;
-		// 		y -= (Math.random()*displace*2) + displace/2;
-		// 		points.push(x);
-		// 		points.push(y);
-		// 		displace *= roughness;
-		// 	}
-		// 	// LEFT SIDE OF OCTAGON
-		// 	displace = height / 10;
-		// 	points.push(x)
-		// 	points.push(y)
-		// 	for(j = 0; j < numSegs; j++){
-		// 		x -= (Math.random()*displace*2) - displace;
-		// 		y -= segLength;
-		// 		points.push(x);
-		// 		points.push(y);
-		// 		displace *= roughness;
-		// 	}
-		// 	// TOP LEFT OF OCTAGON - work in progress
-		// 	displace = height / 10;
-		// 	for(j = 0; j < numSegs; j++){
-		// 		x += segLength/2;
-		// 		y -= (Math.random()*displace*2) - displace/10;
-		// 		points.push(x);
-		// 		points.push(y);
-		// 		displace *= roughness;
-		// 	}
-		// 	x = (array[0][0] + x)/2;
-		// 	y = (array[0][1] + y)/2;
-		// 	points.push(x);
-		// 	points.push(y);
-		// 	return points
-		// };
-		// var octagonArray = octagon(window.innerWidth/1.4, 500, 150);
-		// poly = new Phaser.Polygon(createPlanet(octagonArray, 10, 250, 1.05));
-		// graphics = this.add.graphics(100, 100);
-		// graphics.beginFill(0xeaeaea); // light gray
-		// graphics.drawPolygon(poly.points);
-		// graphics.endFill();
-		// terrain = this.add.sprite(window.innerWidth/2, window.innerHeight * 1.9, graphics.generateTexture());
-		// terrain.anchor.set(0.5);
-		// graphics.destroy();
-		// this.physics.p2.enable(terrain, false);
+		// initial angle for landing pad position
+		this.angle = 1.5;
 
-		//terrain polygon
-		// terrain.body.clearShapes();
-		// console.log('points', poly.points);
-		// console.log(createPlanet(octagonArray, 10, 250, 1.05));
-		// let pointsArray = poly.points.map((el, i) => [el.x, el.y])
-		// let arrOfCoords = createPlanet(octagonArray, 10, 250, 1.05)
-		// let fn = function(number) {
-		// 	return Math.ceil(number)
-		// }
-		// let coords = Array.prototype.slice.call(arrOfCoords).map(number => Math.ceil(number));
-		// let coords = Array.from(arrOfCoords)
-		// let coords2 = Object.keys(arrOfCoords).map(key => arrOfCoords[key]);
-		// console.log(Object.keys(coords))
-		// console.log(coords2)
-		//terrain.body.addPolygon({}, coords);
-		// terrain.x = window.innerWidth/2;
-		// terrain.y = window.innerHeight * 1.7;
-		//collision - terrain won't move when hit
-		// game.load.physics('shipPhysics', 'tracedRocket.json');
-		// terrain.body.clearShapes();
-		// terrain.body.loadPolygon('shipPhysics', 'terrain');
-
-		// === attempt at outlining the ship ====
-		// ship.body.clearShapes();
-		//this line throw error - can't read length of null
-		// ship.body.loadPolygon('shipPhysics', 'ship');
-		// ship.body.addPolygon('shipPhysics')
-		// ship.body.loadPolygon('shipPhysics');
 
 		// set boundaries on left and right of the screen
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
 		customBounds = { left: null, right: null, top: null, bottom: null };
-		this.createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 
-
+		centerX = window.innerWidth/2
+		centerY = this.game.height/0.65 + 200
 		// creating static terrain
-		terrain = this.add.sprite(window.innerWidth/2, this.game.height/0.65 + 200, 'terrain');
+		terrain = this.add.sprite(centerX, centerY, 'terrain');
 		terrain.anchor.set(0.5)
 		this.physics.p2.enable(terrain, false)
 		terrain.body.static = true;
@@ -186,51 +41,36 @@ LunarAdventure.Game.prototype = {
 
 
 		// create sprite landing pad
-		landingPad = this.add.sprite(gameWidth/1.5, this.game.height/2, 'landingPad');
+		landingPad = this.add.sprite(centerX, 2000, 'landingPad');
 		landingPad.scale.setTo(0.2, 0.2);
+		// landingPad.anchor.setTo(1, 0)
+		// landingPad.pivot.setTo(500, 0);
 		this.physics.p2.enable(landingPad, false);
 		landingPad.body.static = true;
+		console.log(landingPad);
 
 
-		// create sprite landing pad
-		obstacle = this.add.sprite(gameWidth/4, this.game.height/2, 'astronaut');
-		obstacle.anchor.set(0.5)
-		this.physics.p2.enable(obstacle, true);
-		obstacle.body.static = true;
-
-    var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
-		var obstacleMaterial = this.game.physics.p2.createMaterial('obstacleMaterial', obstacle.body);
-		var obstacleContactMaterial = this.game.physics.p2.createContactMaterial(shipMaterial, obstacleMaterial);
-
-		obstacleContactMaterial.friction = 0.3;     // Friction to use in the contact of these two materials.
-    obstacleContactMaterial.restitution = 2.0;  // Restitution (i.e. how bouncy it is!) to use in the contact of these two materials.
-    obstacleContactMaterial.stiffness = 1e7;    // Stiffness of the resulting ContactEquation that this obstacleContactMaterial generate.
-    obstacleContactMaterial.relaxation = 3;     // Relaxation of the resulting ContactEquation that this obstacleContactMaterial generate.
-    obstacleContactMaterial.frictionStiffness = 1e7;    // Stiffness of the resulting FrictionEquation that this obstacleContactMaterial generate.
-    obstacleContactMaterial.frictionRelaxation = 3;     // Relaxation of the resulting FrictionEquation that this obstacleContactMaterial generate.
-    obstacleContactMaterial.surfaceVelocity = 0;
-
-		//create bounds on sides of screen
+		////create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
 
 
 		// add event to fade in landingPad
-		this.time.events.add(Phaser.Timer.SECOND * timeElaspedBeforeLanding, this.showLandingPad, this);
-		landingPad.alpha = 0;
+		// this.time.events.add(Phaser.Timer.SECOND * timeElaspedBeforeLanding, this.showLandingPad, this);
+		// landingPad.alpha = 0;
 
 
-		// create and set collision groups
+		// ======== set collisions ========
+
 		var terrainCollisionGroup = this.physics.p2.createCollisionGroup();
 		var shipCollisionGroup = this.physics.p2.createCollisionGroup();
 		var landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
+		var obstaclesCollisionGroup = this.physics.p2.createCollisionGroup();
 		var boundsCollisionGroup = this.physics.p2.createCollisionGroup();
-		var obstacleCollisionGroup = this.physics.p2.createCollisionGroup();
 
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
-		obstacle.body.setCollisionGroup(obstacleCollisionGroup);
 
 		// ship and terrain collision
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
@@ -240,13 +80,89 @@ LunarAdventure.Game.prototype = {
 		landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
 
-		obstacle.body.collides(shipCollisionGroup);
-		ship.body.collides(obstacleCollisionGroup, this.hitObstacle, this);
+
+		// ship and obstacle collision
+		ship.body.collides(obstaclesCollisionGroup, this.hitTerrain, this);
+
+
+		// ======== generate obstacles! ========
+
+		// create groups for each of the obstacle categories
+		smallObstacles = this.add.group();
+		smallObstacles.enableBody = true;
+		smallObstacles.physicsBodyType = Phaser.Physics.P2JS;
+
+		mediumObstacles = this.add.group();
+		mediumObstacles.enableBody = true;
+		mediumObstacles.physicsBodyType = Phaser.Physics.P2JS;
+
+		largeObstacles = this.add.group();
+		largeObstacles.enableBody = true;
+		largeObstacles.physicsBodyType = Phaser.Physics.P2JS;
+
+		var frames = [ 1, 0, 5];
+
+		// create small obstacles
+		for (var i = 0; i < 10; i++) {
+				var obstacle = smallObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'smallObstacle', this.rnd.pick(frames));
+				obstacle.body.setCircle(25);
+				obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+				obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+				obstacle.body.gravity = -60;
+		}
+
+		// create medium obstacles
+		for (var i = 0; i < 5; i++) {
+				var obstacle = mediumObstacles.create(this.world.width + Math.random() * 100, 200 + Math.random() * 10, 'mediumObstacle', this.rnd.pick(frames));
+				obstacle.body.setCircle(52);
+				obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+				obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+				obstacle.body.gravity = -60;
+		}
+
+		// create large obstacles
+		for (var i = 0; i < 1; i++) {
+				var obstacle = largeObstacles.create(this.world.width + Math.random() * 1000, 200 + Math.random() * 10, 'largeObstacle', this.rnd.pick(frames));
+				obstacle.body.setCircle(180);
+				obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+				obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+				obstacle.body.gravity = -60;
+		}
+
+		// enable physics on all obstacle groups
+		this.physics.p2.enable(smallObstacles);
+		this.physics.p2.enable(mediumObstacles);
+		this.physics.p2.enable(largeObstacles);
 	},
 
 	// fade in landingPad
-	showLandingPad: function() {
-		this.game.add.tween(landingPad).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true);
+	// showLandingPad: function() {
+	//   this.game.add.tween(landingPad).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true);
+	// },
+
+// landing pad rotation functions
+	rotateLandingPadRight: function(radius, startX, startY){
+		var x = startX + Math.cos(this.angle) * radius;
+		var y = startY + Math.sin(this.angle) * radius
+		landingPad.body.x = x;
+		landingPad.body.y = y;
+		if(this.angle <= 360){
+			this.angle += 0.002;
+		}else {
+			this.angle = 0;
+		}
+	},
+	rotateLandingPadLeft: function(radius, startX, startY){
+		console.log(this)
+		var x = startX + Math.cos(this.angle) * radius;
+		var y = startY + Math.sin(this.angle) * radius
+		landingPad.body.x = x;
+		landingPad.body.y = y;
+		if(this.angle <= 360){
+			this.angle -= 0.002;
+		}else {
+			this.angle = 0;
+		}
 	},
 
 	hitTerrain: function(body1, body2) {
@@ -257,10 +173,10 @@ LunarAdventure.Game.prototype = {
 				//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
 				let posX = ship.x;
 				let posY = ship.y;
-				ship.destroy();
-				explosion = this.add.sprite(posX - 30, posY, 'explosion')
-				explosion.scale.setTo(0.05, 0.05);
-				this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+				// ship.destroy();
+				// explosion = this.add.sprite(posX - 30, posY, 'explosion')
+				// explosion.scale.setTo(0.05, 0.05);
+				// this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
 			}
 	},
 
@@ -291,34 +207,12 @@ LunarAdventure.Game.prototype = {
 		}
 	},
 
-	hitObstacle: function(body1, body2) {
-		body2.sprite.alpha -= 0.1
-	},
-
 	hitBounds: function(body1, body2) {
 		console.log('hit boundary');
 	},
 
-	createPreviewBounds: function(x, y, w, h) {
-			var sim = this.physics.p2;
-			//  If you want to use your own collision group then set it here and un-comment the lines below
-			var mask = sim.boundsCollisionGroup.mask;
-			customBounds.left = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y) ], angle: 1.5707963267948966 });
-			customBounds.left.addShape(new p2.Plane());
-			// customBounds.left.shapes[0].collisionGroup = mask;
-			customBounds.right = new p2.Body({ mass: 0, position: [ sim.pxmi(x + w), sim.pxmi(y) ], angle: -1.5707963267948966 });
-			customBounds.right.addShape(new p2.Plane());
-			// customBounds.right.shapes[0].collisionGroup = mask;
-			// customBounds.top = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y) ], angle: -3.141592653589793 });
-			// customBounds.top.addShape(new p2.Plane());
-			// // customBounds.top.shapes[0].collisionGroup = mask;
-			// customBounds.bottom = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y + h) ] });
-			// customBounds.bottom.addShape(new p2.Plane());
-			// // customBounds.bottom.shapes[0].collisionGroup = mask;
-			sim.world.addBody(customBounds.left);
-			sim.world.addBody(customBounds.right);
-			// sim.world.addBody(customBounds.top);
-			// sim.world.addBody(customBounds.bottom);
+	destroyObstacle: function(obstacle) {
+		obstacle.destroy();
 	},
 
 	gameOverCrash: function() {
@@ -330,10 +224,8 @@ LunarAdventure.Game.prototype = {
 	},
 
 	update: function() {
-
 		var timeElapsed = this.game.time.now.toString();
 		var timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
-		obstacle.body.x += 1;
 
 		if (ship.body) {
 			// debug info in top left corner
@@ -359,19 +251,23 @@ LunarAdventure.Game.prototype = {
 				ship.body.thrust(200);
 			}
 			// terrain spins when rocket nears the edges
-			if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
+			if (ship.world.x <= gameWidth/divide + 200 && ship.body.rotation < 0) {
 				terrain.body.rotation += 0.002;
-				this.background.tilePosition.x += 4;
-				this.background.tilePosition.y -= 1;
-			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
+				this.rotateLandingPadRight(775, centerX, 1200);
+				tilesprite.tilePosition.x += 4;
+				tilesprite.tilePosition.y -= 1;
+			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 210 && ship.body.rotation > 0) {
+				this.rotateLandingPadLeft(775, centerX, 1200);
 				terrain.body.rotation -= 0.002;
-				this.background.tilePosition.x -= 4;
-				this.background.tilePosition.y -= 1;
+				tilesprite.tilePosition.x -= 4;
+				tilesprite.tilePosition.y -= 1;
 			}
 			// terrain spins FASTER when rocket nears the edges
-			if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
+			if (ship.world.x <= gameWidth/divide + 150 && ship.body.rotation < 0) {
+				this.rotateLandingPadRight(775, centerX, 1200);
 				terrain.body.rotation += 0.002;
-			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
+			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 160 && ship.body.rotation > 0) {
+				this.rotateLandingPadLeft(775, centerX, 1200);
 				terrain.body.rotation -= 0.002;
 			}
 		}
