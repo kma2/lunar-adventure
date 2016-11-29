@@ -44,7 +44,6 @@ LunarAdventure.Game.prototype = {
 		ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
 
-
 		// create sprite landing pad
 		landingPad = this.add.sprite(centerX, 2000, 'landingPad');
 		landingPad.scale.setTo(0.2, 0.2);
