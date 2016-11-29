@@ -73,14 +73,15 @@ LunarAdventure.Lobby.prototype = {
 		this.background.tilePosition.y -= 0.5;
 	},
 
-	hostGameAction: function(gameId) {
+	hostGameAction: function () {
 		socket.emit("host game", {gameId: this.gameId});
 		socket.removeAllListeners();
 		LunarAdventure.game.state.start("GameRoom", true, false, this.gameId);
 	},
 
-	joinGameAction: function(gameId) {
+	joinGameAction: function () {
 		socket.removeAllListeners();
+		console.log(this.gameId)
 		LunarAdventure.game.state.start("GameRoom", true, false, this.gameId);
 	},
 

@@ -5,9 +5,14 @@ LunarAdventure.Game = function(){};
 let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0;
 
 LunarAdventure.Game.prototype = {
+	init: function(gameId, players) {
+		console.log(gameId)
+		this.gameId = gameId
+    this.players = players;
+  },
 
 	create: function() {
-
+		console.log(this.gameId)
 		this.physics.p2.gravity.y = 20;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
@@ -38,29 +43,29 @@ LunarAdventure.Game.prototype = {
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
 
-		// ======== generate obstacles! ========
+		// // ======== generate obstacles! ========
 
-		// create groups for each of the obstacle categories
-		smallObstacles = this.add.group();
-		smallObstacles.enableBody = true;
-		smallObstacles.physicsBodyType = Phaser.Physics.P2JS;
+		// // create groups for each of the obstacle categories
+		// smallObstacles = this.add.group();
+		// smallObstacles.enableBody = true;
+		// smallObstacles.physicsBodyType = Phaser.Physics.P2JS;
 
-		mediumObstacles = this.add.group();
-		mediumObstacles.enableBody = true;
-		mediumObstacles.physicsBodyType = Phaser.Physics.P2JS;
+		// mediumObstacles = this.add.group();
+		// mediumObstacles.enableBody = true;
+		// mediumObstacles.physicsBodyType = Phaser.Physics.P2JS;
 
-		largeObstacles = this.add.group();
-		largeObstacles.enableBody = true;
-		largeObstacles.physicsBodyType = Phaser.Physics.P2JS;
+		// largeObstacles = this.add.group();
+		// largeObstacles.enableBody = true;
+		// largeObstacles.physicsBodyType = Phaser.Physics.P2JS;
 
-		// enable physics on all obstacle groups
-		this.physics.p2.enable(smallObstacles);
-		this.physics.p2.enable(mediumObstacles);
-		this.physics.p2.enable(largeObstacles);
+		// // enable physics on all obstacle groups
+		// this.physics.p2.enable(smallObstacles);
+		// this.physics.p2.enable(mediumObstacles);
+		// this.physics.p2.enable(largeObstacles);
 
-		this.generateSmallObstacles();
-		this.generateMediumObstacles();
-		this.generateLargeObstacles();
+		// this.generateSmallObstacles();
+		// this.generateMediumObstacles();
+		// this.generateLargeObstacles();
 
 
 		// ======== create terrain ========
@@ -150,6 +155,9 @@ LunarAdventure.Game.prototype = {
 		tenPenaltyEmitter.minParticleScale = 0.1
 		tenPenaltyEmitter.maxParticleScale = 0.1
 		tenPenaltyEmitter.gravity = 50;
+
+
+		socket.on("move ship", this.updateShipPosition.bind(this));
 	},
 
 	createTimer: function() {
@@ -319,13 +327,27 @@ LunarAdventure.Game.prototype = {
 			this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
 
 			// left key, rotate ship
-			if (cursors.left.isDown) { ship.body.rotateLeft(100); }
+
+			if (cursors.left.isDown) { 
+				ship.body.rotateLeft(100); 
+				// console.log(ship.body)
+				console.log(this.gameId)
+				socket.emit('move player', {move: 'left', gameId: this.gameId});
+			}
+
 			// right key, rotate ship
-			else if (cursors.right.isDown){ ship.body.rotateRight(100); }
+			else if (cursors.right.isDown){ 
+				ship.body.rotateRight(100); 
+				socket.emit('move player', {move: 'right', gameId: this.gameId});
+			}
 			// stop rotating if key is not pressed
 			else { ship.body.setZeroRotation(); }
 			// up key, accelerate
-			if (cursors.up.isDown){ ship.body.thrust(200); }
+			if (cursors.up.isDown){
+				ship.body.thrust(200);
+				socket.emit('move player', {move: 'up', gameId: this.gameId});
+
+			}
 			
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 200 && ship.body.rotation < 0) {
@@ -349,4 +371,13 @@ LunarAdventure.Game.prototype = {
 			// }
 		}
 	},
+	updateShipPosition: function(data) {
+		if (data.move === 'left') {
+			ship.body.rotateLeft(100);
+		} else if (data.move === 'right') {
+			ship.body.rotateRight(100);
+		} else if (data.move === 'up') {
+			ship.body.thrust(200);
+		}
+	}
 };

@@ -5,7 +5,10 @@ let minPlayerMessageOffsetY = 400;
 let numCharacterSquares = 2;
 
 LunarAdventure.GameRoom.prototype = {
-	init: function(gameId) { this.gameId = gameId; },
+	init: function(gameId) { 
+		console.log('gameroom', gameId)
+		this.gameId = gameId; 
+	},
 
 	create: function() {
 		socket.emit("enter game room", {gameId: this.gameId});
@@ -48,7 +51,7 @@ LunarAdventure.GameRoom.prototype = {
 		socket.on("show current players", this.populateCharacterSquares.bind(this));
 		socket.on("player joined", this.playerJoined.bind(this));
 		socket.on("player left", this.playerLeft.bind(this));
-		socket.on("start game on client", this.startGame);
+		socket.on("start game on client", this.startGame.bind(this));
 	},
 
 	drawCharacterSquares: function(numOpenings) {
@@ -159,6 +162,8 @@ LunarAdventure.GameRoom.prototype = {
 
 	startGame: function(data) {
 		socket.removeAllListeners();
-		LunarAdventure.game.state.start("Game", true, false, data.players, this.id);
+		console.log(this.gameId);
+		console.log(data.players)
+		LunarAdventure.game.state.start("Game", true, false, this.gameId, data.players);
 	}
 }

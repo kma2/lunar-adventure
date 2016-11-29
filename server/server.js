@@ -50,7 +50,9 @@ function setEventHandlers () {
 		socket.on("leave game room", function() { Lobby.onLeaveGameRoom.call(this, io); });
 
 		socket.on("start game on server", function() { onStartGame.call(this); });
-		socket.on("move player", onMovePlayer);
+		socket.on("move player", function(data) {
+			io.in(data.gameId).emit('move ship', {move: data.move})
+		})
 	});
 }
 
@@ -112,24 +114,18 @@ function onStartGame() {
 	io.in(this.gameId).emit("start game on client", {players: game.players});
 };
 
-function onMovePlayer(data) {
-	var game = games[this.gameId];
-
-	if(game === undefined || game.awaitingAcknowledgements) {
-		return;
+function broadcastingLoop() {
+	for(var g in games) {
+		var game = games[g];
+		for(var i in game.players) {
+			var player = game.players[i];
+			if(player.alive && player.hasMoved) {
+				io.to(g).emit("m", {id: player.id, x: player.x, y: player.y, f: player.facing});
+				player.hasMoved = false;
+			}
+		}
 	}
-
-	var movingPlayer = game.players[this.id];
-
-	// Moving player can be null if a player is killed and leftover movement signals come through.
-	if(!movingPlayer) {
-		return;
-	}
-
-	movingPlayer.x = data.x;
-	movingPlayer.y = data.y;
-	movingPlayer.facing = data.facing;
-	movingPlayer.hasMoved = true;
 };
+
 
 http.listen(PORT)
