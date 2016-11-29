@@ -5,6 +5,7 @@ LunarAdventure.Game = function(){
 
 let timeElapsedBeforeLanding = 10;
 let globalTime = 0;
+let penalty = 0;
 
 LunarAdventure.Game.prototype = {
 
@@ -87,7 +88,7 @@ LunarAdventure.Game.prototype = {
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
 
 		// ship and obstacle collision
-		ship.body.collides(obstaclesCollisionGroup, this.hitTerrain, this);
+		ship.body.collides(obstaclesCollisionGroup, this.hitObstacle, this);
 
 
 		// ======== generate obstacles! ========
@@ -155,7 +156,7 @@ LunarAdventure.Game.prototype = {
 	    //Time elapsed in seconds
 	    me.timeElapsed = Math.abs(timeDifference / 1000);
 
-	    result = Math.floor(me.timeElapsed)
+	    result = Math.floor(me.timeElapsed) + penalty;
 	    me.timeLabel.text = result; 
 	    //make time text globally accessible
 	    globalTime = me.timeLabel.text;
@@ -188,18 +189,37 @@ LunarAdventure.Game.prototype = {
 	},
 
 	hitTerrain: function(body1, body2) {
-			console.log('hit terrain');
+		//add penalty for when you hit terrain
+		penalty += 10;
+		console.log('hit terrain! 10 seconds added!');
 
-			//create explosion sprite for collision
-			if (body1) {
-				//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
-				let posX = ship.x;
-				let posY = ship.y;
-				// ship.destroy();
-				// explosion = this.add.sprite(posX - 30, posY, 'explosion')
-				// explosion.scale.setTo(0.05, 0.05);
-				// this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
-			}
+		//create explosion sprite for collision
+		if (body1) {
+			//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
+			let posX = ship.x;
+			let posY = ship.y;
+			// ship.destroy();
+			// explosion = this.add.sprite(posX - 30, posY, 'explosion')
+			// explosion.scale.setTo(0.05, 0.05);
+			// this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+		}
+	},
+
+	hitObstacle: function(body1, body2) {
+		//add penalty for when you hit obstacle
+		penalty += 5;
+		console.log('hit obstacle! 5 seconds added!');
+
+		// //create explosion sprite for collision
+		// if (body1) {
+		// 	//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
+		// 	let posX = ship.x;
+		// 	let posY = ship.y;
+		// 	// ship.destroy();
+		// 	// explosion = this.add.sprite(posX - 30, posY, 'explosion')
+		// 	// explosion.scale.setTo(0.05, 0.05);
+		// 	// this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+		// }
 	},
 
 	landedShip: function(body1, body2) {
