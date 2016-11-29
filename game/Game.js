@@ -16,9 +16,9 @@ LunarAdventure.Game.prototype = {
 
 
 		// set boundaries on left and right of the screen
-		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
-		customBounds = { left: null, right: null, top: null, bottom: null };
-		this.createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+		// var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
+		// customBounds = { left: null, right: null, top: null, bottom: null };
+		// this.createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 
 
     // creating static terrain
@@ -43,9 +43,9 @@ LunarAdventure.Game.prototype = {
     landingPad.body.static = true;
 
 
-		//create bounds on sides of screen
-		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
-		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
+		////create bounds on sides of screen
+		//this.physics.p2.setBoundsToWorld(true, true, true, true, true);
+		//// ship.body.collides(boundsCollisionGroup, hitBounds, this);
 
 
     // add event to fade in landingPad
@@ -85,16 +85,43 @@ LunarAdventure.Game.prototype = {
     smallObstacles.enableBody = true;
     smallObstacles.physicsBodyType = Phaser.Physics.P2JS;
 
-    var frames = [ 10, 30];
+    mediumObstacles = this.add.group();
+    mediumObstacles.enableBody = true;
+    mediumObstacles.physicsBodyType = Phaser.Physics.P2JS;
 
-    for (var i = 0; i < 5; i++) {
-        var obstacle = smallObstacles.create(this.world.width + Math.random() * 200, 20 + Math.random() * 200, 'smallObstacle', this.rnd.pick(frames));
-        obstacle.body.setCircle(50);
+    largeObstacles = this.add.group();
+    largeObstacles.enableBody = true;
+    largeObstacles.physicsBodyType = Phaser.Physics.P2JS;
+
+    var frames = [ 1, 0, 5];
+
+    for (var i = 0; i < 15; i++) {
+        var obstacle = smallObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'smallObstacle', this.rnd.pick(frames));
+        obstacle.body.setCircle(25);
         obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
         obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+        obstacle.body.gravity = -60;
+    }
+
+    for (var i = 0; i < 10; i++) {
+        var obstacle = mediumObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'mediumObstacle', this.rnd.pick(frames));
+        obstacle.body.setCircle(108);
+        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+        obstacle.body.gravity = -60;
+    }
+
+    for (var i = 0; i < 5; i++) {
+        var obstacle = largeObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'largeObstacle', this.rnd.pick(frames));
+        obstacle.body.setCircle(360);
+        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+        obstacle.body.gravity = -60;
     }
 
     this.physics.p2.enable(smallObstacles);
+    this.physics.p2.enable(mediumObstacles);
+    this.physics.p2.enable(largeObstacles);
   },
 
   // fade in landingPad
@@ -147,6 +174,10 @@ LunarAdventure.Game.prototype = {
 	hitBounds: function(body1, body2) {
 		console.log('hit boundary');
 	},
+
+  destroyObstacle: function(obstacle) {
+    obstacle.destroy();
+  },
 
 	createPreviewBounds: function(x, y, w, h) {
 			var sim = this.physics.p2;
