@@ -8,16 +8,16 @@ let globalTime = 0;
 
 LunarAdventure.Game.prototype = {
 
-  create: function() {
+	create: function() {
 
-  		//timer
-  		me = this;
-  		me.startTime = new Date()
-  		me.timeElapsed = 0;
-  		me.createTimer();
-  		me.gameTimer = this.game.time.events.loop(100, function() {
-  			me.updateTimer();
-  		});
+			//timer
+			me = this;
+			me.startTime = new Date()
+			me.timeElapsed = 0;
+			me.createTimer();
+			me.gameTimer = this.game.time.events.loop(100, function() {
+				me.updateTimer();
+			});
 
 		this.physics.p2.gravity.y = 20;
 		this.physics.p2.setImpactEvents(true);
@@ -55,18 +55,13 @@ LunarAdventure.Game.prototype = {
 		// create sprite landing pad
 		landingPad = this.add.sprite(centerX, 2000, 'landingPad');
 		landingPad.scale.setTo(0.2, 0.2);
-		// landingPad.anchor.setTo(1, 0)
-		// landingPad.pivot.setTo(500, 0);
 		this.physics.p2.enable(landingPad, true);
 		landingPad.body.static = true;
-		// console.log(landingPad);
 
 
 		// create boundary
 		boundaryL = this.add.sprite(width/10, 0, 'boundary');
-		console.log(width/100)
 		boundaryL.scale.setTo(width/1800, height/700);
-		console.log(boundaryL)
 		this.physics.p2.enable(boundaryL);
 		boundaryL.body.static = true;
 
@@ -111,6 +106,21 @@ LunarAdventure.Game.prototype = {
 		boundaryR.body.collides(shipCollisionGroup);
 		ship.body.collides(boundsCollisionGroup, null, this);
 
+		// bounce
+		var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
+		var terrainMaterial = this.game.physics.p2.createMaterial('terrainMaterial', terrain.body);
+		var terrainContactMaterial = this.game.physics.p2.createContactMaterial(shipMaterial, terrainMaterial);
+
+		terrainContactMaterial.friction = 0.3;     
+		terrainContactMaterial.restitution = 1.0;  
+    terrainContactMaterial.stiffness = 1e7;    
+    terrainContactMaterial.relaxation = 3;     
+    terrainContactMaterial.frictionStiffness = 1e7;    
+    terrainContactMaterial.frictionRelaxation = 3;     
+    terrainContactMaterial.surfaceVelocity = 0;
+
+
+
 
 		// ======== generate obstacles! ========
 
@@ -136,6 +146,7 @@ LunarAdventure.Game.prototype = {
 				obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
 				obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 				obstacle.body.gravity = -60;
+
 		}
 
 		// create medium obstacles
@@ -163,26 +174,26 @@ LunarAdventure.Game.prototype = {
 	},
 
 	createTimer: function() {
-	  	let me = this;
-	  	me.timeLabel = me.game.add.text(500, 500, "00:00", {font: "100px Arial", fill: "#fff"}); 
-	    // me.timeLabel.anchor.setTo(0.5, 0);
-	    // me.timeLabel.align = 'center';
-  	},
+			let me = this;
+			me.timeLabel = me.game.add.text(500, 500, "00:00", {font: "100px Arial", fill: "#fff"}); 
+			// me.timeLabel.anchor.setTo(0.5, 0);
+			// me.timeLabel.align = 'center';
+		},
 
-  	updateTimer: function() {
-	  	let me = this;
-	    let currentTime = new Date();
-	    let timeDifference = me.startTime.getTime() - currentTime.getTime();
-	 
-	    //Time elapsed in seconds
-	    me.timeElapsed = Math.abs(timeDifference / 1000);
+	updateTimer: function() {
+		let me = this;
+		let currentTime = new Date();
+		let timeDifference = me.startTime.getTime() - currentTime.getTime();
+ 
+		//Time elapsed in seconds
+		me.timeElapsed = Math.abs(timeDifference / 1000);
 
-	    result = Math.floor(me.timeElapsed)
-	    me.timeLabel.text = result; 
-	    //make time text globally accessible
-	    globalTime = me.timeLabel.text;
-   
-	},
+		result = Math.floor(me.timeElapsed)
+		me.timeLabel.text = result; 
+		//make time text globally accessible
+		globalTime = me.timeLabel.text;
+ 
+},
 
 // landing pad rotation functions
 	rotateLandingPadRight: function(radius, startX, startY){
@@ -225,29 +236,25 @@ LunarAdventure.Game.prototype = {
 
 	landedShip: function(body1, body2) {
 
-      // if ship lands carefully, the landing is successful
-      if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
-        console.log('ship landing successful');
-        ship.body = null; // disables the ship from moving
-        this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
-      // else, ship crashes :(
-      } else {
-        console.log('ship landing unsuccessful');
-        let posX = ship.x;
-        let posY = ship.y;
-        ship.destroy();
-        explosion = this.add.sprite(posX - 30, posY, 'explosion')
-        explosion.scale.setTo(0.05, 0.05);
-        this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
-      }
+			// if ship lands carefully, the landing is successful
+			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
+				console.log('ship landing successful');
+				ship.body = null; // disables the ship from moving
+				this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
+			// else, ship crashes :(
+			} else {
+				console.log('ship landing unsuccessful');
+				let posX = ship.x;
+				let posY = ship.y;
+				ship.destroy();
+				explosion = this.add.sprite(posX - 30, posY, 'explosion')
+				explosion.scale.setTo(0.05, 0.05);
+				this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+			}
 
-	    //grab the current globalTime to pass to success screen
-	    successGlobalTime = globalTime
-	    this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
-	},
-
-	hitBounds: function(body1, body2) {
-		console.log('hit boundary');
+			//grab the current globalTime to pass to success screen
+			successGlobalTime = globalTime
+			this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
 	},
 
 	destroyObstacle: function(obstacle) {
