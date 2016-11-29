@@ -20,16 +20,11 @@ LunarAdventure.Game.prototype = {
 		this.landingPadAngle = 1.5;
 
 		// ======== make collision groups ========
-
 		terrainCollisionGroup = this.physics.p2.createCollisionGroup();
 		shipCollisionGroup = this.physics.p2.createCollisionGroup();
 		landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
 		obstaclesCollisionGroup = this.physics.p2.createCollisionGroup();
-
-
-		// set boundaries on left and right of the screen
-		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
-		customBounds = { left: null, right: null, top: null, bottom: null };
+		boundsCollisionGroup = this.physics.p2.createCollisionGroup();
 
 		centerX = window.innerWidth/2
 		centerY = this.game.height/0.65 + 200
@@ -118,6 +113,18 @@ LunarAdventure.Game.prototype = {
 		boundaryL.body.collides(shipCollisionGroup);
 		boundaryR.body.collides(shipCollisionGroup);
 		ship.body.collides(boundsCollisionGroup, null, this);
+
+		// setting terrain bounce
+		var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
+		var terrainMaterial = this.game.physics.p2.createMaterial('terrainMaterial', terrain.body);
+		var terrainContactMaterial = this.game.physics.p2.createContactMaterial(shipMaterial, terrainMaterial);
+		terrainContactMaterial.friction = 0.3;
+		terrainContactMaterial.restitution = 1.3;
+		terrainContactMaterial.stiffness = 1e7;
+		terrainContactMaterial.relaxation = 3;
+		terrainContactMaterial.frictionStiffness = 1e7;
+		terrainContactMaterial.frictionRelaxation = 3;
+		terrainContactMaterial.surfaceVelocity = 0;
 
 		//timer
 		me = this;
@@ -317,7 +324,6 @@ LunarAdventure.Game.prototype = {
 			else if (cursors.right.isDown){ ship.body.rotateRight(100); }
 			// stop rotating if key is not pressed
 			else { ship.body.setZeroRotation(); }
-			
 			// up key, accelerate
 			if (cursors.up.isDown){ ship.body.thrust(200); }
 			
