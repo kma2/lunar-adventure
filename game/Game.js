@@ -4,6 +4,7 @@ LunarAdventure.Game = function(){
 };
 
 var timeElaspedBeforeLanding = 10;
+var frames = [ 1, 0, 5];
 
 LunarAdventure.Game.prototype = {
   create: function() {
@@ -22,37 +23,16 @@ LunarAdventure.Game.prototype = {
 
     // ======== set collisions ========
 
-		var terrainCollisionGroup = this.physics.p2.createCollisionGroup();
-		var shipCollisionGroup = this.physics.p2.createCollisionGroup();
-		var landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
-    var obstaclesCollisionGroup = this.physics.p2.createCollisionGroup();
-		var boundsCollisionGroup = this.physics.p2.createCollisionGroup();
-
-
-    // ======== obstacle motion path ========
-    this.increment = 1 / this.width;
-    this.i = 0;
-    this.timer1Stopped = true;
-    this.timer1 = null;
-    this.obstaclePoints = {
-    'x': [0, 200, 120, 456, 640],
-    'y': [0, 300, 120, 156, 480]
-    };
-
-    this.bmd = this.add.bitmapData(this.width, this.height);
-    this.bmd.addToWorld();
-
-    // Draw the path
-    for (var j = 0; j < 1; j += this.increment) {
-      var posx = this.math.bezierInterpolation(this.obstaclePoints.x, j);
-      var posy = this.math.bezierInterpolation(this.obstaclePoints.y, j);
-      this.bmd.rect(posx, posy, 3, 3, 'rgba(245, 0, 0, 1)');
-    }
+		terrainCollisionGroup = this.physics.p2.createCollisionGroup();
+		shipCollisionGroup = this.physics.p2.createCollisionGroup();
+		landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
+    obstaclesCollisionGroup = this.physics.p2.createCollisionGroup();
+		//boundsCollisionGroup = this.physics.p2.createCollisionGroup();
 
 
 		// set boundaries on left and right of the screen
-		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
-		customBounds = { left: null, right: null, top: null, bottom: null };
+		// var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
+		// customBounds = { left: null, right: null, top: null, bottom: null };
 
     centerX = window.innerWidth/2
     centerY = this.game.height/0.65 + 200
@@ -65,7 +45,7 @@ LunarAdventure.Game.prototype = {
 
 
 		////create bounds on sides of screen
-		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
+		//this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
 
 
@@ -84,39 +64,9 @@ LunarAdventure.Game.prototype = {
     largeObstacles.enableBody = true;
     largeObstacles.physicsBodyType = Phaser.Physics.P2JS;
 
-    var frames = [ 1, 0, 5];
-
-    obstacleOnPath = this.add.sprite(30, 30, 'smallObstacle');
-
-    // create small obstacles
-    // for (var i = 0; i < 15; i++) {
-    //     var obstacle = smallObstacles.create(Math.random() * this.world.width, Math.random() * 700, 'smallObstacle', this.rnd.pick(frames));
-    //     obstacle.body.setCircle(25);
-    //     obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-    //     obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
-    //     obstacle.body.gravity = 0;
-    //     obstacle.body.static = true;
-    // }
-
-    // create medium obstacles
-    // for (var i = 0; i < 6; i++) {
-    //     var obstacle = mediumObstacles.create(Math.random() * this.world.width, Math.random() * 700, 'mediumObstacle', this.rnd.pick(frames));
-    //     obstacle.body.setCircle(52);
-    //     obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-    //     obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
-    //     obstacle.body.gravity = 0;
-    //     obstacle.body.static = true;
-    // }
-
-    // create large obstacles
-    // for (var i = 0; i < 2; i++) {
-    //     var obstacle = largeObstacles.create(Math.random() * this.world.width, Math.random() * 700, 'largeObstacle', this.rnd.pick(frames));
-    //     obstacle.body.setCircle(180);
-    //     obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-    //     obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
-    //     obstacle.body.gravity = 0;
-    //     obstacle.body.static = true;
-    // }
+    this.generateSmallObstacles();
+    this.generateMediumObstacles();
+    this.generateLargeObstacles();
 
     // enable physics on all obstacle groups
     this.physics.p2.enable(smallObstacles);
@@ -185,29 +135,6 @@ LunarAdventure.Game.prototype = {
     }
   },
 
-  // rotateObstaclesRight: function(radius, startX, startY){
-  //   var x = startX + Math.cos(this.obstaclesAngle) * radius;
-  //   var y = startY + Math.sin(this.obstaclesAngle) * radius;
-  //   smallObstacles.position.x = x;
-  //   smallObstacles.position.y = y;
-  //   if(this.obstaclesAngle <= 360){
-  //     this.obstaclesAngle += 0.002;
-  //   }else {
-  //     this.obstaclesAngle = 0;
-  //   }
-  // },
-  //
-  // rotateObstaclesLeft: function(radius, startX, startY){
-  //   var x = startX + Math.cos(this.obstaclesAngle) * radius;
-  //   var y = startY + Math.sin(this.obstaclesAngle) * radius;
-  //   smallObstacles.position.x = x;
-  //   smallObstacles.position.y = y;
-  //   if(this.obstaclesAngle <= 360){
-  //     this.obstaclesAngle -= 0.002;
-  //   }else {
-  //     this.obstaclesAngle = 0;
-  //   }
-  // },
 
   hitTerrain: function(body1, body2) {
 			console.log('hit terrain');
@@ -245,8 +172,46 @@ LunarAdventure.Game.prototype = {
 		console.log('hit boundary');
 	},
 
-  destroyObstacle: function(obstacle) {
-    obstacle.destroy();
+  generateSmallObstacles: function() {
+    for (var i = 0; i < 10; i++) {
+        var obstacle = smallObstacles.create(Math.random() * this.world.width, Math.random() * 700, 'smallObstacle', this.rnd.pick(frames));
+        obstacle.body.setCircle(25);
+        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+
+        this.game.physics.p2.enable(obstacle, false);
+        obstacle.body.static = true;
+        obstacle.body.velocity.y = -100 + Math.random() * -100;
+        obstacle.body.velocity.x = -100 + Math.random() * -100;
+    }
+  },
+
+  generateMediumObstacles: function() {
+    for (var i = 0; i < 5; i++) {
+        var obstacle = mediumObstacles.create(Math.random() * this.world.width, Math.random() * 500, 'mediumObstacle', this.rnd.pick(frames));
+        obstacle.body.setCircle(52);
+        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+
+        this.game.physics.p2.enable(obstacle, false);
+        obstacle.body.static = true;
+        obstacle.body.velocity.y = -50 + Math.random() * -100;
+        obstacle.body.velocity.x = -50 + Math.random() * -100;
+    }
+  },
+
+  generateLargeObstacles: function() {
+    for (var i = 0; i < 2; i++) {
+        var obstacle = largeObstacles.create(Math.random() * this.world.width, Math.random() * 300, 'largeObstacle', this.rnd.pick(frames));
+        obstacle.body.setCircle(180);
+        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+
+        this.game.physics.p2.enable(obstacle, false);
+        obstacle.body.static = true;
+        obstacle.body.velocity.y = -30 + Math.random() * -100;
+        obstacle.body.velocity.x = -30 + Math.random() * -100;
+    }
   },
 
   gameOverCrash: function() {
@@ -257,29 +222,7 @@ LunarAdventure.Game.prototype = {
       this.game.state.start('Success', true, false);
   },
 
-  plot: function() {
-    var posx = this.math.bezierInterpolation(this.game.obstaclePoints.x, this.game.i);
-    var posy = this.math.bezierInterpolation(this.game.obstaclePoints.y, this.game.i);
-    obstacleOnPath.position.x = posx;
-    obstacleOnPath.position.y = posy;
-    this.game.i += this.game.increment;
-    if (posy > 480) {
-      this.game.timer1.stop();
-      this.game.timer1.destroy();
-      this.game.i = 0;
-      this.game.timer1Stopped = true;
-    }
-  },
-
   update: function() {
-    // this just takes care of resetting
-    // the timer so the movement repeats
-    if (this.game.timer1Stopped) {
-      this.game.timer1Stopped = false;
-      this.game.timer1 = this.game.time.create(true);
-      this.game.timer1.loop(.01, this.plot, this);
-      this.game.timer1.start();
-    }
 
     if (ship.body) {
       // debug info in top left corner
