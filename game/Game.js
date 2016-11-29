@@ -11,14 +11,6 @@ LunarAdventure.Game.prototype = {
 
   create: function() {
 
-  		//timer
-  		me = this;
-  		me.startTime = new Date()
-  		me.timeElapsed = 0;
-  		me.createTimer();
-  		me.gameTimer = this.game.time.events.loop(100, function() {
-  			me.updateTimer();
-  		});
 
 		this.physics.p2.gravity.y = 20;
 		this.physics.p2.setImpactEvents(true);
@@ -139,13 +131,31 @@ LunarAdventure.Game.prototype = {
 		this.physics.p2.enable(smallObstacles);
 		this.physics.p2.enable(mediumObstacles);
 		this.physics.p2.enable(largeObstacles);
+
+  		//timer
+  		me = this;
+  		me.startTime = new Date()
+  		me.timeElapsed = 0;
+  		me.createTimer();
+  		me.gameTimer = this.game.time.events.loop(100, function() {
+  			me.updateTimer();
+  		});
+
+  		//particle effects for time penalties
+  			//get position of rocket for particle position
+  			xCoord = ship.body.x;
+  			yCoord = ship.body.y;
+
+  		fivePenaltyEmitter = this.game.add.emitter(xCoord,yCoord,1)
+  		fivePenaltyEmitter.makeParticles('penalty5')
+  		fivePenaltyEmitter.gravity = 0;
 	},
 
 	createTimer: function() {
 	  	let me = this;
-	  	me.timeLabel = me.game.add.text(500, 500, "00:00", {font: "100px Arial", fill: "#fff"}); 
-	    // me.timeLabel.anchor.setTo(0.5, 0);
-	    // me.timeLabel.align = 'center';
+	  	//this fixes issue with timer appearing in some place other than upper left corner
+	  	me.timeLabel = {};
+	  	// me.timeLabel = me.game.add.text(500, 500, "", {font: "100px Arial", fill: "#fff"}); 
   	},
 
   	updateTimer: function() {
@@ -188,6 +198,12 @@ LunarAdventure.Game.prototype = {
 		}
 	},
 
+	// particleBurst: function() {
+	// 	console.log('inside particle burst')
+	// 	//optional args
+	// 	fivePenaltyEmitter.start(true, 500)
+	// },
+
 	hitTerrain: function(body1, body2) {
 		//add penalty for when you hit terrain
 		penalty += 10;
@@ -209,6 +225,9 @@ LunarAdventure.Game.prototype = {
 		//add penalty for when you hit obstacle
 		penalty += 5;
 		console.log('hit obstacle! 5 seconds added!');
+		
+		fivePenaltyEmitter.start(true, 10000)
+		
 
 		// //create explosion sprite for collision
 		// if (body1) {

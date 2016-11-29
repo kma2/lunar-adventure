@@ -25,6 +25,8 @@ LunarAdventure.Preload.prototype = {
     this.load.image('smallObstacle', 'images/smallObstacle.png');
     this.load.image('mediumObstacle', 'images/mediumObstacle.png');
     this.load.image('largeObstacle', 'images/largeObstacle.png');
+    this.load.image('penalty10', 'images/penalty10.png');
+    this.load.image('penalty5', 'images/penalty5.png')
   },
 
   create: function() {
