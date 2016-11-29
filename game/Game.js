@@ -1,6 +1,7 @@
 var LunarAdventure = LunarAdventure || {};
 
-LunarAdventure.Game = function(){};
+LunarAdventure.Game = function(){
+};
 
 var timeElaspedBeforeLanding = 10;
 
@@ -13,7 +14,9 @@ LunarAdventure.Game.prototype = {
 		divide = 15;
 		cursors = this.input.keyboard.createCursorKeys();
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
-    angle = 5;
+
+    // initial angle for landing pad position
+    this.angle = 1.5;
 
 		// create terrain
 		// const octagon = function(radius, start_x, start_y) {
@@ -181,11 +184,11 @@ LunarAdventure.Game.prototype = {
 
 
 		// create sprite landing pad
-    landingPad = this.add.sprite(centerX, 200, 'landingPad');
+    landingPad = this.add.sprite(centerX, 2000, 'landingPad');
     landingPad.scale.setTo(0.2, 0.2);
     // landingPad.anchor.setTo(1, 0)
     // landingPad.pivot.setTo(500, 0);
-    this.physics.p2.enable(landingPad, true);
+    this.physics.p2.enable(landingPad, false);
     landingPad.body.static = true;
     console.log(landingPad);
 
@@ -224,14 +227,27 @@ LunarAdventure.Game.prototype = {
   // showLandingPad: function() {
   //   this.game.add.tween(landingPad).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true);
   // },
-  rotateLandingPad: function(radius, startX, startY){
+
+// landing pad rotation functions
+  rotateLandingPadRight: function(radius, startX, startY){
+    var x = startX + Math.cos(this.angle) * radius;
+    var y = startY + Math.sin(this.angle) * radius
+    landingPad.body.x = x;
+    landingPad.body.y = y;
+    if(this.angle <= 360){
+      this.angle += 0.002;
+    }else {
+      this.angle = 0;
+    }
+  },
+  rotateLandingPadLeft: function(radius, startX, startY){
     console.log(this)
     var x = startX + Math.cos(this.angle) * radius;
     var y = startY + Math.sin(this.angle) * radius
     landingPad.body.x = x;
     landingPad.body.y = y;
     if(this.angle <= 360){
-      this.angle += 0.05;
+      this.angle -= 0.002;
     }else {
       this.angle = 0;
     }
@@ -317,7 +333,7 @@ LunarAdventure.Game.prototype = {
     var timeElapsed = this.game.time.now.toString();
     var timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
 
-    this.rotateLandingPad(500, centerX, 200)
+
 
     if (ship.body) {
       // debug info in top left corner
@@ -345,18 +361,18 @@ LunarAdventure.Game.prototype = {
       // terrain spins when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 100) {
         terrain.body.rotation += 0.002;
-        landingPad.body.rotation += 0.002;
+        this.rotateLandingPadRight(775, centerX, 1200)
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110) {
+        this.rotateLandingPadLeft(775, centerX, 1200)
         terrain.body.rotation -= 0.002;
-        landingPad.body.rotation -= 0.002;
       }
       // terrain spins FASTER when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 50) {
+        this.rotateLandingPadRight(775, centerX, 1200)
         terrain.body.rotation += 0.002;
-        landingPad.body.rotation += 0.002;
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60) {
+        this.rotateLandingPadLeft(775, centerX, 1200)
         terrain.body.rotation -= 0.002;
-        landingPad.body.rotation -= 0.002;
       }
     }
   },
