@@ -31,7 +31,7 @@ LunarAdventure.Boot.prototype = {
 
   	//physics system for movement
   	this.game.physics.startSystem(Phaser.Physics.P2);
-
+    
       this.state.start('Preload');
     }
 };
