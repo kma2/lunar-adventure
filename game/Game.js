@@ -17,14 +17,45 @@ LunarAdventure.Game.prototype = {
 
     // initial angle for landing pad position
     this.angle = 1.5;
+    centerX = window.innerWidth/2
+    centerY = this.game.height/0.65 + 200
 
+
+    // define key UI images
+    leftKeyUp = this.add.sprite(centerX + 395, 100, 'leftKeyUp');
+    leftKeyUp.scale.setTo(0.25, 0.25);
+    leftKeyUp.visible = true;
+
+    rightKeyUp = this.add.sprite(centerX + 560, 100, 'rightKeyUp');
+    rightKeyUp.scale.setTo(0.25, 0.25);
+    rightKeyUp.visible = true;
+
+    upKeyUp = this.add.sprite(centerX + 480, 25, 'upKeyUp');
+    upKeyUp.scale.setTo(0.25, 0.25);
+    upKeyUp.visible = true;
+
+    leftKeyDown = this.add.sprite(centerX + 395, 113, 'leftKeyDown');
+    leftKeyDown.scale.setTo(0.25, 0.25);
+    leftKeyDown.visible = false;
+
+    rightKeyDown = this.add.sprite(centerX + 560, 113, 'rightKeyDown');
+    rightKeyDown.scale.setTo(0.25, 0.25);
+    rightKeyDown.visible = false;
+
+    upKeyDown = this.add.sprite(centerX + 480, 38, 'upKeyDown');
+    upKeyDown.scale.setTo(0.25, 0.25);
+    upKeyDown.visible = false;
+
+    landingArrow = this.add.sprite(centerX, 2000, 'landingArrow');
+    landingArrow.scale.setTo(0.25, 0.25);
+    landingArrow.alpha = 0;
+
+    this.add.tween(landingArrow).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true)
 
 		// set boundaries on left and right of the screen
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
 		customBounds = { left: null, right: null, top: null, bottom: null };
 
-    centerX = window.innerWidth/2
-    centerY = this.game.height/0.65 + 200
     // creating static terrain
 		terrain = this.add.sprite(centerX, centerY, 'terrain');
 		terrain.anchor.set(0.5)
@@ -43,11 +74,17 @@ LunarAdventure.Game.prototype = {
 		// create sprite landing pad
     landingPad = this.add.sprite(centerX, 2000, 'landingPad');
     landingPad.scale.setTo(0.2, 0.2);
-    // landingPad.anchor.setTo(1, 0)
-    // landingPad.pivot.setTo(500, 0);
     this.physics.p2.enable(landingPad, false);
     landingPad.body.static = true;
-    console.log(landingPad);
+
+
+
+
+
+
+
+
+
 
 
 		////create bounds on sides of screen
@@ -143,7 +180,7 @@ LunarAdventure.Game.prototype = {
 // landing pad rotation functions
   rotateLandingPadRight: function(radius, startX, startY){
     var x = startX + Math.cos(this.angle) * radius;
-    var y = startY + Math.sin(this.angle) * radius
+    var y = startY + Math.sin(this.angle) * radius;
     landingPad.body.x = x;
     landingPad.body.y = y;
     if(this.angle <= 360){
@@ -153,9 +190,9 @@ LunarAdventure.Game.prototype = {
     }
   },
   rotateLandingPadLeft: function(radius, startX, startY){
-    console.log(this)
+
     var x = startX + Math.cos(this.angle) * radius;
-    var y = startY + Math.sin(this.angle) * radius
+    var y = startY + Math.sin(this.angle) * radius;
     landingPad.body.x = x;
     landingPad.body.y = y;
     if(this.angle <= 360){
@@ -163,6 +200,13 @@ LunarAdventure.Game.prototype = {
     }else {
       this.angle = 0;
     }
+  },
+
+  rotateLandingArrow: function(radius, startX, startY){
+    var x = startX + Math.cos(this.angle) * radius;
+    var y = startY + Math.sin(this.angle) * radius;
+    landingArrow.x = x;
+    landingArrow.y = y;
   },
 
   hitTerrain: function(body1, body2) {
@@ -181,14 +225,6 @@ LunarAdventure.Game.prototype = {
 	},
 
 	landedShip: function(body1, body2) {
-    var timeElapsed = this.game.time.now.toString();
-    var timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
-
-    // ship cannot crash into landing pad before it appears
-    // bug: ship still bounces off the invisible landing pad
-    if (timeElapsedInSeconds < timeElaspedBeforeLanding) {
-      landingPad.body = null;
-    } else {
       // if ship lands carefully, the landing is successful
       if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
         console.log('ship landing successful');
@@ -204,7 +240,6 @@ LunarAdventure.Game.prototype = {
         explosion.scale.setTo(0.05, 0.05);
         this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
       }
-    }
 	},
 
 	hitBounds: function(body1, body2) {
@@ -238,26 +273,41 @@ LunarAdventure.Game.prototype = {
 
       // left key, rotate ship
       if (cursors.left.isDown) {
+        leftKeyUp.visible = false;
+        leftKeyDown.visible = true;
         ship.body.rotateLeft(100);
       }
       // right key, rotate ship
       else if (cursors.right.isDown){
+        rightKeyUp.visible = false;
+        rightKeyDown.visible = true;
         ship.body.rotateRight(100);
       }
       // stop rotating if key is not pressed
       else {
+        leftKeyUp.visible = true;
+        leftKeyDown.visible = false;
+        rightKeyUp.visible = true;
+        rightKeyDown.visible = false;
         ship.body.setZeroRotation();
       }
       // up key, accelerate
       if (cursors.up.isDown){
+        upKeyUp.visible = false;
+        upKeyDown.visible = true;
         ship.body.thrust(200);
+      } else {
+        upKeyUp.visible = true;
+        upKeyDown.visible = false;
       }
       // terrain spins when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 200 && ship.body.rotation < 0) {
         terrain.body.rotation += 0.002;
         this.rotateLandingPadRight(775, centerX, 1200);
+        this.rotateLandingArrow(875, centerX, 1200);
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 210 && ship.body.rotation > 0) {
         this.rotateLandingPadLeft(775, centerX, 1200);
+        this.rotateLandingArrow(875, centerX, 1200);
         terrain.body.rotation -= 0.002;
       }
       // terrain spins FASTER when rocket nears the edges
