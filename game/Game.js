@@ -142,13 +142,20 @@ LunarAdventure.Game.prototype = {
   		});
 
   		//particle effects for time penalties
-  			//get position of rocket for particle position
-  			xCoord = ship.body.x;
-  			yCoord = ship.body.y;
-
-  		fivePenaltyEmitter = this.game.add.emitter(xCoord,yCoord,1)
+  		//putting this in another location and grabbing ships position slows game down too much
+  			
+  		//emitter for 5 sec penalty
+  		fivePenaltyEmitter = this.game.add.emitter(220,25,5000)
   		fivePenaltyEmitter.makeParticles('penalty5')
-  		fivePenaltyEmitter.gravity = 0;
+  		fivePenaltyEmitter.minParticleScale = 0.1
+  		fivePenaltyEmitter.maxParticleScale = 0.1
+  		fivePenaltyEmitter.gravity = 50;
+  		//emitter for 10 sec penalty
+  		tenPenaltyEmitter = this.game.add.emitter(230,25,5000)
+  		tenPenaltyEmitter.makeParticles('penalty10')
+  		tenPenaltyEmitter.minParticleScale = 0.1
+  		tenPenaltyEmitter.maxParticleScale = 0.1
+  		tenPenaltyEmitter.gravity = 50;
 	},
 
 	createTimer: function() {
@@ -198,16 +205,12 @@ LunarAdventure.Game.prototype = {
 		}
 	},
 
-	// particleBurst: function() {
-	// 	console.log('inside particle burst')
-	// 	//optional args
-	// 	fivePenaltyEmitter.start(true, 500)
-	// },
-
 	hitTerrain: function(body1, body2) {
 		//add penalty for when you hit terrain
 		penalty += 10;
 		console.log('hit terrain! 10 seconds added!');
+		//penalty emitter
+		tenPenaltyEmitter.start(true, 1000, null, 1)
 
 		//create explosion sprite for collision
 		if (body1) {
@@ -225,8 +228,9 @@ LunarAdventure.Game.prototype = {
 		//add penalty for when you hit obstacle
 		penalty += 5;
 		console.log('hit obstacle! 5 seconds added!');
-		
-		fivePenaltyEmitter.start(true, 10000)
+
+		//penalty emitter
+		fivePenaltyEmitter.start(true, 1000, null, 1)
 		
 
 		// //create explosion sprite for collision
