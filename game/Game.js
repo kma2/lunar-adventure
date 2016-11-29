@@ -17,7 +17,7 @@ LunarAdventure.Game.prototype = {
 
     // initial angle for landing pad position
     this.angle = 1.5;
-    
+
 
 		// set boundaries on left and right of the screen
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
@@ -255,13 +255,17 @@ LunarAdventure.Game.prototype = {
       // terrain spins when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 200 && ship.body.rotation < 0) {
         terrain.body.rotation += 0.002;
+        this.rotateLandingPadRight(775, centerX, 1200);
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 210 && ship.body.rotation > 0) {
+        this.rotateLandingPadRight(775, centerX, 1200);
         terrain.body.rotation -= 0.002;
       }
       // terrain spins FASTER when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 150 && ship.body.rotation < 0) {
+        this.rotateLandingPadRight(775, centerX, 1200);
         terrain.body.rotation += 0.002;
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 160 && ship.body.rotation > 0) {
+        this.rotateLandingPadRight(775, centerX, 1200);
         terrain.body.rotation -= 0.002;
       }
     }
