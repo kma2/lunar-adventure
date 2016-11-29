@@ -2,11 +2,22 @@ var LunarAdventure = LunarAdventure || {};
 
 LunarAdventure.Game = function(){};
 
-var timeElaspedBeforeLanding = 10;
+let timeElapsedBeforeLanding = 10;
+let globalTime = 0;
 
 LunarAdventure.Game.prototype = {
   create: function() {
-  	i = 0;
+
+  		//timer
+  		me = this;
+  		me.startTime = new Date()
+  		me.timeElapsed = 0;
+  		me.createTimer();
+  		me.gameTimer = this.game.time.events.loop(100, function() {
+  			me.updateTimer();
+  		});
+
+
 		this.physics.p2.gravity.y = 20;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
@@ -192,7 +203,7 @@ LunarAdventure.Game.prototype = {
 
 
     // add event to fade in landingPad
-    this.time.events.add(Phaser.Timer.SECOND * timeElaspedBeforeLanding, this.showLandingPad, this);
+    this.time.events.add(Phaser.Timer.SECOND * timeElapsedBeforeLanding, this.showLandingPad, this);
     landingPad.alpha = 0;
 
 
@@ -214,6 +225,28 @@ LunarAdventure.Game.prototype = {
     landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
   },
+
+  createTimer: function() {
+  	let me = this;
+  	me.timeLabel = me.game.add.text(500, 500, "00:00", {font: "100px Arial", fill: "#fff"}); 
+    // me.timeLabel.anchor.setTo(0.5, 0);
+    // me.timeLabel.align = 'center';
+  },
+
+  updateTimer: function() {
+  	let me = this;
+    let currentTime = new Date();
+    let timeDifference = me.startTime.getTime() - currentTime.getTime();
+ 
+    //Time elapsed in seconds
+    me.timeElapsed = Math.abs(timeDifference / 1000);
+
+    result = Math.floor(me.timeElapsed)
+    me.timeLabel.text = result; 
+    //make time text globally accessible
+    globalTime = me.timeLabel.text;
+   
+	},
 
   // fade in landingPad
   showLandingPad: function() {
@@ -241,7 +274,7 @@ LunarAdventure.Game.prototype = {
 
     // ship cannot crash into landing pad before it appears
     // bug: ship still bounces off the invisible landing pad
-    if (timeElapsedInSeconds < timeElaspedBeforeLanding) {
+    if (timeElapsedInSeconds < timeElapsedBeforeLanding) {
       landingPad.body = null;
     } else {
       // if ship lands carefully, the landing is successful
@@ -260,6 +293,9 @@ LunarAdventure.Game.prototype = {
         this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
       }
     }
+
+    //grab the current globalTime to pass to success screen
+    successGlobalTime = globalTime
     this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
 	},
 
@@ -298,25 +334,10 @@ LunarAdventure.Game.prototype = {
   },
 
   update: function() {
-  	//timer
-  	// time = 0
-  	// myTimer = time++;
-  	timeElapsed = this.game.time.now.toString()
-    timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
-  	// console.log(this.game.time)
-  	// console.log('time elapsed', this.game.time.elapsedMS)
-  	// console.log('no ms above elapsed', this.game.time.elapsed)
-  	// console.log('physics time elapsed', this.game.time.physicsElapsedMS)
-  	// this.game.time.reset()
-
-    // timeElapsed = this.game.time.now.toString();
-    // let timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
-    // let newTime = new Time(this.game)
-    // console.log('new time is', newTime)
 
     if (ship.body) {
       // debug info in top left corner
-      this.game.debug.text('time elapsed: ' + timeElapsedInSeconds + "s", 32, 32);
+      this.game.debug.text('time elapsed: ' + globalTime + "s", 32, 32);
       this.game.debug.text('velocity x: ' + Math.floor(ship.body.velocity.x), 32, 52);
       this.game.debug.text('velocity y: ' + Math.floor(ship.body.velocity.y), 32, 72);
       this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);

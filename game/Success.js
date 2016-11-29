@@ -15,7 +15,7 @@ LunarAdventure.Success.prototype = {
     // message.scale.setTo(0.6, 0.6);
 
     //new dynamic text
-    this.game.debug.text(`Perfect landing! Your time is ${timeElapsedInSeconds} seconds!`, this.game.width/2.5 - 20, this.game.height/2.6);
+    this.game.debug.text(`Perfect landing! Your time is ${successGlobalTime} seconds!`, this.game.width/2.5 - 20, this.game.height/2.6);
 
 
     // creating static terrain
@@ -27,14 +27,13 @@ LunarAdventure.Success.prototype = {
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
     this.game.debug.text('click to play again', this.game.width/2 - 85, this.game.height/2.1);
+
   },
 
   update: function() {
     terrain.body.rotation -= 0.003;
 
-    if(this.game.input.activePointer.justPressed()) {
-      timeElapsed = 0
-      console.log('time elapsed is', timeElapsed)
+    if(this.game.input.activePointer.justPressed()) {      
       this.game.state.start('Game');
     }
   }
