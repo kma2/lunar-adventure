@@ -4,9 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "webpack && nodemon app.js",
-    "test": "mocha --compilers js:babel-register --watch tests/{*,**/*}.spec.js",
-    "postinstall" : "webpack --config ./webpack.config.js --progress --colors"
+    "start": "nodemon server/server.js",
+    "test": "mocha --compilers js:babel-register --watch tests/{*,**/*}.spec.js"
   },
   "repository": {
     "type": "git",
@@ -19,9 +18,10 @@
   },
   "homepage": "https://github.com/kma2/lunar-game#readme",
   "dependencies": {
-    "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "path": "^0.12.7",
+    "phaser": "^2.6.2",
+    "phaser-input": "^1.2.6",
     "socket.io": "^1.6.0"
   },
   "devDependencies": {
@@ -38,8 +38,8 @@
     "node-sass": "^3.11.2",
     "nodemon": "^1.11.0",
     "sass-loader": "^4.0.2",
-    "volleyball": "^1.4.1",
     "style-loader": "^0.13.1",
+    "volleyball": "^1.4.1",
     "webpack": "^1.13.3"
   }
 }
