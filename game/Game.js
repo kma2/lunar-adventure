@@ -64,14 +64,14 @@ LunarAdventure.Game.prototype = {
     largeObstacles.enableBody = true;
     largeObstacles.physicsBodyType = Phaser.Physics.P2JS;
 
-    this.generateSmallObstacles();
-    this.generateMediumObstacles();
-    this.generateLargeObstacles();
-
     // enable physics on all obstacle groups
     this.physics.p2.enable(smallObstacles);
     this.physics.p2.enable(mediumObstacles);
     this.physics.p2.enable(largeObstacles);
+
+    this.generateSmallObstacles();
+    this.generateMediumObstacles();
+    this.generateLargeObstacles();
 
 
     // ======== create terrain ========
@@ -181,7 +181,7 @@ LunarAdventure.Game.prototype = {
 
         this.game.physics.p2.enable(obstacle, false);
         obstacle.body.static = true;
-        obstacle.body.velocity.y = -100 + Math.random() * -100;
+        obstacle.body.velocity.y = -50 + Math.random() * -100;
         obstacle.body.velocity.x = -100 + Math.random() * -100;
     }
   },
