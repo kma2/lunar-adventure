@@ -44,11 +44,13 @@ function setEventHandlers () {
 		socket.on('unsubscribe', function(data) { socket.leave(data); })
 
 		socket.on("disconnect", function() { onClientDisconnect.call(this); });
-		socket.on("start game on server", function() { onStartGame.call(this); });
 		socket.on("enter lobby", function() { Lobby.onEnterLobby.call(this, io); });
 		socket.on("host game", function(data) { Lobby.onHostGame.call(this, data, io); });
 		socket.on("enter game room", function(data) { Lobby.onEnterGameRoom.call(this, data, io); });
 		socket.on("leave game room", function() { Lobby.onLeaveGameRoom.call(this, io); });
+
+		socket.on("start game on server", function() { onStartGame.call(this); });
+		socket.on("move player", onMovePlayer);
 	});
 }
 
@@ -104,10 +106,30 @@ function onStartGame() {
 	for(var i = 0; i < ids.length; i++) {
 		var playerId = ids[i];
 		// var newPlayer = new Player(spawnPoint.x * TILE_SIZE, spawnPoint.y * TILE_SIZE, "down", playerId, pendingGame.players[playerId].color);
-		game.players[playerId] = i;
+		game.players[playerId] = i === 0 ? 'left' : 'up'
 	}
 	game.numPlayersAlive = ids.length;
 	io.in(this.gameId).emit("start game on client", {players: game.players});
+};
+
+function onMovePlayer(data) {
+	var game = games[this.gameId];
+
+	if(game === undefined || game.awaitingAcknowledgements) {
+		return;
+	}
+
+	var movingPlayer = game.players[this.id];
+
+	// Moving player can be null if a player is killed and leftover movement signals come through.
+	if(!movingPlayer) {
+		return;
+	}
+
+	movingPlayer.x = data.x;
+	movingPlayer.y = data.y;
+	movingPlayer.facing = data.facing;
+	movingPlayer.hasMoved = true;
 };
 
 http.listen(PORT)

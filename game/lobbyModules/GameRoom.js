@@ -159,6 +159,6 @@ LunarAdventure.GameRoom.prototype = {
 
 	startGame: function(data) {
 		socket.removeAllListeners();
-		LunarAdventure.game.state.start("Game", true, false, data.mapName, data.players, this.id);
+		LunarAdventure.game.state.start("Game", true, false, data.players, this.id);
 	}
 }

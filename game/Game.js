@@ -7,6 +7,11 @@ var obstacle
 var i = 0;
 
 LunarAdventure.Game.prototype = {
+	init: function(players, id) {
+		this.players = players;
+		this.playerId = id;
+	},
+
 	create: function() {
 		this.physics.p2.gravity.y = 20;
 		this.physics.p2.setImpactEvents(true);
