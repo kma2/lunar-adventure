@@ -21,5 +21,3 @@ Ship.prototype.accelerate = function() {
 	 this.velocity.x -= Math.sin(-1 *  this.rotation * (Math.PI/180)) * this.speed
 	 this.velocity.y -= Math.cos(-1 *  this.rotation * (Math.PI/180)) * this.speed
 }
-
-// module.exports = Ship
