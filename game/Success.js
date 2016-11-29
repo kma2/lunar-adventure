@@ -15,9 +15,6 @@ LunarAdventure.Success.prototype = {
     // message.scale.setTo(0.6, 0.6);
 
     //new dynamic text
-    let timeElapsed = this.game.time.now.toString();
-    let timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
-    console.log('time is:', timeElapsedInSeconds)
     this.game.debug.text(`Perfect landing! Your time is ${timeElapsedInSeconds} seconds!`, this.game.width/2.5 - 20, this.game.height/2.6);
 
 
@@ -36,7 +33,8 @@ LunarAdventure.Success.prototype = {
     terrain.body.rotation -= 0.003;
 
     if(this.game.input.activePointer.justPressed()) {
-      this.game.time = 0
+      timeElapsed = 0
+      console.log('time elapsed is', timeElapsed)
       this.game.state.start('Game');
     }
   }

@@ -6,6 +6,7 @@ var timeElaspedBeforeLanding = 10;
 
 LunarAdventure.Game.prototype = {
   create: function() {
+  	i = 0;
 		this.physics.p2.gravity.y = 20;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
@@ -240,27 +241,25 @@ LunarAdventure.Game.prototype = {
 
     // ship cannot crash into landing pad before it appears
     // bug: ship still bounces off the invisible landing pad
-    //**===========UNCOMMENT FOR PROPER LANDING PAD MECHANICS ===============***//////
-    // if (timeElapsedInSeconds < timeElaspedBeforeLanding) {
-    //   landingPad.body = null;
-    // } else {
-    //   // if ship lands carefully, the landing is successful
-    //   if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
-    //     console.log('ship landing successful');
-    //     ship.body = null; // disables the ship from moving
-    //     this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
-    //   // else, ship crashes :(
-    //   } else {
-    //     console.log('ship landing unsuccessful');
-    //     let posX = ship.x;
-    //     let posY = ship.y;
-    //     ship.destroy();
-    //     explosion = this.add.sprite(posX - 30, posY, 'explosion')
-    //     explosion.scale.setTo(0.05, 0.05);
-    //     this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
-    //   }
-    // }
-    console.log('ship landed successfully')
+    if (timeElapsedInSeconds < timeElaspedBeforeLanding) {
+      landingPad.body = null;
+    } else {
+      // if ship lands carefully, the landing is successful
+      if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
+        console.log('ship landing successful');
+        ship.body = null; // disables the ship from moving
+        this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
+      // else, ship crashes :(
+      } else {
+        console.log('ship landing unsuccessful');
+        let posX = ship.x;
+        let posY = ship.y;
+        ship.destroy();
+        explosion = this.add.sprite(posX - 30, posY, 'explosion')
+        explosion.scale.setTo(0.05, 0.05);
+        this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+      }
+    }
     this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
 	},
 
@@ -300,10 +299,20 @@ LunarAdventure.Game.prototype = {
 
   update: function() {
   	//timer
-    var timeElapsed = this.game.time.now.toString();
-    var timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
-    let newTime = new Time(this.game)
-    console.log('new time is', newTime)
+  	// time = 0
+  	// myTimer = time++;
+  	timeElapsed = this.game.time.now.toString()
+    timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
+  	// console.log(this.game.time)
+  	// console.log('time elapsed', this.game.time.elapsedMS)
+  	// console.log('no ms above elapsed', this.game.time.elapsed)
+  	// console.log('physics time elapsed', this.game.time.physicsElapsedMS)
+  	// this.game.time.reset()
+
+    // timeElapsed = this.game.time.now.toString();
+    // let timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
+    // let newTime = new Time(this.game)
+    // console.log('new time is', newTime)
 
     if (ship.body) {
       // debug info in top left corner
