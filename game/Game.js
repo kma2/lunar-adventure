@@ -16,9 +16,8 @@ LunarAdventure.Game.prototype = {
 
 
 		// set boundaries on left and right of the screen
-		// var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
-		// customBounds = { left: null, right: null, top: null, bottom: null };
-		// this.createPreviewBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
+		customBounds = { left: null, right: null, top: null, bottom: null };
 
 
     // creating static terrain
@@ -44,8 +43,8 @@ LunarAdventure.Game.prototype = {
 
 
 		////create bounds on sides of screen
-		//this.physics.p2.setBoundsToWorld(true, true, true, true, true);
-		//// ship.body.collides(boundsCollisionGroup, hitBounds, this);
+		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
+		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
 
 
     // add event to fade in landingPad
@@ -95,7 +94,7 @@ LunarAdventure.Game.prototype = {
     var frames = [ 1, 0, 5];
 
     // create small obstacles
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 10; i++) {
         var obstacle = smallObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'smallObstacle', this.rnd.pick(frames));
         obstacle.body.setCircle(25);
         obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
@@ -104,18 +103,18 @@ LunarAdventure.Game.prototype = {
     }
 
     // create medium obstacles
-    for (var i = 0; i < 10; i++) {
-        var obstacle = mediumObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'mediumObstacle', this.rnd.pick(frames));
-        obstacle.body.setCircle(108);
+    for (var i = 0; i < 5; i++) {
+        var obstacle = mediumObstacles.create(this.world.width + Math.random() * 100, 200 + Math.random() * 10, 'mediumObstacle', this.rnd.pick(frames));
+        obstacle.body.setCircle(52);
         obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
         obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
         obstacle.body.gravity = -60;
     }
 
     // create large obstacles
-    for (var i = 0; i < 5; i++) {
-        var obstacle = largeObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'largeObstacle', this.rnd.pick(frames));
-        obstacle.body.setCircle(360);
+    for (var i = 0; i < 1; i++) {
+        var obstacle = largeObstacles.create(this.world.width + Math.random() * 1000, 200 + Math.random() * 10, 'largeObstacle', this.rnd.pick(frames));
+        obstacle.body.setCircle(180);
         obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
         obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
         obstacle.body.gravity = -60;
@@ -140,10 +139,10 @@ LunarAdventure.Game.prototype = {
 				//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
 				let posX = ship.x;
 				let posY = ship.y;
-				ship.destroy();
-				explosion = this.add.sprite(posX - 30, posY, 'explosion')
-				explosion.scale.setTo(0.05, 0.05);
-        this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+				// ship.destroy();
+				// explosion = this.add.sprite(posX - 30, posY, 'explosion')
+				// explosion.scale.setTo(0.05, 0.05);
+        // this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
 			}
 	},
 
@@ -182,28 +181,6 @@ LunarAdventure.Game.prototype = {
     obstacle.destroy();
   },
 
-	createPreviewBounds: function(x, y, w, h) {
-			var sim = this.physics.p2;
-			//  If you want to use your own collision group then set it here and un-comment the lines below
-			var mask = sim.boundsCollisionGroup.mask;
-			customBounds.left = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y) ], angle: 1.5707963267948966 });
-			customBounds.left.addShape(new p2.Plane());
-			// customBounds.left.shapes[0].collisionGroup = mask;
-			customBounds.right = new p2.Body({ mass: 0, position: [ sim.pxmi(x + w), sim.pxmi(y) ], angle: -1.5707963267948966 });
-			customBounds.right.addShape(new p2.Plane());
-			// customBounds.right.shapes[0].collisionGroup = mask;
-			// customBounds.top = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y) ], angle: -3.141592653589793 });
-			// customBounds.top.addShape(new p2.Plane());
-			// // customBounds.top.shapes[0].collisionGroup = mask;
-			// customBounds.bottom = new p2.Body({ mass: 0, position: [ sim.pxmi(x), sim.pxmi(y + h) ] });
-			// customBounds.bottom.addShape(new p2.Plane());
-			// // customBounds.bottom.shapes[0].collisionGroup = mask;
-			sim.world.addBody(customBounds.left);
-			sim.world.addBody(customBounds.right);
-			// sim.world.addBody(customBounds.top);
-			// sim.world.addBody(customBounds.bottom);
-	},
-
   gameOverCrash: function() {
       this.game.state.start('Crash', true, false);
   },
@@ -241,15 +218,15 @@ LunarAdventure.Game.prototype = {
         ship.body.thrust(200);
       }
       // terrain spins when rocket nears the edges
-      if (ship.world.x <= gameWidth/divide + 100 && ship.body.rotation < 0) {
+      if (ship.world.x <= gameWidth/divide + 200 && ship.body.rotation < 0) {
         terrain.body.rotation += 0.002;
-      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 110 && ship.body.rotation > 0) {
+      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 210 && ship.body.rotation > 0) {
         terrain.body.rotation -= 0.002;
       }
       // terrain spins FASTER when rocket nears the edges
-      if (ship.world.x <= gameWidth/divide + 50 && ship.body.rotation < 0) {
+      if (ship.world.x <= gameWidth/divide + 150 && ship.body.rotation < 0) {
         terrain.body.rotation += 0.002;
-      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 60 && ship.body.rotation > 0) {
+      } else if (ship.world.x >= gameWidth/divide * (divide-1) - 160 && ship.body.rotation > 0) {
         terrain.body.rotation -= 0.002;
       }
     }
