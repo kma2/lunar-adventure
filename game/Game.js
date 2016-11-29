@@ -203,6 +203,9 @@ LunarAdventure.Game.prototype = {
     this.world.bringToTop(rightKeyDown)
     this.world.bringToTop(upKeyUp)
     this.world.bringToTop(upKeyDown)
+    this.world.bringToTop(thrustUI)
+    this.world.bringToTop(rotateRightUI)
+    this.world.bringToTop(rotateLeftUI)
 
 	},
 
