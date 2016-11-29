@@ -3,6 +3,8 @@ var LunarAdventure = LunarAdventure || {};
 LunarAdventure.Game = function(){};
 
 var timeElaspedBeforeLanding = 10;
+var obstacle
+var i = 0;
 
 LunarAdventure.Game.prototype = {
 	create: function() {
@@ -185,6 +187,24 @@ LunarAdventure.Game.prototype = {
 		landingPad.body.static = true;
 
 
+		// create sprite landing pad
+		obstacle = this.add.sprite(gameWidth/4, this.game.height/2, 'astronaut');
+		obstacle.anchor.set(0.5)
+		this.physics.p2.enable(obstacle, true);
+		obstacle.body.static = true;
+
+    var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
+		var obstacleMaterial = this.game.physics.p2.createMaterial('obstacleMaterial', obstacle.body);
+		var obstacleContactMaterial = this.game.physics.p2.createContactMaterial(shipMaterial, obstacleMaterial);
+
+		obstacleContactMaterial.friction = 0.3;     // Friction to use in the contact of these two materials.
+    obstacleContactMaterial.restitution = 2.0;  // Restitution (i.e. how bouncy it is!) to use in the contact of these two materials.
+    obstacleContactMaterial.stiffness = 1e7;    // Stiffness of the resulting ContactEquation that this obstacleContactMaterial generate.
+    obstacleContactMaterial.relaxation = 3;     // Relaxation of the resulting ContactEquation that this obstacleContactMaterial generate.
+    obstacleContactMaterial.frictionStiffness = 1e7;    // Stiffness of the resulting FrictionEquation that this obstacleContactMaterial generate.
+    obstacleContactMaterial.frictionRelaxation = 3;     // Relaxation of the resulting FrictionEquation that this obstacleContactMaterial generate.
+    obstacleContactMaterial.surfaceVelocity = 0;
+
 		//create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		// ship.body.collides(boundsCollisionGroup, hitBounds, this);
@@ -200,10 +220,12 @@ LunarAdventure.Game.prototype = {
 		var shipCollisionGroup = this.physics.p2.createCollisionGroup();
 		var landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
 		var boundsCollisionGroup = this.physics.p2.createCollisionGroup();
+		var obstacleCollisionGroup = this.physics.p2.createCollisionGroup();
 
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
+		obstacle.body.setCollisionGroup(obstacleCollisionGroup);
 
 		// ship and terrain collision
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
@@ -212,6 +234,9 @@ LunarAdventure.Game.prototype = {
 		// ship and landing pad collision
 		landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
+
+		obstacle.body.collides(shipCollisionGroup);
+		ship.body.collides(obstacleCollisionGroup, this.hitObstacle, this);
 	},
 
 	// fade in landingPad
@@ -261,6 +286,10 @@ LunarAdventure.Game.prototype = {
 		}
 	},
 
+	hitObstacle: function(body1, body2) {
+		body2.sprite.alpha -= 0.1
+	},
+
 	hitBounds: function(body1, body2) {
 		console.log('hit boundary');
 	},
@@ -299,6 +328,7 @@ LunarAdventure.Game.prototype = {
 
 		var timeElapsed = this.game.time.now.toString();
 		var timeElapsedInSeconds = timeElapsed.slice(0, timeElapsed.length - 3);
+		obstacle.body.x += 1;
 
 		if (ship.body) {
 			// debug info in top left corner
