@@ -37,6 +37,9 @@ LunarAdventure.Preload.prototype = {
     this.load.image('upKeyUp', 'images/upKeyUp.png');
     this.load.image('upKeyDown', 'images/upKeyDown.png');
     this.load.image('landingArrow', 'images/landingArrow.png');
+    this.load.image('thrust', 'images/thrustUI.png');
+    this.load.image('rotateL', 'images/rotateLeftUI.png');
+    this.load.image('rotateR', 'images/rotateRightUI.png');
 
   },
 

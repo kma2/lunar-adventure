@@ -23,29 +23,38 @@ LunarAdventure.Game.prototype = {
     centerY = this.game.height/0.65 + 200
 
     // define key UI images
-    leftKeyUp = this.add.sprite(centerX + 395, 100, 'leftKeyUp');
+    leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
     leftKeyUp.scale.setTo(0.25, 0.25);
     leftKeyUp.visible = true;
 
-    rightKeyUp = this.add.sprite(centerX + 560, 100, 'rightKeyUp');
+    rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
     rightKeyUp.scale.setTo(0.25, 0.25);
     rightKeyUp.visible = true;
 
-    upKeyUp = this.add.sprite(centerX + 480, 25, 'upKeyUp');
+    upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
     upKeyUp.scale.setTo(0.25, 0.25);
     upKeyUp.visible = true;
 
-    leftKeyDown = this.add.sprite(centerX + 395, 113, 'leftKeyDown');
+    leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
     leftKeyDown.scale.setTo(0.25, 0.25);
     leftKeyDown.visible = false;
 
-    rightKeyDown = this.add.sprite(centerX + 560, 113, 'rightKeyDown');
+    rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
     rightKeyDown.scale.setTo(0.25, 0.25);
     rightKeyDown.visible = false;
 
-    upKeyDown = this.add.sprite(centerX + 480, 38, 'upKeyDown');
+    upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
     upKeyDown.scale.setTo(0.25, 0.25);
     upKeyDown.visible = false;
+
+    thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
+    thrustUI.scale.setTo(0.25, 0.25);
+
+    rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
+    rotateRightUI.scale.setTo(0.25, 0.25);
+
+    rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
+    rotateLeftUI.scale.setTo(0.25, 0.25);
 
     landingArrow = this.add.sprite(centerX, 2000, 'landingArrow');
     landingArrow.scale.setTo(0.25, 0.25);
