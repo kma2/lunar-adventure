@@ -15,7 +15,7 @@ LunarAdventure.Success.prototype = {
     // message.scale.setTo(0.6, 0.6);
 
     //new dynamic text
-    this.game.debug.text(`Perfect landing! Your time is ${successGlobalTime} seconds!`, this.game.width/2.5 - 20, this.game.height/2.6);
+    this.game.debug.text(`Perfect landing! Your time is ${successGlobalTime} seconds!`, this.game.width/2.3 - 96, this.game.height/2.6);
 
 
     // creating static terrain
