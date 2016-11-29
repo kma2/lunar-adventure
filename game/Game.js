@@ -53,7 +53,8 @@ LunarAdventure.Game.prototype = {
     landingPad.alpha = 0;
 
 
-    // create and set collision groups
+    // ======== set collisions ========
+
 		var terrainCollisionGroup = this.physics.p2.createCollisionGroup();
 		var shipCollisionGroup = this.physics.p2.createCollisionGroup();
 		var landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
@@ -63,7 +64,6 @@ LunarAdventure.Game.prototype = {
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
-    //obstacles.body.setCollisionGroup(obstaclesCollisionGroup);
 
     // ship and terrain collision
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
@@ -74,12 +74,11 @@ LunarAdventure.Game.prototype = {
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
 
     // ship and obstacle collision
-    // obstacles.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
     ship.body.collides(obstaclesCollisionGroup, this.hitTerrain, this);
 
 
+    // ======== generate obstacles! ========
 
-    // generate obstacles
     // create groups for each of the obstacle categories
     smallObstacles = this.add.group();
     smallObstacles.enableBody = true;
@@ -95,6 +94,7 @@ LunarAdventure.Game.prototype = {
 
     var frames = [ 1, 0, 5];
 
+    // create small obstacles
     for (var i = 0; i < 15; i++) {
         var obstacle = smallObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'smallObstacle', this.rnd.pick(frames));
         obstacle.body.setCircle(25);
@@ -103,6 +103,7 @@ LunarAdventure.Game.prototype = {
         obstacle.body.gravity = -60;
     }
 
+    // create medium obstacles
     for (var i = 0; i < 10; i++) {
         var obstacle = mediumObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'mediumObstacle', this.rnd.pick(frames));
         obstacle.body.setCircle(108);
@@ -111,6 +112,7 @@ LunarAdventure.Game.prototype = {
         obstacle.body.gravity = -60;
     }
 
+    // create large obstacles
     for (var i = 0; i < 5; i++) {
         var obstacle = largeObstacles.create(this.world.width + Math.random() * 10, 200 + Math.random() * 10, 'largeObstacle', this.rnd.pick(frames));
         obstacle.body.setCircle(360);
@@ -119,6 +121,7 @@ LunarAdventure.Game.prototype = {
         obstacle.body.gravity = -60;
     }
 
+    // enable physics on all obstacle groups
     this.physics.p2.enable(smallObstacles);
     this.physics.p2.enable(mediumObstacles);
     this.physics.p2.enable(largeObstacles);
