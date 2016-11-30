@@ -1,7 +1,7 @@
 var LunarAdventure = LunarAdventure || {};
 
-//phaser accepts %s as well as pxs
-LunarAdventure.game = new Phaser.Game("99%", "99%", Phaser.AUTO, '');
+//phaser accepts %s as well as pxs - 4th argument is a parent DOM element
+LunarAdventure.game = new Phaser.Game(1380, 750, Phaser.AUTO, 'phaser-game');
 
 // setup global variables
 var textStyle = function(size, color) {
