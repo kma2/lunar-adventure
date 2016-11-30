@@ -17,11 +17,14 @@ LunarAdventure.Preload.prototype = {
     this.load.image('ship', 'images/rocket.png');
 		this.load.image('explosion', 'images/explosion.png');
 		this.load.physics('tracedTerrain', 'terrainPolygon.json');
-    this.load.image('terrain', 'images/terrain1.png');
+    this.load.image('terrain', 'images/terrain2.png');
     this.load.image('starfield', 'images/starfield.png');
     this.load.image('landingPad', 'images/landingPad.png');
     this.load.image('crash', 'images/crash_message.png');
     this.load.image('success', 'images/success_message.png');
+
+    // obstacles
+    this.load.image('tinyObstacle', 'images/tinyObstacle.png');
     this.load.image('smallObstacle', 'images/smallObstacle.png');
     this.load.image('mediumObstacle', 'images/mediumObstacle.png');
     this.load.image('largeObstacle', 'images/largeObstacle.png');
@@ -40,6 +43,10 @@ LunarAdventure.Preload.prototype = {
     this.load.image('thrust', 'images/thrustUI.png');
     this.load.image('rotateL', 'images/rotateLeftUI.png');
     this.load.image('rotateR', 'images/rotateRightUI.png');
+
+    // multiplayer
+    this.load.image('W_upKeyUp', 'images/W_upKeyUp.png');
+    this.load.image('W_upKeyDown', 'images/W_upKeyDown.png');
 
   },
 
