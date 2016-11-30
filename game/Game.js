@@ -318,11 +318,11 @@ LunarAdventure.Game.prototype = {
         leftKeyUp.destroy();
         leftKeyDown.destroy();
 
-        leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
+        leftKeyUp = this.add.sprite(centerX + 395, 110, `leftKeyLetter${newKey}Unpressed`);
         leftKeyUp.scale.setTo(0.25, 0.25);
         leftKeyUp.visible = true;
 
-        leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyUp');
+        leftKeyDown = this.add.sprite(centerX + 395, 123, `leftKeyLetter${newKey}Pressed`);
         leftKeyDown.scale.setTo(0.25, 0.25);
         leftKeyDown.visible = false;
       } else if ( cursor === 'right') {
@@ -379,11 +379,11 @@ LunarAdventure.Game.prototype = {
         leftKeyUp.destroy();
         leftKeyDown.destroy();
 
-        leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
+        leftKeyUp = this.add.sprite(centerX + 395, 110, `leftKeyLetter${newKey}Unpressed`);
         leftKeyUp.scale.setTo(0.25, 0.25);
         leftKeyUp.visible = true;
 
-        leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyUp');
+        leftKeyDown = this.add.sprite(centerX + 395, 123, `leftKeyLetter${newKey}Pressed`);
         leftKeyDown.scale.setTo(0.25, 0.25);
         leftKeyDown.visible = false;
       } else if ( cursor === 'right') {
