@@ -29,14 +29,14 @@ LunarAdventure.MainMenu.prototype = {
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
 		// this.game.debug.text('click to begin', this.game.width/2 - 70, this.game.height/1.9);
-		this.game.debug.text('click to begin', width/2.2 - 20, height/2.15);
+		// this.game.debug.text('click to begin', width/2.2 - 20, height/2.15);
 		//this.game.debug.text('click to begin', this.game.width/2 - 70, this.game.height/1.9);
 
-		let singlePlayer = this.game.add.text(width/2.6, height/2, 'Single player', textStyle(height/40, 'white'));
+		let singlePlayer = this.game.add.text(width/2.6, height/2.3, 'Single player', textStyle(height/40, 'white'));
 		singlePlayer.inputEnabled = true;
 		singlePlayer.events.onInputDown.add(this.startSinglePlayer, this);
 
-		let multiPlayer = this.game.add.text(width/1.85, height/2, 'Two player', textStyle(height/40, 'white'));
+		let multiPlayer = this.game.add.text(width/1.85, height/2.3, 'Cooperative', textStyle(height/40, 'white'));
 		multiPlayer.inputEnabled = true;
 		multiPlayer.events.onInputDown.add(this.startMultiPlayer, this);
 
