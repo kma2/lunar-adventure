@@ -282,6 +282,9 @@ LunarAdventure.Game.prototype = {
 		console.log('hit terrain! 10 seconds added!');
 		//penalty emitter
 		tenPenaltyEmitter.start(true, 1000, null, 1)
+		successGlobalTime = globalTime
+		this.game.state.start('Crash', true, false);
+
 
 		//create explosion sprite for collision
 		if (body1) {
