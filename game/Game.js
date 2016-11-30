@@ -8,7 +8,7 @@ LunarAdventure.Game.prototype = {
 
 	create: function() {
 
-		this.physics.p2.gravity.y = 80;
+		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
 
@@ -254,7 +254,7 @@ LunarAdventure.Game.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle += 0.004;
+			this.landingPadAngle += 0.002;
 		} else {
 				this.landingPadAngle = 0;
 		}
@@ -266,7 +266,7 @@ LunarAdventure.Game.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle -= 0.004;
+			this.landingPadAngle -= 0.002;
 		} else {
 			this.landingPadAngle = 0;
 		}
@@ -359,7 +359,7 @@ LunarAdventure.Game.prototype = {
   generateTinyObstacles: function(amount, startX, startY, velocityX, velocityY) {
   		for (var i = 0; i < amount; i++) {
 	        var obstacle = smallObstacles.create(startX, startY, 'tinyObstacle', this.rnd.pick(frames));
-	        obstacle.body.setCircle(12);
+	        obstacle.body.setCircle(8);
 	        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
 	        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
@@ -398,33 +398,19 @@ LunarAdventure.Game.prototype = {
 		}
 	},
 
-	// still working on directional generation
+	// note: still working on directional generation
   sendObstacleWaves: function() {
-    // when ship is on the left side of screen, send obstacles from left side
-    // if (this.currentDirectionTraveling === 'left') {
-    //   waveOne = this.game.time.events.loop(3000, () => {
-    //     this.generateSmallObstacles(2, 0 + Math.random() * -300, Math.random() * 500, 50 + Math.random() * 100, -10 + Math.random() * 30);
-    //   });
-    //   waveTwo = this.game.time.events.loop(6000, () => {
-    //     this.generateMediumObstacles(1, 0 + Math.random() * -500, Math.random() * 500, 50 + Math.random() * 100, Math.random() * -50);
-    //   });
-    //   waveThree = this.game.time.events.loop(15000, () => {
-    //     this.generateLargeObstacles(1, -200, Math.random() * 350, 50 + Math.random() * 50, -10 + Math.random() * -50);
-    //   });
-    // when ship is in middle region or on the right side of screen, send obstacles from right side
-		// } else if (this.currentDirectionTraveling === 'right'){
-        waveOne = this.game.time.events.loop(3000, () => {
-          this.generateSmallObstacles(2, this.world.width + Math.random() * 300, Math.random() * 500, -50 + Math.random() * -100, -10 + Math.random() * -30);
-        });
-        waveTwo = this.game.time.events.loop(6000, () => {
-          this.generateMediumObstacles(1, this.world.width + Math.random() * 500, Math.random() * 500, -50 + Math.random() * -100, Math.random() * -50);
-					this.generateTinyObstacles(5, this.world.width + Math.random() * 500, Math.random() * 500, -50 + Math.random() * -100, Math.random() * -50);
-        });
-        waveThree = this.game.time.events.loop(15000, () => {
-          this.generateLargeObstacles(1, this.world.width + 200, Math.random() * 350, -50 + Math.random() * -50, -10 + Math.random() * -50);
-					this.generateTinyObstacles(5, this.world.width + Math.random() * 500, Math.random() * 500, -50 + Math.random() * -100, Math.random() * -50);
-        });
-		//}
+      waveOne = this.game.time.events.loop(3000, () => {
+        this.generateSmallObstacles(2, this.world.width + Math.random() * 300, Math.random() * 400, -50 + Math.random() * -100, Math.random() * -70);
+				this.generateTinyObstacles(2, this.world.width + Math.random() * 300, Math.random() * 400, -150 + Math.random() * -100, Math.random() * -50);
+      });
+      waveTwo = this.game.time.events.loop(8000, () => {
+        this.generateMediumObstacles(1, this.world.width + Math.random() * 500, Math.random() * 400, -50 + Math.random() * -100, Math.random() * -50);
+				this.generateTinyObstacles(5, this.world.width + Math.random() * 500, Math.random() * 400, -150 + Math.random() * -100, Math.random() * -50);
+      });
+      waveThree = this.game.time.events.loop(15000, () => {
+        this.generateLargeObstacles(1, this.world.width + 250, Math.random() * 250, -50, -10 + Math.random() * -50);
+      });
   },
 
   gameOverCrash: function() {
@@ -476,21 +462,21 @@ LunarAdventure.Game.prototype = {
 
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-				terrain.body.rotation += 0.004;
+				terrain.body.rotation += 0.002;
 				this.rotateLandingPadRight(775, centerX, 1200);
         this.rotateLandingArrow(875, centerX, 1200);
-				tilesprite.tilePosition.x += 4;
-				tilesprite.tilePosition.y -= 1;
+				tilesprite.tilePosition.x += 0.6;
+				tilesprite.tilePosition.y -= 0.3;
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
 				this.rotateLandingPadLeft(775, centerX, 1200);
         this.rotateLandingArrow(875, centerX, 1200);
-				terrain.body.rotation -= 0.004;
-				tilesprite.tilePosition.x -= 4;
-				tilesprite.tilePosition.y -= 1;
+				terrain.body.rotation -= 0.002;
+				tilesprite.tilePosition.x -= 0.6;
+				tilesprite.tilePosition.y -= 0.3;
 			}
 			// // terrain spins FASTER when rocket nears the edges
 			// if (ship.world.x <= gameWidth/divide + 150 && ship.body.rotation < 0) {
-			// 	this.rotateLandingPadRight(775, centerX, 1200);
+			// 	this.rotate2Right(775, centerX, 1200);
 			// 	terrain.body.rotation += 0.002;
 			// } else if (ship.world.x >= gameWidth/divide * (divide-1) - 160 && ship.body.rotation > 0) {
 			// 	this.rotateLandingPadLeft(775, centerX, 1200);
