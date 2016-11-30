@@ -4,18 +4,18 @@ var LunarAdventure = LunarAdventure || {};
 LunarAdventure.Boot = function(){};
 
 LunarAdventure.Boot.prototype = {
-  preload: function() {
-  	// this.game.scale.maxWidth = 800;
-  	// this.game.scale.maxHeight = 600;
-  },
+	preload: function() {
+		// this.game.scale.maxWidth = 800;
+		// this.game.scale.maxHeight = 600;
+	},
 
-  create: function() {
-    // this.game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
-    // this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    // this.game.scale.pageAlignHorizontally = true;
-    // this.game.scale.pageAlignVertically = true;
-    // this.game.scale.setScreenSize();
+	create: function() {
+		// this.game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
+		// this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		// this.game.scale.pageAlignHorizontally = true;
+		// this.game.scale.pageAlignVertically = true;
+		// this.game.scale.setScreenSize();
 
-  	this.state.start('Preload');
-  }
+		this.state.start('Preload');
+	}
 };

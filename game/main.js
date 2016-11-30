@@ -8,11 +8,8 @@ var textStyle = function(size, color) {
 	var color = color === 'black' ? "#444" : "#ddd"
 	return { font: `${size}px Arial`, fill: color, align: "center" }
 }
-// var width = window.innerWidth;
+
 let width = 1280;
-//innerWidth is a number - currently 693. innerHeight is 557. just for ball parks
-// console.log('inner width is:', window.innerHeight)
-// var height = window.innerHeight;
 let height = 800;
 
 // setup game states

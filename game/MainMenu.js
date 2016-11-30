@@ -62,8 +62,8 @@ LunarAdventure.MainMenu.prototype = {
 		this.background.tilePosition.y -= 0.2;
 
 		// if(this.game.input.activePointer.justPressed()) {
-    //   this.game.state.start('Game');
-    // }
+		//   this.game.state.start('Game');
+		// }
 	},
 
 	startSinglePlayer: function() {
