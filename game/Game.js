@@ -8,7 +8,7 @@ LunarAdventure.Game.prototype = {
 
 	create: function() {
 
-		this.physics.p2.gravity.y = 20;
+		this.physics.p2.gravity.y = 60;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
 
@@ -372,7 +372,6 @@ LunarAdventure.Game.prototype = {
 		    obstacle.body.velocity.x = velocityX;
 		}
 	},
-
 
 	// still working on directional generation
   sendObstacleWaves: function() {
