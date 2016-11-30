@@ -14,15 +14,30 @@
 		<script type="text/javascript" src="lobbyModules/Lobby.js"></script>
 		<script type="text/javascript" src="lobbyModules/GameRoom.js"></script>
 		<script type="text/javascript" src="Game.js"></script>
+		<script type="text/javascript" src="Multiplayer.js"></script>
 
 	    <style type="text/css">
 	        body {
-              padding: 0;
-	            margin: 0;
+              /*padding: 0;*/
+	          /*margin: 0 auto;*/
+	          /*this center window on the screen*/
+	          /*margin-left: 20px;*/
+	          /*margin-top: 15px;*/
+	          /*vertical-align: middle;*/
+	          background-color: black;
+	        }
+	        .container {
+	        	display: flex;
+	        	justify-content: center;
+	        	margin-top: 2vh;
 	        }
 	    </style>
 	</head>
 	<body>
+		<div class='container'>
+			<div id='phaser-game'>
+			</div>
+		</div>
 
 		<script type="text/javascript" src="main.js"></script>
 		<script type="text/javascript" src="localSocket.js"></script>
