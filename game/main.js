@@ -1,14 +1,19 @@
 var LunarAdventure = LunarAdventure || {};
 
-LunarAdventure.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '');
+//phaser accepts %s as well as pxs
+LunarAdventure.game = new Phaser.Game("99%", "99%", Phaser.AUTO, '');
 
 // setup global variables
 var textStyle = function(size, color) {
 	var color = color === 'black' ? "#444" : "#ddd"
 	return { font: `${size}px Arial`, fill: color, align: "center" }
 }
-var width = window.innerWidth;
-var height = window.innerHeight;
+// var width = window.innerWidth;
+let width = 693;
+//innerWidth is a number - currently 693. innerHeight is 557. just for ball parks
+// console.log('inner width is:', window.innerHeight)
+// var height = window.innerHeight;
+let height = 557;
 
 // setup game states
 LunarAdventure.game.state.add('Preload', LunarAdventure.Preload);
