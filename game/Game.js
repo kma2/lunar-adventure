@@ -2,7 +2,7 @@ var LunarAdventure = LunarAdventure || {};
 
 LunarAdventure.Game = function(){};
 
-let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0; //, currentDirectionTraveling = null;
+let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0;
 
 LunarAdventure.Game.prototype = {
 
