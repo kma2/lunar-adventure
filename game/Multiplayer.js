@@ -1,13 +1,15 @@
 var LunarAdventure = LunarAdventure || {};
 
 LunarAdventure.Multiplayer = function(){};
-
 // let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0; //, currentDirectionTraveling = null;
-timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
 
 LunarAdventure.Multiplayer.prototype = {
 
 	create: function() {
+
+		//reset timer and global variables since might be coming from different play state
+		
+		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
 
 		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);

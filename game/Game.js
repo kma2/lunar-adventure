@@ -8,6 +8,9 @@ LunarAdventure.Game.prototype = {
 
 	create: function() {
 
+		//reset timer and global variables since might be coming from different play state
+		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
+		
 		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
