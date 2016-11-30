@@ -1,70 +1,75 @@
 var LunarAdventure = LunarAdventure || {};
 
-LunarAdventure.Game = function(){};
+LunarAdventure.Multiplayer = function(){};
+// let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0; //, currentDirectionTraveling = null;
 
-let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0;
-
-LunarAdventure.Game.prototype = {
+LunarAdventure.Multiplayer.prototype = {
 
 	create: function() {
 
 		//reset timer and global variables since might be coming from different play state
-		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
 		
+		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
+
 		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
+
 		gameHeight = this.world.height;
 		divide = 15;
-		cursors = this.input.keyboard.createCursorKeys();
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
-
+		//cursors = this.input.keyboard.createCursorKeys();
+		cursors = {
+			up: this.input.keyboard.addKey(Phaser.Keyboard.W),
+			left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
+			right: this.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
+		}
 
     // initial angle for landing pad position
-    centerX = gameWidth/2
-    centerY = gameHeight + 500
+    centerX = window.innerWidth/2
+    centerY = this.game.height/0.65 + 200
 
     // define key UI images
     // leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
-		leftKeyUp = this.add.sprite(centerX - 115, this.world.height - 120, 'leftKeyUp');
+		leftKeyUp = this.add.sprite(centerX - 115 + 250, this.world.height - 120, 'leftKeyUp');
     leftKeyUp.scale.setTo(0.25, 0.25);
     leftKeyUp.visible = true;
 
     // rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
-		rightKeyUp = this.add.sprite(centerX + 48, this.world.height - 120, 'rightKeyUp');
+		rightKeyUp = this.add.sprite(centerX + 48 + 250, this.world.height - 120, 'rightKeyUp');
     rightKeyUp.scale.setTo(0.25, 0.25);
     rightKeyUp.visible = true;
 
     // upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
-		upKeyUp = this.add.sprite(centerX - 35, this.world.height - 195, 'upKeyUp');
+		upKeyUp = this.add.sprite(centerX - 35 - 250, this.world.height - 120, 'W_upKeyUp');
     upKeyUp.scale.setTo(0.25, 0.25);
     upKeyUp.visible = true;
 
     // leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
-		leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, 'leftKeyDown');
+		leftKeyDown = this.add.sprite(centerX - 115 + 250, this.world.height - 107, 'leftKeyDown');
     leftKeyDown.scale.setTo(0.25, 0.25);
     leftKeyDown.visible = false;
 
     // rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
-		rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, 'rightKeyDown');
+		rightKeyDown = this.add.sprite(centerX + 48 + 250, this.world.height - 107, 'rightKeyDown');
     rightKeyDown.scale.setTo(0.25, 0.25);
     rightKeyDown.visible = false;
 
     // upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
-		upKeyDown = this.add.sprite(centerX - 35, this.world.height - 182, 'upKeyDown');
+		upKeyDown = this.add.sprite(centerX - 35 - 250, this.world.height - 107, 'W_upKeyDown');
     upKeyDown.scale.setTo(0.25, 0.25);
     upKeyDown.visible = false;
 
     // thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
-		thrustUI = this.add.sprite(centerX - 35, this.world.height - 215, 'thrust');
+		thrustUI = this.add.sprite(centerX - 35 - 250, this.world.height - 40, 'thrust');
     thrustUI.scale.setTo(0.25, 0.25);
 
     // rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
-		rotateRightUI = this.add.sprite(centerX + 48, this.world.height - 40, 'rotateR');
+		rotateRightUI = this.add.sprite(centerX + 48 + 250, this.world.height - 40, 'rotateR');
     rotateRightUI.scale.setTo(0.25, 0.25);
 
     // rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
-		rotateLeftUI = this.add.sprite(centerX - 152, this.world.height - 40, 'rotateL');
+		rotateLeftUI = this.add.sprite(centerX - 152 + 250, this.world.height - 40, 'rotateL');
     rotateLeftUI.scale.setTo(0.25, 0.25);
 
     landingArrow = this.add.sprite(centerX, 2000, 'landingArrow');
@@ -275,8 +280,10 @@ LunarAdventure.Game.prototype = {
 	},
 
   rotateLandingArrow: function(radius, startX, startY){
-    landingArrow.x = landingPad.body.x - 32;
-    landingArrow.y = landingPad.body.y - 85;
+    var x = startX + Math.cos(this.landingPadAngle) * radius;
+    var y = startY + Math.sin(this.landingPadAngle) * radius;
+    landingArrow.x = x;
+    landingArrow.y = y;
   },
 
 	hitTerrain: function(body1, body2) {
@@ -285,9 +292,6 @@ LunarAdventure.Game.prototype = {
 		console.log('hit terrain! 10 seconds added!');
 		//penalty emitter
 		tenPenaltyEmitter.start(true, 1000, null, 1)
-		successGlobalTime = globalTime
-		this.game.state.start('Crash', true, false);
-
 
 		//create explosion sprite for collision
 		if (body1) {
@@ -463,28 +467,19 @@ LunarAdventure.Game.prototype = {
         upKeyDown.visible = false;
       }
 
-
-
-      		//this is all based on the following center points:
-      		//centerX = gameWidth/2
-    		//centerY = gameHeight/0.65 + 200
-
-      		let radius = 820;
-
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-				terrain.body.rotation += 0.004;
-				this.rotateLandingPadRight(radius, centerX, centerY);
-				// console.log(landingPad.body.y)
-        	this.rotateLandingArrow();
-				tilesprite.tilePosition.x += 4;
-				tilesprite.tilePosition.y -= 1;
+				terrain.body.rotation += 0.002;
+				this.rotateLandingPadRight(775, centerX, 1200);
+        this.rotateLandingArrow(875, centerX, 1200);
+				tilesprite.tilePosition.x += 0.6;
+				tilesprite.tilePosition.y -= 0.3;
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
-				this.rotateLandingPadLeft(radius, centerX, centerY);
-        	this.rotateLandingArrow();
-				terrain.body.rotation -= 0.004;
-				tilesprite.tilePosition.x -= 4;
-				tilesprite.tilePosition.y -= 1;
+				this.rotateLandingPadLeft(775, centerX, 1200);
+        this.rotateLandingArrow(875, centerX, 1200);
+				terrain.body.rotation -= 0.002;
+				tilesprite.tilePosition.x -= 0.6;
+				tilesprite.tilePosition.y -= 0.3;
 			}
 			// // terrain spins FASTER when rocket nears the edges
 			// if (ship.world.x <= gameWidth/divide + 150 && ship.body.rotation < 0) {

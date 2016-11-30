@@ -33,8 +33,8 @@ LunarAdventure.Success.prototype = {
   update: function() {
     terrain.body.rotation -= 0.003;
 
-    if(this.game.input.activePointer.justPressed()) {      
-      this.game.state.start('Game');
+    if(this.game.input.activePointer.justPressed()) {
+      this.game.state.start('MainMenu');
     }
   }
 };

@@ -23,7 +23,7 @@ LunarAdventure.Crash.prototype = {
     terrain.body.rotation -= 0.003;
 
     if(this.game.input.activePointer.justPressed()) {
-      this.game.state.start('Game');
+      this.game.state.start('MainMenu');
     }
   }
 };
