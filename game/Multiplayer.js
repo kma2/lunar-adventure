@@ -2,11 +2,13 @@ var LunarAdventure = LunarAdventure || {};
 
 LunarAdventure.Multiplayer = function(){};
 
-//let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0; //, currentDirectionTraveling = null;
-
 LunarAdventure.Multiplayer.prototype = {
 
 	create: function() {
+
+		//reset timer and global variables since might be coming from different play state
+		
+		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
 
 		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);
@@ -15,66 +17,65 @@ LunarAdventure.Multiplayer.prototype = {
 		gameHeight = this.world.height;
 		divide = 15;
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
-		//cursors = this.input.keyboard.createCursorKeys();
 		cursors = {
 			up: this.input.keyboard.addKey(Phaser.Keyboard.W),
 			left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
 			right: this.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
 		}
 
-    // initial angle for landing pad position
-    centerX = window.innerWidth/2
-    centerY = this.game.height/0.65 + 200
+		// initial angle for landing pad position
+		centerX = gameWidth/2
+		centerY = gameHeight + 500
 
-    // define key UI images
-    // leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
+		// define key UI images
+		// leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
 		leftKeyUp = this.add.sprite(centerX - 115 + 250, this.world.height - 120, 'leftKeyUp');
-    leftKeyUp.scale.setTo(0.25, 0.25);
-    leftKeyUp.visible = true;
+		leftKeyUp.scale.setTo(0.25, 0.25);
+		leftKeyUp.visible = true;
 
-    // rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
+		// rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
 		rightKeyUp = this.add.sprite(centerX + 48 + 250, this.world.height - 120, 'rightKeyUp');
-    rightKeyUp.scale.setTo(0.25, 0.25);
-    rightKeyUp.visible = true;
+		rightKeyUp.scale.setTo(0.25, 0.25);
+		rightKeyUp.visible = true;
 
-    // upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
-		upKeyUp = this.add.sprite(centerX - 35 - 250, this.world.height - 120, 'W_upKeyUp');
-    upKeyUp.scale.setTo(0.25, 0.25);
-    upKeyUp.visible = true;
+		// upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
+		upKeyUp = this.add.sprite(centerX - 300, this.world.height - 120, 'W_upKeyUp');
+		upKeyUp.scale.setTo(0.25, 0.25);
+		upKeyUp.visible = true;
 
-    // leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
+		// leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
 		leftKeyDown = this.add.sprite(centerX - 115 + 250, this.world.height - 107, 'leftKeyDown');
-    leftKeyDown.scale.setTo(0.25, 0.25);
-    leftKeyDown.visible = false;
+		leftKeyDown.scale.setTo(0.25, 0.25);
+		leftKeyDown.visible = false;
 
-    // rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
+		// rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
 		rightKeyDown = this.add.sprite(centerX + 48 + 250, this.world.height - 107, 'rightKeyDown');
-    rightKeyDown.scale.setTo(0.25, 0.25);
-    rightKeyDown.visible = false;
+		rightKeyDown.scale.setTo(0.25, 0.25);
+		rightKeyDown.visible = false;
 
-    // upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
-		upKeyDown = this.add.sprite(centerX - 35 - 250, this.world.height - 107, 'W_upKeyDown');
-    upKeyDown.scale.setTo(0.25, 0.25);
-    upKeyDown.visible = false;
+		// upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
+		upKeyDown = this.add.sprite(centerX - 300, this.world.height - 107, 'W_upKeyDown');
+		upKeyDown.scale.setTo(0.25, 0.25);
+		upKeyDown.visible = false;
 
-    // thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
-		thrustUI = this.add.sprite(centerX - 35 - 250, this.world.height - 40, 'thrust');
-    thrustUI.scale.setTo(0.25, 0.25);
+		// thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
+		thrustUI = this.add.sprite(centerX - 300, this.world.height - 40, 'thrust');
+		thrustUI.scale.setTo(0.25, 0.25);
 
-    // rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
+		// rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
 		rotateRightUI = this.add.sprite(centerX + 48 + 250, this.world.height - 40, 'rotateR');
-    rotateRightUI.scale.setTo(0.25, 0.25);
+		rotateRightUI.scale.setTo(0.25, 0.25);
 
-    // rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
+		// rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
 		rotateLeftUI = this.add.sprite(centerX - 152 + 250, this.world.height - 40, 'rotateL');
-    rotateLeftUI.scale.setTo(0.25, 0.25);
+		rotateLeftUI.scale.setTo(0.25, 0.25);
 
-    landingArrow = this.add.sprite(centerX, 2000, 'landingArrow');
-    landingArrow.scale.setTo(0.25, 0.25);
-    landingArrow.alpha = 0;
+		landingArrow = this.add.sprite(centerX, 2000, 'landingArrow');
+		landingArrow.scale.setTo(0.25, 0.25);
+		landingArrow.alpha = 0;
 
 
-    this.add.tween(landingArrow).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true)
+		this.add.tween(landingArrow).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true)
 
 		// set boundaries on left and right of the screen
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
@@ -154,8 +155,8 @@ LunarAdventure.Multiplayer.prototype = {
 		boundaryR.body.static = true;
 
 
-    // ======== set collision groups ========
-    terrain.body.setCollisionGroup(terrainCollisionGroup);
+		// ======== set collision groups ========
+		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
 		boundaryL.body.setCollisionGroup(boundsCollisionGroup);
@@ -216,18 +217,18 @@ LunarAdventure.Multiplayer.prototype = {
 		tenPenaltyEmitter.maxParticleScale = 0.1;
 		tenPenaltyEmitter.gravity = 50;
 
-    this.world.bringToTop(leftKeyUp);
-    this.world.bringToTop(leftKeyDown);
-    this.world.bringToTop(rightKeyUp);
-    this.world.bringToTop(rightKeyDown);
-    this.world.bringToTop(upKeyUp);
-    this.world.bringToTop(upKeyDown);
-    this.world.bringToTop(thrustUI);
-    this.world.bringToTop(rotateRightUI);
-    this.world.bringToTop(rotateLeftUI);
+		this.world.bringToTop(leftKeyUp);
+		this.world.bringToTop(leftKeyDown);
+		this.world.bringToTop(rightKeyUp);
+		this.world.bringToTop(rightKeyDown);
+		this.world.bringToTop(upKeyUp);
+		this.world.bringToTop(upKeyDown);
+		this.world.bringToTop(thrustUI);
+		this.world.bringToTop(rotateRightUI);
+		this.world.bringToTop(rotateLeftUI);
 
 		// generate waves of obstacles
-    this.sendObstacleWaves();
+		this.sendObstacleWaves();
 	},
 
 	createTimer: function() {
@@ -258,7 +259,7 @@ LunarAdventure.Multiplayer.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle += 0.002;
+			this.landingPadAngle += 0.004;
 		} else {
 				this.landingPadAngle = 0;
 		}
@@ -270,18 +271,16 @@ LunarAdventure.Multiplayer.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle -= 0.002;
+			this.landingPadAngle -= 0.004;
 		} else {
 			this.landingPadAngle = 0;
 		}
 	},
 
-  rotateLandingArrow: function(radius, startX, startY){
-    var x = startX + Math.cos(this.landingPadAngle) * radius;
-    var y = startY + Math.sin(this.landingPadAngle) * radius;
-    landingArrow.x = x;
-    landingArrow.y = y;
-  },
+	rotateLandingArrow: function(radius, startX, startY){
+		landingArrow.x = landingPad.body.x - 32;
+		landingArrow.y = landingPad.body.y - 85;
+	},
 
 	hitTerrain: function(body1, body2) {
 		//add penalty for when you hit terrain
@@ -289,17 +288,6 @@ LunarAdventure.Multiplayer.prototype = {
 		console.log('hit terrain! 10 seconds added!');
 		//penalty emitter
 		tenPenaltyEmitter.start(true, 1000, null, 1)
-
-		//create explosion sprite for collision
-		if (body1) {
-			//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
-			let posX = ship.x;
-			let posY = ship.y;
-			// ship.destroy();
-			// explosion = this.add.sprite(posX - 30, posY, 'explosion')
-			// explosion.scale.setTo(0.05, 0.05);
-			// this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
-		}
 	},
 
 	hitObstacle: function(body1, body2) {
@@ -309,17 +297,6 @@ LunarAdventure.Multiplayer.prototype = {
 
 		//penalty emitter
 		fivePenaltyEmitter.start(true, 1000, null, 1)
-
-		// //create explosion sprite for collision
-		// if (body1) {
-		// 	//get the coordinates of the ship before it's destroyed so we can place the explosion at the same position
-		// 	let posX = ship.x;
-		// 	let posY = ship.y;
-		// 	// ship.destroy();
-		// 	// explosion = this.add.sprite(posX - 30, posY, 'explosion')
-		// 	// explosion.scale.setTo(0.05, 0.05);
-		// 	// this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
-		// }
 	},
 
 	landedShip: function(body1, body2) {
@@ -329,7 +306,6 @@ LunarAdventure.Multiplayer.prototype = {
 				console.log('ship landing successful');
 				ship.body = null; // disables the ship from moving
 				this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
-			// else, ship crashes :(
 			} else {
 				console.log('ship landing unsuccessful');
 				let posX = ship.x;
@@ -347,79 +323,85 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	generateSmallObstacles: function(amount, startX, startY, velocityX, velocityY) {
-  		for (var i = 0; i < 10; i++) {
-	        var obstacle = smallObstacles.create(startX, startY, 'smallObstacle', this.rnd.pick(frames));
-	        obstacle.body.setCircle(25);
-	        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-	        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+			for (var i = 0; i < amount; i++) {
+				var obstacle = smallObstacles.create(startX, startY, 'smallObstacle', this.rnd.pick(frames));
+				obstacle.body.setCircle(25);
+				obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+				obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
-	        this.game.physics.p2.enable(obstacle, false);
-	        obstacle.body.static = true;
-	        obstacle.body.velocity.y = velocityY;
-	        obstacle.body.velocity.x = velocityX;
-    	}
+				this.game.physics.p2.enable(obstacle, false);
+				obstacle.body.static = true;
+				obstacle.body.velocity.y = velocityY;
+				obstacle.body.velocity.x = velocityX;
+			}
 	},
 
-  generateTinyObstacles: function(amount, startX, startY, velocityX, velocityY) {
-  		for (var i = 0; i < amount; i++) {
-	        var obstacle = smallObstacles.create(startX, startY, 'tinyObstacle', this.rnd.pick(frames));
-	        obstacle.body.setCircle(8);
-	        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-	        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+	generateTinyObstacles: function(amount, startX, startY, velocityX, velocityY) {
+			for (var i = 0; i < amount; i++) {
+				var obstacle = smallObstacles.create(startX, startY, 'tinyObstacle', this.rnd.pick(frames));
+				obstacle.body.setCircle(8);
+				obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+				obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
-	        this.game.physics.p2.enable(obstacle, false);
-	        obstacle.body.static = true;
-	        obstacle.body.velocity.y = velocityY;
-	        obstacle.body.velocity.x = velocityX;
-    	}
+				this.game.physics.p2.enable(obstacle, false);
+				obstacle.body.static = true;
+				obstacle.body.velocity.y = velocityY;
+				obstacle.body.velocity.x = velocityX;
+			}
 	},
 
-  generateMediumObstacles: function(amount, startX, startY, velocityX, velocityY) {
+	generateMediumObstacles: function(amount, startX, startY, velocityX, velocityY) {
 		for (var i = 0; i < amount; i++) {
-		    var obstacle = mediumObstacles.create(startX, startY, 'mediumObstacle', this.rnd.pick(frames));
-		    obstacle.body.setCircle(52);
-		    obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-		    obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+			var obstacle = mediumObstacles.create(startX, startY, 'mediumObstacle', this.rnd.pick(frames));
+			obstacle.body.setCircle(52);
+			obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+			obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
-		    this.game.physics.p2.enable(obstacle, false);
-		    obstacle.body.static = true;
-		    obstacle.body.velocity.y = velocityY;
-		    obstacle.body.velocity.x = velocityX;
+			this.game.physics.p2.enable(obstacle, false);
+			obstacle.body.static = true;
+			obstacle.body.velocity.y = velocityY;
+			obstacle.body.velocity.x = velocityX;
 		}
 	},
 
-  generateLargeObstacles: function(amount, startX, startY, velocityX, velocityY) {
+	generateLargeObstacles: function(amount, startX, startY, velocityX, velocityY) {
 		for (var i = 0; i < amount; i++) {
-        var obstacle = largeObstacles.create(startX, startY, 'largeObstacle', this.rnd.pick(frames));
-		    obstacle.body.setCircle(180);
-		    obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-		    obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+			var obstacle = largeObstacles.create(startX, startY, 'largeObstacle', this.rnd.pick(frames));
+			obstacle.body.setCircle(180);
+			obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+			obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
-		    this.game.physics.p2.enable(obstacle, false);
-		    obstacle.body.static = true;
-        obstacle.body.velocity.y = velocityY;
-		    obstacle.body.velocity.x = velocityX;
+			this.game.physics.p2.enable(obstacle, false);
+			obstacle.body.static = true;
+			obstacle.body.velocity.y = velocityY;
+			obstacle.body.velocity.x = velocityX;
 		}
 	},
 
-	// note: still working on directional generation
-  sendObstacleWaves: function() {
-      waveOne = this.game.time.events.loop(3000, () => {
-        this.generateSmallObstacles(2, this.world.width + Math.random() * 300, Math.random() * 400, -50 + Math.random() * -100, Math.random() * -70);
-				this.generateTinyObstacles(2, this.world.width + Math.random() * 300, Math.random() * 400, -150 + Math.random() * -100, Math.random() * -50);
-      });
-      waveTwo = this.game.time.events.loop(8000, () => {
-        this.generateMediumObstacles(1, this.world.width + Math.random() * 500, Math.random() * 400, -50 + Math.random() * -100, Math.random() * -50);
-				this.generateTinyObstacles(5, this.world.width + Math.random() * 500, Math.random() * 400, -150 + Math.random() * -100, Math.random() * -50);
-      });
-      waveThree = this.game.time.events.loop(15000, () => {
-        this.generateLargeObstacles(1, this.world.width + 250, Math.random() * 250, -50, -10 + Math.random() * -50);
-      });
-  },
+	sendObstacleWaves: function() {
+		waveOne = this.game.time.events.loop(6000, () => {
+			this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 400 + Math.random() * 300, -40 + Math.random() * -60, -20 + Math.random() * -50
+			);
+			this.generateTinyObstacles(1, Math.random() * -100, 400 + Math.random() * 300, 40 + Math.random() * 60, -20 + Math.random() * -50
+			);
+		});
+		waveTwo = this.game.time.events.loop(10000, () => {
+			this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 100 + Math.random() * 400, -60 + Math.random() * -50, -30 + Math.random() * -30
+			);
+			this.generateSmallObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 50, + Math.random() * -30
+			);
+			this.generateMediumObstacles(1, this.world.width + Math.random() * 100, 200 + Math.random() * 400, -60 + Math.random() * -100, -20 + Math.random() * -30);
+			this.generateMediumObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 100, + Math.random() * -30);
+		});
+		waveThree = this.game.time.events.loop(30000, () => {
+			this.generateLargeObstacles(1, this.world.width + 250, 400 + Math.random() * 200, -80, -40 + Math.random() * -20);
+			this.generateLargeObstacles(1, -1000, 800 + Math.random() * 200, 80, -40 + Math.random() * -20);
+		});
+	},
 
-  gameOverCrash: function() {
-      this.game.state.start('Crash', true, false);
-  },
+	gameOverCrash: function() {
+			this.game.state.start('Crash', true, false);
+	},
 
 	gameOverSuccess: function() {
 		this.game.state.start('Success', true, false);
@@ -436,56 +418,53 @@ LunarAdventure.Multiplayer.prototype = {
 
 			// left key, rotate ship
 			if (cursors.left.isDown) {
-        leftKeyUp.visible = false;
-        leftKeyDown.visible = true;
-        ship.body.rotateLeft(100);
-      }
+				leftKeyUp.visible = false;
+				leftKeyDown.visible = true;
+				ship.body.rotateLeft(100);
+			}
 			// right key, rotate ship
 			else if (cursors.right.isDown){
-        rightKeyUp.visible = false;
-        rightKeyDown.visible = true;
-        ship.body.rotateRight(100);
-      }
+				rightKeyUp.visible = false;
+				rightKeyDown.visible = true;
+				ship.body.rotateRight(100);
+			}
 			// stop rotating if key is not pressed
 			else {
-        leftKeyUp.visible = true;
-        leftKeyDown.visible = false;
-        rightKeyUp.visible = true;
-        rightKeyDown.visible = false;
-        ship.body.setZeroRotation();
-      }
+				leftKeyUp.visible = true;
+				leftKeyDown.visible = false;
+				rightKeyUp.visible = true;
+				rightKeyDown.visible = false;
+				ship.body.setZeroRotation();
+			}
 			// up key, accelerate
 			if (cursors.up.isDown){
-        upKeyUp.visible = false;
-        upKeyDown.visible = true;
-        ship.body.thrust(200);
-      }else {
-        upKeyUp.visible = true;
-        upKeyDown.visible = false;
-      }
+				upKeyUp.visible = false;
+				upKeyDown.visible = true;
+				ship.body.thrust(200);
+			}else {
+				upKeyUp.visible = true;
+				upKeyDown.visible = false;
+			}
+			
+			if (ship.body.rotation < -3.15) { ship.body.rotation = 3.15; }
+			if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }
 
+			let radius = 820
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-				terrain.body.rotation += 0.002;
-				this.rotateLandingPadRight(775, centerX, 1200);
-        this.rotateLandingArrow(875, centerX, 1200);
+				terrain.body.rotation += 0.004;
+				this.rotateLandingPadRight(radius, centerX, centerY);
+				// console.log(landingPad.body.y)
+					this.rotateLandingArrow();
 				tilesprite.tilePosition.x += 0.6;
 				tilesprite.tilePosition.y -= 0.3;
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
-				this.rotateLandingPadLeft(775, centerX, 1200);
-        this.rotateLandingArrow(875, centerX, 1200);
-				terrain.body.rotation -= 0.002;
+				this.rotateLandingPadLeft(radius, centerX, centerY);
+					this.rotateLandingArrow();
+				terrain.body.rotation -= 0.004;
 				tilesprite.tilePosition.x -= 0.6;
 				tilesprite.tilePosition.y -= 0.3;
 			}
-			// // terrain spins FASTER when rocket nears the edges
-			// if (ship.world.x <= gameWidth/divide + 150 && ship.body.rotation < 0) {
-			// 	this.rotate2Right(775, centerX, 1200);
-			// 	terrain.body.rotation += 0.002;
-			// } else if (ship.world.x >= gameWidth/divide * (divide-1) - 160 && ship.body.rotation > 0) {
-			// 	this.rotateLandingPadLeft(775, centerX, 1200);
-			// 	terrain.body.rotation -= 0.002;
-			// }
-    }
+		}
 	}
 };
