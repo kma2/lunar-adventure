@@ -44,6 +44,10 @@ LunarAdventure.Preload.prototype = {
     this.load.image('rotateL', 'images/rotateLeftUI.png');
     this.load.image('rotateR', 'images/rotateRightUI.png');
 
+    // multiplayer
+    this.load.image('W_upKeyUp', 'images/W_upKeyUp.png');
+    this.load.image('W_upKeyDown', 'images/W_upKeyDown.png');
+
   },
 
   create: function() {

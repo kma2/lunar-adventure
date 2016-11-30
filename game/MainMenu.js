@@ -21,15 +21,15 @@ LunarAdventure.MainMenu.prototype = {
 		terrain.body.clearShapes();
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
-		this.game.debug.text('click to begin', this.game.width/2 - 70, this.game.height/1.9);
+		//this.game.debug.text('click to begin', this.game.width/2 - 70, this.game.height/1.9);
 
-		// let singlePlayer = this.game.add.text(width/2.2, height/2, 'Click to begin', textStyle(height/40, 'white'));
-		// singlePlayer.inputEnabled = true;
-		// singlePlayer.events.onInputDown.add(this.startSinglePlayer, this);
+		let singlePlayer = this.game.add.text(width/2.6, height/2, 'Single player', textStyle(height/40, 'white'));
+		singlePlayer.inputEnabled = true;
+		singlePlayer.events.onInputDown.add(this.startSinglePlayer, this);
 
-		// let multiPlayer = this.game.add.text(width/1.8, height/2, 'Multi player', textStyle(height/40, 'white'));
-		// multiPlayer.inputEnabled = true;
-		// multiPlayer.events.onInputDown.add(this.startMultiPlayer, this);
+		let multiPlayer = this.game.add.text(width/1.85, height/2, 'Two player', textStyle(height/40, 'white'));
+		multiPlayer.inputEnabled = true;
+		multiPlayer.events.onInputDown.add(this.startMultiPlayer, this);
 
 		// this.game.debug.text('click to begin', width/2 - 70, height/1.9);
 
@@ -52,18 +52,18 @@ LunarAdventure.MainMenu.prototype = {
 		this.background.tilePosition.x += 0.2;
 		this.background.tilePosition.y -= 0.2;
 
-		if(this.game.input.activePointer.justPressed()) {
-      this.game.state.start('Game');
-    }
+		// if(this.game.input.activePointer.justPressed()) {
+    //   this.game.state.start('Game');
+    // }
 	},
 
 	startSinglePlayer: function() {
-		this.game.state.start('Game')
+		this.game.state.start('Game');
 	},
 
 	startMultiPlayer: function() {
 		// if (input.value) {
-			this.game.state.start('Lobby')
+			this.game.state.start('Multiplayer');
 		// }
 	}
 

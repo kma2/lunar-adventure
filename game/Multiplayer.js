@@ -1,10 +1,10 @@
 var LunarAdventure = LunarAdventure || {};
 
-LunarAdventure.Game = function(){};
+LunarAdventure.Multiplayer = function(){};
 
-let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0; //, currentDirectionTraveling = null;
+//let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0; //, currentDirectionTraveling = null;
 
-LunarAdventure.Game.prototype = {
+LunarAdventure.Multiplayer.prototype = {
 
 	create: function() {
 
@@ -14,9 +14,13 @@ LunarAdventure.Game.prototype = {
 
 		gameHeight = this.world.height;
 		divide = 15;
-		cursors = this.input.keyboard.createCursorKeys();
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
-
+		//cursors = this.input.keyboard.createCursorKeys();
+		cursors = {
+			up: this.input.keyboard.addKey(Phaser.Keyboard.W),
+			left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
+			right: this.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
+		}
 
     // initial angle for landing pad position
     centerX = window.innerWidth/2
@@ -24,45 +28,45 @@ LunarAdventure.Game.prototype = {
 
     // define key UI images
     // leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
-		leftKeyUp = this.add.sprite(centerX - 115, this.world.height - 120, 'leftKeyUp');
+		leftKeyUp = this.add.sprite(centerX - 115 + 250, this.world.height - 120, 'leftKeyUp');
     leftKeyUp.scale.setTo(0.25, 0.25);
     leftKeyUp.visible = true;
 
     // rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
-		rightKeyUp = this.add.sprite(centerX + 48, this.world.height - 120, 'rightKeyUp');
+		rightKeyUp = this.add.sprite(centerX + 48 + 250, this.world.height - 120, 'rightKeyUp');
     rightKeyUp.scale.setTo(0.25, 0.25);
     rightKeyUp.visible = true;
 
     // upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
-		upKeyUp = this.add.sprite(centerX - 35, this.world.height - 195, 'upKeyUp');
+		upKeyUp = this.add.sprite(centerX - 35 - 250, this.world.height - 120, 'W_upKeyUp');
     upKeyUp.scale.setTo(0.25, 0.25);
     upKeyUp.visible = true;
 
     // leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
-		leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, 'leftKeyDown');
+		leftKeyDown = this.add.sprite(centerX - 115 + 250, this.world.height - 107, 'leftKeyDown');
     leftKeyDown.scale.setTo(0.25, 0.25);
     leftKeyDown.visible = false;
 
     // rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
-		rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, 'rightKeyDown');
+		rightKeyDown = this.add.sprite(centerX + 48 + 250, this.world.height - 107, 'rightKeyDown');
     rightKeyDown.scale.setTo(0.25, 0.25);
     rightKeyDown.visible = false;
 
     // upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
-		upKeyDown = this.add.sprite(centerX - 35, this.world.height - 182, 'upKeyDown');
+		upKeyDown = this.add.sprite(centerX - 35 - 250, this.world.height - 107, 'W_upKeyDown');
     upKeyDown.scale.setTo(0.25, 0.25);
     upKeyDown.visible = false;
 
     // thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
-		thrustUI = this.add.sprite(centerX - 35, this.world.height - 215, 'thrust');
+		thrustUI = this.add.sprite(centerX - 35 - 250, this.world.height - 40, 'thrust');
     thrustUI.scale.setTo(0.25, 0.25);
 
     // rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
-		rotateRightUI = this.add.sprite(centerX + 48, this.world.height - 40, 'rotateR');
+		rotateRightUI = this.add.sprite(centerX + 48 + 250, this.world.height - 40, 'rotateR');
     rotateRightUI.scale.setTo(0.25, 0.25);
 
     // rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
-		rotateLeftUI = this.add.sprite(centerX - 152, this.world.height - 40, 'rotateL');
+		rotateLeftUI = this.add.sprite(centerX - 152 + 250, this.world.height - 40, 'rotateL');
     rotateLeftUI.scale.setTo(0.25, 0.25);
 
     landingArrow = this.add.sprite(centerX, 2000, 'landingArrow');
