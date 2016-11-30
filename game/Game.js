@@ -4,7 +4,7 @@ LunarAdventure.Game = function(){
 };
 
 
-let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0;
+let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0; //, currentDirectionTraveling = null;
 
 LunarAdventure.Game.prototype = {
 
@@ -18,61 +18,64 @@ LunarAdventure.Game.prototype = {
 		cursors = this.input.keyboard.createCursorKeys();
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
 
-			// initial angle for landing pad position
-	    this.landingPadAngle = 1.5;
+		// initial angle for landing pad position
+    this.landingPadAngle = 1.5;
 
-	    // ======== make collision groups ========
+		// set initial direction
+		this.currentDirectionTraveling = 'right';
+
+    // ======== make collision groups ========
 
 		terrainCollisionGroup = this.physics.p2.createCollisionGroup();
 		shipCollisionGroup = this.physics.p2.createCollisionGroup();
 		landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
-	    obstaclesCollisionGroup = this.physics.p2.createCollisionGroup();
+    obstaclesCollisionGroup = this.physics.p2.createCollisionGroup();
 
 
 		// set boundaries on left and right of the screen
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
 		customBounds = { left: null, right: null, top: null, bottom: null };
 
-	    centerX = window.innerWidth/2
-	    centerY = this.game.height/0.65 + 200
+    centerX = window.innerWidth/2
+    centerY = this.game.height/0.65 + 200
 
 
-	    // ======== create ship ========
+    // ======== create ship ========
 		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
 		ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
 
 		// create bounds on sides of screen
-	    this.physics.p2.setBoundsToWorld(true, true, true, true, true);
+    this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
 
-	    // ======== generate obstacles! ========
+    // ======== generate obstacles! ========
 
-	    // create groups for each of the obstacle categories
-	    smallObstacles = this.add.group();
-	    smallObstacles.enableBody = true;
-	    smallObstacles.physicsBodyType = Phaser.Physics.P2JS;
-
-
-	    mediumObstacles = this.add.group();
-	    mediumObstacles.enableBody = true;
-	    mediumObstacles.physicsBodyType = Phaser.Physics.P2JS;
-
-	    largeObstacles = this.add.group();
-	    largeObstacles.enableBody = true;
-	    largeObstacles.physicsBodyType = Phaser.Physics.P2JS;
-
-	    // enable physics on all obstacle groups
-	    this.physics.p2.enable(smallObstacles);
-	    this.physics.p2.enable(mediumObstacles);
-	    this.physics.p2.enable(largeObstacles);
-
-	    this.generateSmallObstacles();
-	    this.generateMediumObstacles();
-	    this.generateLargeObstacles();
+    // create groups for each of the obstacle categories
+    smallObstacles = this.add.group();
+    smallObstacles.enableBody = true;
+    smallObstacles.physicsBodyType = Phaser.Physics.P2JS;
 
 
-	    // ======== create terrain ========
+    mediumObstacles = this.add.group();
+    mediumObstacles.enableBody = true;
+    mediumObstacles.physicsBodyType = Phaser.Physics.P2JS;
+
+    largeObstacles = this.add.group();
+    largeObstacles.enableBody = true;
+    largeObstacles.physicsBodyType = Phaser.Physics.P2JS;
+
+    // enable physics on all obstacle groups
+    this.physics.p2.enable(smallObstacles);
+    this.physics.p2.enable(mediumObstacles);
+    this.physics.p2.enable(largeObstacles);
+
+    // this.generateSmallObstacles(Math.random() * this.world.width, Math.random() * 300, -30 + Math.random() * -100, -30 + Math.random() * -100);
+    // this.generateMediumObstacles(Math.random() * this.world.width, Math.random() * 500, -50 + Math.random() * -100, -50 + Math.random() * -100);
+    // this.generateLargeObstacles(Math.random() * this.world.width, Math.random() * 700, -50 + Math.random() * -100, -100 + Math.random() * -100);
+
+
+    // ======== create terrain ========
 		terrain = this.add.sprite(centerX, centerY, 'terrain');
 		terrain.anchor.set(0.5)
 		this.physics.p2.enable(terrain, false)
@@ -81,41 +84,43 @@ LunarAdventure.Game.prototype = {
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
 
-	    // ======== create landing pad  ========
-	    landingPad = this.add.sprite(centerX, 2000, 'landingPad');
-	    landingPad.scale.setTo(0.2, 0.2);
-	    this.physics.p2.enable(landingPad, false);
-	    landingPad.body.static = true;
+    // ======== create landing pad  ========
+    landingPad = this.add.sprite(centerX, 2000, 'landingPad');
+    landingPad.scale.setTo(0.2, 0.2);
+    this.physics.p2.enable(landingPad, false);
+    landingPad.body.static = true;
 
 
-	    // ======== set collision groups ========
-	    terrain.body.setCollisionGroup(terrainCollisionGroup);
+    // ======== set collision groups ========
+    terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
 
-	    // ship and terrain collision
+    // ship and terrain collision
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(terrainCollisionGroup, this.hitTerrain, this);
 
-	    // ship and landing pad collision
-	    landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
+    // ship and landing pad collision
+    landingPad.body.collides([landingPadCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(landingPadCollisionGroup, this.landedShip, this);
 
 		// ship and obstacle collision
 		ship.body.collides(obstaclesCollisionGroup, this.hitObstacle, this);
 
-		//timer
+
+		// ======== create timer ========
 		me = this;
 		me.startTime = new Date()
 		me.timeElapsed = 0;
 		me.createTimer();
-	  	me.gameTimer = this.game.time.events.loop(100, function() {
-	  		me.updateTimer();
-	  	});
+  	me.gameTimer = this.game.time.events.loop(100, function() {
+  		me.updateTimer();
+  	});
 
-		//particle effects for time penalties
-		//putting this in another location and grabbing ships position slows game down too much
-			
+
+    // ======== particle effects for time penalties ========
+		// note: putting this in another location and grabbing ships position slows game down too much
+
 		//emitter for 5 sec penalty
 		fivePenaltyEmitter = this.game.add.emitter(220,25,5000)
 		fivePenaltyEmitter.makeParticles('penalty5')
@@ -128,28 +133,30 @@ LunarAdventure.Game.prototype = {
 		tenPenaltyEmitter.minParticleScale = 0.1
 		tenPenaltyEmitter.maxParticleScale = 0.1
 		tenPenaltyEmitter.gravity = 50;
+
+		// generate waves of obstacles
+    this.sendObstacleWaves();
 	},
 
 	createTimer: function() {
-	  	let me = this;
-	  	//this fixes issue with timer appearing in some place other than upper left corner
-	  	me.timeLabel = {};
-	  	// me.timeLabel = me.game.add.text(500, 500, "", {font: "100px Arial", fill: "#fff"}); 
-  	},
+  	let me = this;
+  	//this fixes issue with timer appearing in some place other than upper left corner
+  	me.timeLabel = {};
+  	// me.timeLabel = me.game.add.text(500, 500, "", {font: "100px Arial", fill: "#fff"});
+	},
 
-  	updateTimer: function() {
-	  	let me = this;
-	    let currentTime = new Date();
-	    let timeDifference = me.startTime.getTime() - currentTime.getTime();
-	 
-	    //Time elapsed in seconds
-	    me.timeElapsed = Math.abs(timeDifference / 1000);
+	updateTimer: function() {
+  	let me = this;
+    let currentTime = new Date();
+    let timeDifference = me.startTime.getTime() - currentTime.getTime();
 
-	    result = Math.floor(me.timeElapsed) + penalty;
-	    me.timeLabel.text = result; 
-	    //make time text globally accessible
-	    globalTime = me.timeLabel.text;
-   
+    //Time elapsed in seconds
+    me.timeElapsed = Math.abs(timeDifference / 1000);
+
+    result = Math.floor(me.timeElapsed) + penalty;
+    me.timeLabel.text = result;
+    //make time text globally accessible
+    globalTime = me.timeLabel.text;
 	},
 
 	// landing pad rotation functions
@@ -203,7 +210,7 @@ LunarAdventure.Game.prototype = {
 
 		//penalty emitter
 		fivePenaltyEmitter.start(true, 1000, null, 1)
-		
+
 
 		// //create explosion sprite for collision
 		// if (body1) {
@@ -226,14 +233,14 @@ LunarAdventure.Game.prototype = {
         this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
       // else, ship crashes :(
       } else {
-	        console.log('ship landing unsuccessful');
-	        let posX = ship.x;
-	        let posY = ship.y;
-	        ship.destroy();
-	        explosion = this.add.sprite(posX - 30, posY, 'explosion')
-	        explosion.scale.setTo(0.05, 0.05);
-	        this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
-      	}
+        console.log('ship landing unsuccessful');
+        let posX = ship.x;
+        let posY = ship.y;
+        ship.destroy();
+        explosion = this.add.sprite(posX - 30, posY, 'explosion')
+        explosion.scale.setTo(0.05, 0.05);
+        this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+      }
 
 	    //grab the current globalTime to pass to success screen
 	    successGlobalTime = globalTime
@@ -244,46 +251,75 @@ LunarAdventure.Game.prototype = {
 		console.log('hit boundary');
 	},
 
-  generateSmallObstacles: function() {
+  generateSmallObstacles: function(amount, startX, startY, velocityX, velocityY) {
   		for (var i = 0; i < 10; i++) {
-	        var obstacle = smallObstacles.create(Math.random() * this.world.width, Math.random() * 700, 'smallObstacle', this.rnd.pick(frames));
+	        var obstacle = smallObstacles.create(startX, startY, 'smallObstacle', this.rnd.pick(frames));
 	        obstacle.body.setCircle(25);
 	        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
 	        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
 	        this.game.physics.p2.enable(obstacle, false);
 	        obstacle.body.static = true;
-	        obstacle.body.velocity.y = -50 + Math.random() * -100;
-	        obstacle.body.velocity.x = -100 + Math.random() * -100;
+	        obstacle.body.velocity.y = velocityY;
+	        obstacle.body.velocity.x = velocityX;
     	}
 	},
 
-  generateMediumObstacles: function() {
-		for (var i = 0; i < 5; i++) {
-		    var obstacle = mediumObstacles.create(Math.random() * this.world.width, Math.random() * 500, 'mediumObstacle', this.rnd.pick(frames));
+  generateMediumObstacles: function(amount, startX, startY, velocityX, velocityY) {
+		for (var i = 0; i < amount; i++) {
+		    var obstacle = mediumObstacles.create(startX, startY, 'mediumObstacle', this.rnd.pick(frames));
 		    obstacle.body.setCircle(52);
 		    obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
 		    obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
 		    this.game.physics.p2.enable(obstacle, false);
 		    obstacle.body.static = true;
-		    obstacle.body.velocity.y = -50 + Math.random() * -100;
-		    obstacle.body.velocity.x = -50 + Math.random() * -100;
+		    obstacle.body.velocity.y = velocityY;
+		    obstacle.body.velocity.x = velocityX;
 		}
   },
 
-  generateLargeObstacles: function() {
-		for (var i = 0; i < 2; i++) {
-		    var obstacle = largeObstacles.create(Math.random() * this.world.width, Math.random() * 300, 'largeObstacle', this.rnd.pick(frames));
+  generateLargeObstacles: function(amount, startX, startY, velocityX, velocityY) {
+		for (var i = 0; i < amount; i++) {
+        var obstacle = largeObstacles.create(startX, startY, 'largeObstacle', this.rnd.pick(frames));
 		    obstacle.body.setCircle(180);
 		    obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
 		    obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
 		    this.game.physics.p2.enable(obstacle, false);
 		    obstacle.body.static = true;
-		    obstacle.body.velocity.y = -30 + Math.random() * -100;
-		    obstacle.body.velocity.x = -30 + Math.random() * -100;
+        obstacle.body.velocity.y = velocityY;
+		    obstacle.body.velocity.x = velocityX;
 		}
+  },
+
+	// still working on directional generation
+  sendObstacleWaves: function() {
+		//console.log(this.currentDirectionTraveling);
+
+    // when ship is on the left side of screen, send obstacles from left side
+    // if (this.currentDirectionTraveling === 'left') {
+    //   waveOne = this.game.time.events.loop(3000, () => {
+    //     this.generateSmallObstacles(2, 0 + Math.random() * -300, Math.random() * 500, 50 + Math.random() * 100, -10 + Math.random() * 30);
+    //   });
+    //   waveTwo = this.game.time.events.loop(6000, () => {
+    //     this.generateMediumObstacles(1, 0 + Math.random() * -500, Math.random() * 500, 50 + Math.random() * 100, Math.random() * -50);
+    //   });
+    //   waveThree = this.game.time.events.loop(15000, () => {
+    //     this.generateLargeObstacles(1, -200, Math.random() * 350, 50 + Math.random() * 50, -10 + Math.random() * -50);
+    //   });
+    // when ship is in middle region or on the right side of screen, send obstacles from right side
+		// } else if (this.currentDirectionTraveling === 'right'){
+        waveOne = this.game.time.events.loop(3000, () => {
+          this.generateSmallObstacles(2, this.world.width + Math.random() * 300, Math.random() * 500, -50 + Math.random() * -100, -10 + Math.random() * -30);
+        });
+        waveTwo = this.game.time.events.loop(6000, () => {
+          this.generateMediumObstacles(1, this.world.width + Math.random() * 500, Math.random() * 500, -50 + Math.random() * -100, Math.random() * -50);
+        });
+        waveThree = this.game.time.events.loop(15000, () => {
+          this.generateLargeObstacles(1, this.world.width + 200, Math.random() * 350, -50 + Math.random() * -50, -10 + Math.random() * -50);
+        });
+		//}
   },
 
   gameOverCrash: function() {
@@ -302,6 +338,14 @@ LunarAdventure.Game.prototype = {
       this.game.debug.text('velocity x: ' + Math.floor(ship.body.velocity.x), 32, 52);
       this.game.debug.text('velocity y: ' + Math.floor(ship.body.velocity.y), 32, 72);
       this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
+
+			// trying to change direction of obstacle generation
+      // update the currentDirectionTraveling
+      // if (ship.body.x > 0 && ship.body.x < 400) {
+      //   currentDirectionTraveling = 'left';
+      // } else {
+      //   currentDirectionTraveling = 'right';
+      // }
 
       // left key, rotate ship
       if (cursors.left.isDown) {
@@ -323,13 +367,13 @@ LunarAdventure.Game.prototype = {
       if (ship.world.x <= gameWidth/divide + 200 && ship.body.rotation < 0) {
         terrain.body.rotation += 0.002;
         this.rotateLandingPadRight(775, centerX, 1200);
-        tilesprite.tilePosition.x += 4;
-        tilesprite.tilePosition.y -= 1;
+        tilesprite.tilePosition.x += 0.6;
+        tilesprite.tilePosition.y -= 0.3;
       } else if (ship.world.x >= gameWidth/divide * (divide-1) - 210 && ship.body.rotation > 0) {
         this.rotateLandingPadLeft(775, centerX, 1200);
         terrain.body.rotation -= 0.002;
-        tilesprite.tilePosition.x -= 4;
-        tilesprite.tilePosition.y -= 1;
+        tilesprite.tilePosition.x -= 0.6;
+        tilesprite.tilePosition.y -= 0.3;
       }
       // terrain spins FASTER when rocket nears the edges
       if (ship.world.x <= gameWidth/divide + 150 && ship.body.rotation < 0) {
