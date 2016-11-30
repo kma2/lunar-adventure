@@ -302,16 +302,30 @@ LunarAdventure.Game.prototype = {
     if(!this.invulnerable) {
       // change key
       // cursor to change (left, right, up)
-      let cursor = cursorArray[Math.floor(Math.random() * 3)]
+      var cursor = cursorArray[Math.floor(Math.random() * 3)]
 
       // new key
-      let newKey = keyboardArray[Math.floor(Math.random() * 26)]
+      var newKey = keyboardArray[Math.floor(Math.random() * 26)]
 
       console.log("THIS IS THE CURSOR", cursor)
       console.log("IS NOW....")
       console.log("THIS IS NEW KEY", newKey)
 
-      cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
+      var collisionToggle = true;
+
+      while(collisionToggle){
+        if (cursors.left.keyCode === Phaser.KeyCode[newKey]) {
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else if (cursors.right.keyCode === Phaser.KeyCode[newKey]){
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else if (cursors.up.keyCode === Phaser.KeyCode[newKey]){
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else {
+          collisionToggle = false;
+        }
+      }
+        cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
+
 
       // assign new key icons
       if (cursor === 'left') {
@@ -365,16 +379,32 @@ LunarAdventure.Game.prototype = {
 
 	hitObstacle: function(body1, body2) {
     // change key
-    if(!this.invulnerable){
-      let cursor = cursorArray[Math.floor(Math.random() * 3)]
-      let newKey = keyboardArray[Math.floor(Math.random() * 26)]
+    if(!this.invulnerable) {
+      // change key
+      // cursor to change (left, right, up)
+      var cursor = cursorArray[Math.floor(Math.random() * 3)]
 
-      console.log("THIS IS THE CURSOR", cursor)
-      console.log("IS NOW....")
-      console.log("THIS IS NEW KEY", newKey)
+      // new key
+      var newKey = keyboardArray[Math.floor(Math.random() * 26)]
 
-      cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
+      // check for duplicate key assignments
+      var collisionToggle = true;
 
+      while(collisionToggle){
+        if (cursors.left.keyCode === Phaser.KeyCode[newKey]) {
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else if (cursors.right.keyCode === Phaser.KeyCode[newKey]){
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else if (cursors.up.keyCode === Phaser.KeyCode[newKey]){
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else {
+          collisionToggle = false;
+        }
+      }
+        cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
+
+
+      // assign new key icons
       if (cursor === 'left') {
         leftKeyUp.destroy();
         leftKeyDown.destroy();
@@ -547,12 +577,12 @@ LunarAdventure.Game.prototype = {
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
 				terrain.body.rotation += 0.004;
 				this.rotateLandingPadRight(775, centerX, 1200);
-        this.rotateLandingArrow(875, centerX, 1200);
+        this.rotateLandingArrow();
 				tilesprite.tilePosition.x += 4;
 				tilesprite.tilePosition.y -= 1;
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
 				this.rotateLandingPadLeft(775, centerX, 1200);
-        this.rotateLandingArrow(875, centerX, 1200);
+        this.rotateLandingArrow();
 				terrain.body.rotation -= 0.004;
 				tilesprite.tilePosition.x -= 4;
 				tilesprite.tilePosition.y -= 1;
