@@ -27,6 +27,20 @@ LunarAdventure.Preload.prototype = {
     this.load.image('largeObstacle', 'images/largeObstacle.png');
     this.load.image('penalty10', 'images/penalty10.png');
     this.load.image('penalty5', 'images/penalty5.png')
+    this.load.image('boundary', 'images/boundary.png');
+
+    // UI
+    this.load.image('leftKeyUp', 'images/leftKeyUp.png');
+    this.load.image('leftKeyDown', 'images/leftKeyDown.png');
+    this.load.image('rightKeyUp', 'images/rightKeyUp.png');
+    this.load.image('rightKeyDown', 'images/rightKeyDown.png');
+    this.load.image('upKeyUp', 'images/upKeyUp.png');
+    this.load.image('upKeyDown', 'images/upKeyDown.png');
+    this.load.image('landingArrow', 'images/landingArrow.png');
+    this.load.image('thrust', 'images/thrustUI.png');
+    this.load.image('rotateL', 'images/rotateLeftUI.png');
+    this.load.image('rotateR', 'images/rotateRightUI.png');
+
   },
 
   create: function() {
