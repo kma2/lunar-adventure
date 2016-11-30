@@ -459,6 +459,13 @@ LunarAdventure.Game.prototype = {
         upKeyUp.visible = true;
         upKeyDown.visible = false;
       }
+      if (ship.body.rotation < -3.15) {
+      	ship.body.rotation = 3.15;
+      }
+      if (ship.body.rotation > 3.15) {
+      	ship.body.rotation = -3.15
+      }
+      console.log(ship.body.rotation)
 
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
