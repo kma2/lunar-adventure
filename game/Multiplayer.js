@@ -303,6 +303,7 @@ LunarAdventure.Multiplayer.prototype = {
 		if (ship.body) {
 			// if ship lands carefully, the landing is successful
 			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
+				successGlobalTime = globalTime
 				console.log('ship landing successful');
 				ship.body = null; // disables the ship from moving
 				this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
@@ -316,10 +317,6 @@ LunarAdventure.Multiplayer.prototype = {
 				this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
 			}
 		}
-
-		//grab the current globalTime to pass to success screen
-		successGlobalTime = globalTime
-		this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
 	},
 
 	generateSmallObstacles: function(amount, startX, startY, velocityX, velocityY) {
