@@ -10,7 +10,7 @@ LunarAdventure.Game.prototype = {
 
 		//reset timer and global variables since might be coming from different play state
 		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
-		
+
 		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
@@ -18,6 +18,12 @@ LunarAdventure.Game.prototype = {
 		divide = 15;
 		cursors = this.input.keyboard.createCursorKeys();
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
+    this.invulnerable = true;
+    this.toggle = true;
+
+    keyboardArray = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'];
+
+    cursorArray = ['up', 'left', 'right']
 
 		// initial angle for landing pad position
 		centerX = gameWidth/2
@@ -43,6 +49,7 @@ LunarAdventure.Game.prototype = {
 		leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, 'leftKeyDown');
 		leftKeyDown.scale.setTo(0.25, 0.25);
 		leftKeyDown.visible = false;
+
 
 		// rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
 		rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, 'rightKeyDown');
@@ -278,21 +285,167 @@ LunarAdventure.Game.prototype = {
 		landingArrow.y = landingPad.body.y - 85;
 	},
 
+  setVulnerablity: function(){
+    console.log(this.invulnerable)
+    this.invulnerable = false;
+    this.toggle = true;
+    ship.tint = 0xFFFFFF;
+  },
+
 	hitTerrain: function(body1, body2) {
 		//add penalty for when you hit terrain
-		penalty += 10;
-		console.log('hit terrain! 10 seconds added!');
-		//penalty emitter
-		tenPenaltyEmitter.start(true, 1000, null, 1)
+    if(!this.invulnerable) {
+      // change key
+      // cursor to change (left, right, up)
+      var cursor = cursorArray[Math.floor(Math.random() * 3)]
+
+      // new key
+      var newKey = keyboardArray[Math.floor(Math.random() * 26)]
+
+      console.log("THIS IS THE CURSOR", cursor)
+      console.log("IS NOW....")
+      console.log("THIS IS NEW KEY", newKey)
+
+      var collisionToggle = true;
+
+      while(collisionToggle){
+        if (cursors.left.keyCode === Phaser.KeyCode[newKey]) {
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else if (cursors.right.keyCode === Phaser.KeyCode[newKey]){
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else if (cursors.up.keyCode === Phaser.KeyCode[newKey]){
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else {
+          collisionToggle = false;
+        }
+      }
+        cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
+
+
+      // assign new key icons
+      if (cursor === 'left') {
+        leftKeyUp.destroy();
+        leftKeyDown.destroy();
+
+        leftKeyUp = this.add.sprite(centerX - 115, this.world.height - 120, `leftKeyLetter${newKey}Unpressed`);
+        leftKeyUp.scale.setTo(0.25, 0.25);
+        leftKeyUp.visible = true;
+
+        leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, `leftKeyLetter${newKey}Pressed`);
+        leftKeyDown.scale.setTo(0.25, 0.25);
+        leftKeyDown.visible = false;
+      } else if ( cursor === 'right') {
+        rightKeyUp.destroy();
+        rightKeyDown.destroy();
+
+        rightKeyUp = this.add.sprite(centerX + 48, this.world.height - 120, `rightKeyLetter${newKey}Unpressed`);
+        rightKeyUp.scale.setTo(0.25, 0.25);
+        rightKeyUp.visible = true;
+
+        rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, `rightKeyLetter${newKey}Pressed`);
+        rightKeyDown.scale.setTo(0.25, 0.25);
+        rightKeyDown.visible = false;
+      } else {
+        upKeyUp.destroy();
+        upKeyDown.destroy();
+
+        upKeyUp = this.add.sprite(centerX - 35, this.world.height - 195, `upKeyLetter${newKey}Unpressed`);
+        upKeyUp.scale.setTo(0.25, 0.25);
+        upKeyUp.visible = true;
+
+        upKeyDown = this.add.sprite(centerX - 35, this.world.height - 182, `upKeyLetter${newKey}Pressed`);
+        upKeyDown.scale.setTo(0.25, 0.25);
+        upKeyDown.visible = false;
+      }
+
+      penalty += 10;
+      console.log('hit terrain! 10 seconds added!');
+      //penalty emitter
+      tenPenaltyEmitter.start(true, 1000, null, 1)
+    }
+    this.invulnerable = true;
+
+		//create explosion sprite for collision
+		if (body1) {
+			let posX = ship.x;
+			let posY = ship.y;
+		}
 	},
 
 	hitObstacle: function(body1, body2) {
-		//add penalty for when you hit obstacle
-		penalty += 5;
-		console.log('hit obstacle! 5 seconds added!');
+    // change key
+    if(!this.invulnerable) {
+      // change key
+      // cursor to change (left, right, up)
+      var cursor = cursorArray[Math.floor(Math.random() * 3)]
 
-		//penalty emitter
-		fivePenaltyEmitter.start(true, 1000, null, 1)
+      // new key
+      var newKey = keyboardArray[Math.floor(Math.random() * 26)]
+
+      console.log("THIS IS THE CURSOR", cursor)
+      console.log("IS NOW....")
+      console.log("THIS IS NEW KEY", newKey)
+
+      var collisionToggle = true;
+
+      while(collisionToggle){
+        if (cursors.left.keyCode === Phaser.KeyCode[newKey]) {
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else if (cursors.right.keyCode === Phaser.KeyCode[newKey]){
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else if (cursors.up.keyCode === Phaser.KeyCode[newKey]){
+          newKey = keyboardArray[Math.floor(Math.random() * 26)]
+        } else {
+          collisionToggle = false;
+        }
+      }
+        cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
+
+
+      // assign new key icons
+      if (cursor === 'left') {
+        leftKeyUp.destroy();
+        leftKeyDown.destroy();
+
+        leftKeyUp = this.add.sprite(centerX - 115, this.world.height - 120, `leftKeyLetter${newKey}Unpressed`);
+        leftKeyUp.scale.setTo(0.25, 0.25);
+        leftKeyUp.visible = true;
+
+        leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, `leftKeyLetter${newKey}Pressed`);
+        leftKeyDown.scale.setTo(0.25, 0.25);
+        leftKeyDown.visible = false;
+      } else if ( cursor === 'right') {
+        rightKeyUp.destroy();
+        rightKeyDown.destroy();
+
+        rightKeyUp = this.add.sprite(centerX + 48, this.world.height - 120, `rightKeyLetter${newKey}Unpressed`);
+        rightKeyUp.scale.setTo(0.25, 0.25);
+        rightKeyUp.visible = true;
+
+        rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, `rightKeyLetter${newKey}Pressed`);
+        rightKeyDown.scale.setTo(0.25, 0.25);
+        rightKeyDown.visible = false;
+      } else {
+        upKeyUp.destroy();
+        upKeyDown.destroy();
+
+        upKeyUp = this.add.sprite(centerX - 35, this.world.height - 195, `upKeyLetter${newKey}Unpressed`);
+        upKeyUp.scale.setTo(0.25, 0.25);
+        upKeyUp.visible = true;
+
+        upKeyDown = this.add.sprite(centerX - 35, this.world.height - 182, `upKeyLetter${newKey}Pressed`);
+        upKeyDown.scale.setTo(0.25, 0.25);
+        upKeyDown.visible = false;
+      }
+
+		//add penalty for when you hit obstacle
+      penalty += 5;
+      console.log('hit obstacle! 5 seconds added!');
+
+      //penalty emitter
+      fivePenaltyEmitter.start(true, 1000, null, 1)
+    }
+    this.invulnerable = true;
 	},
 
 	landedShip: function(body1, body2) {
@@ -304,13 +457,11 @@ LunarAdventure.Game.prototype = {
 				this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
 			// else, ship crashes :(
 			} else {
-				console.log('ship landing unsuccessful');
-				let posX = ship.x;
-				let posY = ship.y;
-				ship.destroy();
-				explosion = this.add.sprite(posX - 30, posY, 'explosion')
-				explosion.scale.setTo(0.05, 0.05);
-				this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+				  penalty += 50;
+      console.log('landing unsuccessful! Try again! 50 seconds added!');
+
+      //penalty emitter
+      fivePenaltyEmitter.start(true, 1000, null, 1)
 			}
 		}
 
@@ -364,6 +515,7 @@ LunarAdventure.Game.prototype = {
 	generateLargeObstacles: function(amount, startX, startY, velocityX, velocityY) {
 		for (var i = 0; i < amount; i++) {
 			var obstacle = largeObstacles.create(startX, startY, 'largeObstacle', this.rnd.pick(frames));
+
 			obstacle.body.setCircle(180);
 			obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
 			obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
@@ -376,13 +528,13 @@ LunarAdventure.Game.prototype = {
 	},
 
 	sendObstacleWaves: function() {
-		waveOne = this.game.time.events.loop(6000, () => {
+		waveOne = this.game.time.events.loop(8000, () => {
 			this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 400 + Math.random() * 300, -40 + Math.random() * -60, -20 + Math.random() * -50
 			);
 			this.generateTinyObstacles(1, Math.random() * -100, 400 + Math.random() * 300, 40 + Math.random() * 60, -20 + Math.random() * -50
 			);
 		});
-		waveTwo = this.game.time.events.loop(10000, () => {
+		waveTwo = this.game.time.events.loop(12000, () => {
 			this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 100 + Math.random() * 400, -60 + Math.random() * -50, -30 + Math.random() * -30
 			);
 			this.generateSmallObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 50, + Math.random() * -30
@@ -390,7 +542,7 @@ LunarAdventure.Game.prototype = {
 			this.generateMediumObstacles(1, this.world.width + Math.random() * 100, 200 + Math.random() * 400, -60 + Math.random() * -100, -20 + Math.random() * -30);
 			this.generateMediumObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 100, + Math.random() * -30);
 		});
-		waveThree = this.game.time.events.loop(30000, () => {
+		waveThree = this.game.time.events.loop(36000, () => {
 			this.generateLargeObstacles(1, this.world.width + 250, 400 + Math.random() * 200, -80, -40 + Math.random() * -20);
 			this.generateLargeObstacles(1, -1000, 800 + Math.random() * 200, 80, -40 + Math.random() * -20);
 		});
@@ -406,6 +558,14 @@ LunarAdventure.Game.prototype = {
 
 	update: function() {
 
+    if(this.invulnerable){
+      if(this.toggle){
+        let tween = this.game.add.tween(ship).to({tint: 0x00FFFF}, 200, "Linear", true);
+        tween.repeat(11);
+        this.toggle = false;
+        this.time.events.add(Phaser.Timer.SECOND * 3, this.setVulnerablity, this);
+      }
+    }
 		if (ship.body) {
 			// debug info in top left corner
 			this.game.debug.text('time elapsed: ' + globalTime + "s", 32, 32);
@@ -414,6 +574,7 @@ LunarAdventure.Game.prototype = {
 			this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
 
 			// left key, rotate ship
+
 			if (cursors.left.isDown) {
 				leftKeyUp.visible = false;
 				leftKeyDown.visible = true;
@@ -452,17 +613,17 @@ LunarAdventure.Game.prototype = {
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
 				terrain.body.rotation += 0.004;
 				this.rotateLandingPadRight(radius, centerX, centerY);
-				// console.log(landingPad.body.y)
-					this.rotateLandingArrow();
+				this.rotateLandingArrow();
 				tilesprite.tilePosition.x += 0.6;
 				tilesprite.tilePosition.y -= 0.3;
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
 				this.rotateLandingPadLeft(radius, centerX, centerY);
-					this.rotateLandingArrow();
+				this.rotateLandingArrow();
 				terrain.body.rotation -= 0.004;
 				tilesprite.tilePosition.x -= 0.6;
 				tilesprite.tilePosition.y -= 0.3;
 			}
-		}
+
+    }
 	}
 };
