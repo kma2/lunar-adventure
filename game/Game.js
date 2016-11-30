@@ -8,7 +8,7 @@ LunarAdventure.Game.prototype = {
 
 	create: function() {
 
-		this.physics.p2.gravity.y = 60;
+		this.physics.p2.gravity.y = 80;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
 
@@ -23,37 +23,46 @@ LunarAdventure.Game.prototype = {
     centerY = this.game.height/0.65 + 200
 
     // define key UI images
-    leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
+    // leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
+		leftKeyUp = this.add.sprite(centerX - 115, this.world.height - 120, 'leftKeyUp');
     leftKeyUp.scale.setTo(0.25, 0.25);
     leftKeyUp.visible = true;
 
-    rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
+    // rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
+		rightKeyUp = this.add.sprite(centerX + 48, this.world.height - 120, 'rightKeyUp');
     rightKeyUp.scale.setTo(0.25, 0.25);
     rightKeyUp.visible = true;
 
-    upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
+    // upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
+		upKeyUp = this.add.sprite(centerX - 35, this.world.height - 195, 'upKeyUp');
     upKeyUp.scale.setTo(0.25, 0.25);
     upKeyUp.visible = true;
 
-    leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
+    // leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
+		leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, 'leftKeyDown');
     leftKeyDown.scale.setTo(0.25, 0.25);
     leftKeyDown.visible = false;
 
-    rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
+    // rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
+		rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, 'rightKeyDown');
     rightKeyDown.scale.setTo(0.25, 0.25);
     rightKeyDown.visible = false;
 
-    upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
+    // upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
+		upKeyDown = this.add.sprite(centerX - 35, this.world.height - 182, 'upKeyDown');
     upKeyDown.scale.setTo(0.25, 0.25);
     upKeyDown.visible = false;
 
-    thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
+    // thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
+		thrustUI = this.add.sprite(centerX - 35, this.world.height - 215, 'thrust');
     thrustUI.scale.setTo(0.25, 0.25);
 
-    rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
+    // rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
+		rotateRightUI = this.add.sprite(centerX + 48, this.world.height - 40, 'rotateR');
     rotateRightUI.scale.setTo(0.25, 0.25);
 
-    rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
+    // rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
+		rotateLeftUI = this.add.sprite(centerX - 152, this.world.height - 40, 'rotateL');
     rotateLeftUI.scale.setTo(0.25, 0.25);
 
     landingArrow = this.add.sprite(centerX, 2000, 'landingArrow');
@@ -191,13 +200,13 @@ LunarAdventure.Game.prototype = {
 		//putting this in another location and grabbing ships position slows game down too much
 
 		//emitter for 5 sec penalty
-		fivePenaltyEmitter = this.game.add.emitter(220,25,5000);
+		fivePenaltyEmitter = this.game.add.emitter(220,32,5000);
 		fivePenaltyEmitter.makeParticles('penalty5');
 		fivePenaltyEmitter.minParticleScale = 0.1;
 		fivePenaltyEmitter.maxParticleScale = 0.1;
 		fivePenaltyEmitter.gravity = 50;
 		//emitter for 10 sec penalty
-		tenPenaltyEmitter = this.game.add.emitter(230,25,5000);
+		tenPenaltyEmitter = this.game.add.emitter(230,32,5000);
 		tenPenaltyEmitter.makeParticles('penalty10');
 		tenPenaltyEmitter.minParticleScale = 0.1;
 		tenPenaltyEmitter.maxParticleScale = 0.1;
@@ -310,20 +319,22 @@ LunarAdventure.Game.prototype = {
 	},
 
 	landedShip: function(body1, body2) {
-		// if ship lands carefully, the landing is successful
-		if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
-			console.log('ship landing successful');
-			ship.body = null; // disables the ship from moving
-			this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
-		// else, ship crashes :(
-		} else {
-			console.log('ship landing unsuccessful');
-			let posX = ship.x;
-			let posY = ship.y;
-			ship.destroy();
-			explosion = this.add.sprite(posX - 30, posY, 'explosion')
-			explosion.scale.setTo(0.05, 0.05);
-			this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+		if (ship.body) {
+			// if ship lands carefully, the landing is successful
+			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
+				console.log('ship landing successful');
+				ship.body = null; // disables the ship from moving
+				this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
+			// else, ship crashes :(
+			} else {
+				console.log('ship landing unsuccessful');
+				let posX = ship.x;
+				let posY = ship.y;
+				ship.destroy();
+				explosion = this.add.sprite(posX - 30, posY, 'explosion')
+				explosion.scale.setTo(0.05, 0.05);
+				this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+			}
 		}
 
 		//grab the current globalTime to pass to success screen
@@ -331,10 +342,24 @@ LunarAdventure.Game.prototype = {
 		this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
 	},
 
-  generateSmallObstacles: function(amount, startX, startY, velocityX, velocityY) {
+	generateSmallObstacles: function(amount, startX, startY, velocityX, velocityY) {
   		for (var i = 0; i < 10; i++) {
 	        var obstacle = smallObstacles.create(startX, startY, 'smallObstacle', this.rnd.pick(frames));
 	        obstacle.body.setCircle(25);
+	        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+	        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+
+	        this.game.physics.p2.enable(obstacle, false);
+	        obstacle.body.static = true;
+	        obstacle.body.velocity.y = velocityY;
+	        obstacle.body.velocity.x = velocityX;
+    	}
+	},
+
+  generateTinyObstacles: function(amount, startX, startY, velocityX, velocityY) {
+  		for (var i = 0; i < amount; i++) {
+	        var obstacle = smallObstacles.create(startX, startY, 'tinyObstacle', this.rnd.pick(frames));
+	        obstacle.body.setCircle(12);
 	        obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
 	        obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
@@ -393,9 +418,11 @@ LunarAdventure.Game.prototype = {
         });
         waveTwo = this.game.time.events.loop(6000, () => {
           this.generateMediumObstacles(1, this.world.width + Math.random() * 500, Math.random() * 500, -50 + Math.random() * -100, Math.random() * -50);
+					this.generateTinyObstacles(5, this.world.width + Math.random() * 500, Math.random() * 500, -50 + Math.random() * -100, Math.random() * -50);
         });
         waveThree = this.game.time.events.loop(15000, () => {
           this.generateLargeObstacles(1, this.world.width + 200, Math.random() * 350, -50 + Math.random() * -50, -10 + Math.random() * -50);
+					this.generateTinyObstacles(5, this.world.width + Math.random() * 500, Math.random() * 500, -50 + Math.random() * -100, Math.random() * -50);
         });
 		//}
   },
