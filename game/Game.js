@@ -11,7 +11,6 @@ LunarAdventure.Game.prototype = {
 		this.physics.p2.gravity.y = 80;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
-
 		gameHeight = this.world.height;
 		divide = 15;
 		cursors = this.input.keyboard.createCursorKeys();
@@ -19,8 +18,8 @@ LunarAdventure.Game.prototype = {
 
 
     // initial angle for landing pad position
-    centerX = window.innerWidth/2
-    centerY = this.game.height/0.65 + 200
+    centerX = gameWidth/2
+    centerY = gameHeight + 500
 
     // define key UI images
     // leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
@@ -273,10 +272,8 @@ LunarAdventure.Game.prototype = {
 	},
 
   rotateLandingArrow: function(radius, startX, startY){
-    var x = startX + Math.cos(this.landingPadAngle) * radius;
-    var y = startY + Math.sin(this.landingPadAngle) * radius;
-    landingArrow.x = x;
-    landingArrow.y = y;
+    landingArrow.x = landingPad.body.x - 32;
+    landingArrow.y = landingPad.body.y - 85;
   },
 
 	hitTerrain: function(body1, body2) {
@@ -474,16 +471,25 @@ LunarAdventure.Game.prototype = {
         upKeyDown.visible = false;
       }
 
+
+
+      		//this is all based on the following center points:
+      		//centerX = gameWidth/2
+    		//centerY = gameHeight/0.65 + 200
+
+      		let radius = 820;
+
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
 				terrain.body.rotation += 0.004;
-				this.rotateLandingPadRight(775, centerX, 1200);
-        this.rotateLandingArrow(875, centerX, 1200);
+				this.rotateLandingPadRight(radius, centerX, centerY);
+				// console.log(landingPad.body.y)
+        	this.rotateLandingArrow();
 				tilesprite.tilePosition.x += 4;
 				tilesprite.tilePosition.y -= 1;
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
-				this.rotateLandingPadLeft(775, centerX, 1200);
-        this.rotateLandingArrow(875, centerX, 1200);
+				this.rotateLandingPadLeft(radius, centerX, centerY);
+        	this.rotateLandingArrow();
 				terrain.body.rotation -= 0.004;
 				tilesprite.tilePosition.x -= 4;
 				tilesprite.tilePosition.y -= 1;

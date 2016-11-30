@@ -6,22 +6,22 @@ LunarAdventure.MainMenu.prototype = {
 		this.physics.startSystem(Phaser.Physics.P2JS);
 
 		// this.background = this.game.add.tileSprite(0, 0, width, height, 'starfield');
-		this.background = this.game.add.tileSprite(0, 0, 2000, 1000, 'starfield');
+		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
 
 
 		// astronaut = this.add.sprite(width/2 - 50, height/4.5, 'astronaut');
-		astronaut = this.add.sprite(width/1.3, height/6, 'astronaut');
+		astronaut = this.add.sprite(width/2.2, height/6, 'astronaut');
 
 		astronaut.scale.setTo(0.5, 0.5);
 
 		// logo = this.add.sprite(width/2 - 240, height/2.5, 'logo');
-		logo = this.add.sprite(width/1.3 - 180, height/3, 'logo');
+		logo = this.add.sprite(width/3 - 20, height/3, 'logo');
 
 		logo.scale.setTo(0.8, 0.8);
 
 		// creating static terrain
 		// terrain = this.add.sprite(width/2, height/0.65 + 200, 'terrain');
-		terrain = this.add.sprite(width/1.3, height/0.42, 'terrain');
+		terrain = this.add.sprite(width/2, height/.58, 'terrain');
 		terrain.anchor.set(0.5)
 		this.physics.p2.enable(terrain, false)
 		terrain.body.static = true;
@@ -29,7 +29,7 @@ LunarAdventure.MainMenu.prototype = {
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
 		// this.game.debug.text('click to begin', this.game.width/2 - 70, this.game.height/1.9);
-		this.game.debug.text('click to begin', width/1.3 - 20, height/1.9);
+		this.game.debug.text('click to begin', width/2.2 - 20, height/2);
 
 		// let singlePlayer = this.game.add.text(width/2.2, height/2, 'Click to begin', textStyle(height/40, 'white'));
 		// singlePlayer.inputEnabled = true;
