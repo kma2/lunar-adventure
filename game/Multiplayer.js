@@ -26,8 +26,8 @@ LunarAdventure.Multiplayer.prototype = {
 		}
 
     // initial angle for landing pad position
-    centerX = window.innerWidth/2
-    centerY = this.game.height/0.65 + 200
+    centerX = gameWidth/2
+    centerY = gameHeight + 500
 
     // define key UI images
     // leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
@@ -41,7 +41,7 @@ LunarAdventure.Multiplayer.prototype = {
     rightKeyUp.visible = true;
 
     // upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
-		upKeyUp = this.add.sprite(centerX - 35 - 250, this.world.height - 120, 'W_upKeyUp');
+		upKeyUp = this.add.sprite(centerX - 300, this.world.height - 120, 'W_upKeyUp');
     upKeyUp.scale.setTo(0.25, 0.25);
     upKeyUp.visible = true;
 
@@ -56,12 +56,12 @@ LunarAdventure.Multiplayer.prototype = {
     rightKeyDown.visible = false;
 
     // upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
-		upKeyDown = this.add.sprite(centerX - 35 - 250, this.world.height - 107, 'W_upKeyDown');
+		upKeyDown = this.add.sprite(centerX - 300, this.world.height - 107, 'W_upKeyDown');
     upKeyDown.scale.setTo(0.25, 0.25);
     upKeyDown.visible = false;
 
     // thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
-		thrustUI = this.add.sprite(centerX - 35 - 250, this.world.height - 40, 'thrust');
+		thrustUI = this.add.sprite(centerX - 300, this.world.height - 40, 'thrust');
     thrustUI.scale.setTo(0.25, 0.25);
 
     // rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
@@ -261,7 +261,7 @@ LunarAdventure.Multiplayer.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle += 0.002;
+			this.landingPadAngle += 0.004;
 		} else {
 				this.landingPadAngle = 0;
 		}
@@ -273,17 +273,15 @@ LunarAdventure.Multiplayer.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle -= 0.002;
+			this.landingPadAngle -= 0.004;
 		} else {
 			this.landingPadAngle = 0;
 		}
 	},
 
   rotateLandingArrow: function(radius, startX, startY){
-    var x = startX + Math.cos(this.landingPadAngle) * radius;
-    var y = startY + Math.sin(this.landingPadAngle) * radius;
-    landingArrow.x = x;
-    landingArrow.y = y;
+    landingArrow.x = landingPad.body.x - 32;
+    landingArrow.y = landingPad.body.y - 85;
   },
 
 	hitTerrain: function(body1, body2) {
@@ -466,20 +464,21 @@ LunarAdventure.Multiplayer.prototype = {
         upKeyUp.visible = true;
         upKeyDown.visible = false;
       }
-
+      		let radius = 820
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-				terrain.body.rotation += 0.002;
-				this.rotateLandingPadRight(775, centerX, 1200);
-        this.rotateLandingArrow(875, centerX, 1200);
-				tilesprite.tilePosition.x += 0.6;
-				tilesprite.tilePosition.y -= 0.3;
+				terrain.body.rotation += 0.004;
+				this.rotateLandingPadRight(radius, centerX, centerY);
+				// console.log(landingPad.body.y)
+        	this.rotateLandingArrow();
+				tilesprite.tilePosition.x += 4;
+				tilesprite.tilePosition.y -= 1;
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
-				this.rotateLandingPadLeft(775, centerX, 1200);
-        this.rotateLandingArrow(875, centerX, 1200);
-				terrain.body.rotation -= 0.002;
-				tilesprite.tilePosition.x -= 0.6;
-				tilesprite.tilePosition.y -= 0.3;
+				this.rotateLandingPadLeft(radius, centerX, centerY);
+        	this.rotateLandingArrow();
+				terrain.body.rotation -= 0.004;
+				tilesprite.tilePosition.x -= 4;
+				tilesprite.tilePosition.y -= 1;
 			}
 			// // terrain spins FASTER when rocket nears the edges
 			// if (ship.world.x <= gameWidth/divide + 150 && ship.body.rotation < 0) {
