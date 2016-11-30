@@ -8,7 +8,7 @@ LunarAdventure.Game.prototype = {
 
 	create: function() {
 
-		this.physics.p2.gravity.y = 20;
+		this.physics.p2.gravity.y = 60;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
 
@@ -60,7 +60,24 @@ LunarAdventure.Game.prototype = {
     landingArrow.scale.setTo(0.25, 0.25);
     landingArrow.alpha = 0;
 
+    leftIndicator = this.add.sprite(100, 400, 'landingArrow');
+    leftIndicator.scale.setTo(0.20, 0.20);
+    leftIndicator.alpha = 0;
+    leftIndicator.anchor.set(0.5);
+    leftIndicator.rotation = 1.5;
+
+    rightIndicator = this.add.sprite(1350, 400, 'landingArrow');
+    rightIndicator.scale.setTo(0.20, 0.20);
+    rightIndicator.alpha = 0;
+    rightIndicator.anchor.set(0.5);
+    rightIndicator.rotation = -1.5;
+
+    // animations for Arrows
     this.add.tween(landingArrow).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true)
+
+    this.add.tween(leftIndicator).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 3, true)
+
+    this.add.tween(rightIndicator).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 3, true)
 
 		// set boundaries on left and right of the screen
 		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
@@ -206,6 +223,8 @@ LunarAdventure.Game.prototype = {
     this.world.bringToTop(thrustUI)
     this.world.bringToTop(rotateRightUI)
     this.world.bringToTop(rotateLeftUI)
+    this.world.bringToTop(rightIndicator)
+    this.world.bringToTop(leftIndicator)
 
 	},
 
@@ -374,10 +393,8 @@ LunarAdventure.Game.prototype = {
 	},
 
   rotateLandingArrow: function(radius, startX, startY){
-    var x = startX + Math.cos(this.landingPadAngle) * radius;
-    var y = startY + Math.sin(this.landingPadAngle) * radius;
-    landingArrow.x = x;
-    landingArrow.y = y;
+    landingArrow.x = landingPad.body.x - 32;
+    landingArrow.y = landingPad.body.y - 85;
   },
 
 	hitTerrain: function(body1, body2) {
@@ -421,20 +438,22 @@ LunarAdventure.Game.prototype = {
 
 	landedShip: function(body1, body2) {
 		// if ship lands carefully, the landing is successful
-		if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
-			console.log('ship landing successful');
-			ship.body = null; // disables the ship from moving
-			this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
-		// else, ship crashes :(
-		} else {
-			console.log('ship landing unsuccessful');
-			let posX = ship.x;
-			let posY = ship.y;
-			ship.destroy();
-			explosion = this.add.sprite(posX - 30, posY, 'explosion')
-			explosion.scale.setTo(0.05, 0.05);
-			this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
-		}
+    if(ship.body){
+      if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
+        console.log('ship landing successful');
+        ship.body = null; // disables the ship from moving
+        this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
+      // else, ship crashes :(
+      } else {
+        console.log('ship landing unsuccessful');
+        let posX = ship.x;
+        let posY = ship.y;
+        ship.destroy();
+        explosion = this.add.sprite(posX - 30, posY, 'explosion')
+        explosion.scale.setTo(0.05, 0.05);
+        this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+      }
+    }
 
 		//grab the current globalTime to pass to success screen
 		successGlobalTime = globalTime
