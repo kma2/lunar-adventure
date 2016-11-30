@@ -16,6 +16,7 @@ LunarAdventure.game.state.add('MainMenu', LunarAdventure.MainMenu);
 LunarAdventure.game.state.add('Crash', LunarAdventure.Crash);
 LunarAdventure.game.state.add('Success', LunarAdventure.Success);
 LunarAdventure.game.state.add('Game', LunarAdventure.Game);
+LunarAdventure.game.state.add('Multiplayer', LunarAdventure.Multiplayer);
 LunarAdventure.game.state.add('Lobby', LunarAdventure.Lobby);
 LunarAdventure.game.state.add('GameRoom', LunarAdventure.GameRoom);
 
