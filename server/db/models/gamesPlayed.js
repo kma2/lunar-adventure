@@ -6,5 +6,13 @@ const GamesPlayed = db.define('gamesPlayed', {
 		type: Sequelize.INTEGER
 	}
 })
+// ,
+// {
+	// classMethod: {
+	// 	increment: function(count) {
+	// 		count += 1;
+	// 	}
+	// }
+// })
 
 module.exports = GamesPlayed;
