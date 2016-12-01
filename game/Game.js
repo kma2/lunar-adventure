@@ -77,6 +77,19 @@ LunarAdventure.Game.prototype = {
 		landingArrow.scale.setTo(0.25, 0.25);
 		landingArrow.alpha = 0;
 
+    leftIndicator = this.add.sprite(100, 400, 'landingArrow');
+    leftIndicator.scale.setTo(0.20, 0.20);
+    leftIndicator.alpha = 0;
+    leftIndicator.anchor.set(0.5);
+    leftIndicator.rotation = 1.5;
+
+    rightIndicator = this.add.sprite(1350, 400, 'landingArrow');
+    rightIndicator.scale.setTo(0.20, 0.20);
+    rightIndicator.alpha = 0;
+    rightIndicator.anchor.set(0.5);
+    rightIndicator.rotation = -1.5;
+
+
 
 		this.add.tween(landingArrow).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true)
 
