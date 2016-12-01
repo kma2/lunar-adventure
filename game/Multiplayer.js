@@ -401,7 +401,7 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	gameOverSuccess: function() {
-		this.game.state.start('Success', true, false);
+		this.game.state.start('MultiSuccess', true, false);
 	},
 
 	update: function() {

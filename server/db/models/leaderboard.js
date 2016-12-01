@@ -4,7 +4,6 @@ const Sequelize = require('sequelize');
 const Leaderboard = db.define('leaderboard', {
 	name: {
 		type: Sequelize.STRING(15),
-		allowNull: false,
 		validate: {
 			notEmpty: true,
 		}
@@ -14,7 +13,7 @@ const Leaderboard = db.define('leaderboard', {
 		allowNull: false
 	},
 	gameType: {
-		type: Sequelize.ENUM('Single Player', 'Cooperative'),
+		type: Sequelize.ENUM('SinglePlayer', 'Cooperative'),
 		allowNull: false
 	}
 })

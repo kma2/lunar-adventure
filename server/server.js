@@ -17,7 +17,7 @@ const http = require('http').Server(app);
 const PORT = process.env.PORT || 3000
 
 //DATABASE
-const db = require('./db/index.js')
+const db = require('./db/db');
 
 // GAME OBJECTS
 // const Player = require("./entities/player");
@@ -55,7 +55,7 @@ app.get('/highScore/:gameType', (req, res, next) => {
 
 //get route for number of games played
 app.get('/gamesPlayed', (req, res, next) => {
-	GamesPlayed.findAll()
+	GamesPlayed.findById(1)
 	.then(number => res.send(number))
 	.catch(next)
 })
@@ -73,27 +73,25 @@ app.post('/newHighScore/:gameType/:time', (req, res, next) => {
 })
 
 //put route for games played
-app.put('/gamePlayed', (req, res, next) => {
-	// GamesPlayed.findById(1)
-	// .then(count => {
-	// 	count++
-	// 	GamesPlayed.save()
-	// })
-	GamesPlayed.update({
-		count: count += 1
+app.put('/gamesPlayed', (req, res, next) => {
+	GamesPlayed.findById(1)
+	.then(game => {
+		game.increment()
 	})
-	.then(console.log('updating worked'))
-	.catch(console.log('updating failed'))
+	.then(() => res.sendStatus(200))
+	.catch(next)
 })
 
 function startServer() {
 	http.listen(PORT)
 	console.log('listening on port', PORT)
 	console.log('syncing the db')
-	db.sync()
+	db.sync({force: true})
 	.then(() => console.log('db successfully synced'))
-	.catch(next)
-}()
+	.then(() => GamesPlayed.create())
+	.catch((err) => console.error('Probs syncing database', err))
+}
+startServer()
 
 app.use((err, req, res, next) => {
 	res.status(500).send(err)

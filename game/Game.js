@@ -552,7 +552,7 @@ LunarAdventure.Game.prototype = {
 	},
 
 	gameOverSuccess: function() {
-		this.game.state.start('Success', true, false);
+		this.game.state.start('SingleSuccess', true, false);
 	},
 
 	update: function() {

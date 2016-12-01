@@ -3,16 +3,19 @@ const Sequelize = require('sequelize');
 
 const GamesPlayed = db.define('gamesPlayed', {
 	count: {
-		type: Sequelize.INTEGER
+		type: Sequelize.INTEGER,
+		defaultValue: 0
+	}
+}
+
+,
+{
+	instanceMethods: {
+		increment: function() {
+			this.count += 1;
+			this.save();
+		}
 	}
 })
-// ,
-// {
-	// classMethod: {
-	// 	increment: function(count) {
-	// 		count += 1;
-	// 	}
-	// }
-// })
 
 module.exports = GamesPlayed;
