@@ -307,7 +307,7 @@ LunarAdventure.Game.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle += 0.004;
+			this.landingPadAngle += 0.003;
 		} else {
 				this.landingPadAngle = 0;
 		}
@@ -319,7 +319,7 @@ LunarAdventure.Game.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle -= 0.004;
+			this.landingPadAngle -= 0.003;
 		} else {
 			this.landingPadAngle = 0;
 		}
@@ -636,7 +636,7 @@ LunarAdventure.Game.prototype = {
 
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-				terrain.body.rotation += 0.004;
+				terrain.body.rotation += 0.003;
 				this.rotateLandingPadRight(radius, centerX, centerY);
 				this.rotateLandingArrow();
 				tilesprite.tilePosition.x += 0.6;
@@ -644,7 +644,7 @@ LunarAdventure.Game.prototype = {
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
 				this.rotateLandingPadLeft(radius, centerX, centerY);
 				this.rotateLandingArrow();
-				terrain.body.rotation -= 0.004;
+				terrain.body.rotation -= 0.003;
 				tilesprite.tilePosition.x -= 0.6;
 				tilesprite.tilePosition.y -= 0.3;
 			}
