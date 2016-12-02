@@ -29,10 +29,10 @@ LunarAdventure.HowToPlay.prototype = {
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
 		//how to play
-		let Cancel = this.game.add.text(width/1.1, height/2.7, 'CANCEL', textStyle(height/40, 'white'));
-		let Objective = this.game.add.text(width/3.5, height/4.5, 'Objective: Land safely on the landing pad while avoiding obstacles', textStyle(height/40, 'white'));
-		let Obstacles = this.game.add.text(width/3.5, height/3.7, 'Obstacles: Terrain = kills you. Asteroids = +5 second penalty', textStyle(height/40, 'white'));
-		let Controls = this.game.add.text(width/1.9, height/1.5, 'Controls:', textStyle(height/40, 'white'));
+		let Cancel = this.game.add.text(width/1.3, height/6, 'CANCEL', textStyle(height/40, 'white'));
+		let Objective = this.game.add.text(width/3.5, height/4.5, 'Your objective is to land safely on the landing pad while avoiding obstacles', textStyle(height/40, 'white'));
+		let Obstacles = this.game.add.text(width/3.5, height/3.7, 'Colliding with asteroids will cause a time penalty, but colliding with terrain will destroy your ship', textStyle(height/40, 'white'));
+		let Controls = this.game.add.text(width/2.2, height/1.5, 'Controls:', textStyle(height/40, 'white'));
 
 		// CANCEL
 		Cancel.inputEnabled = true;
