@@ -11,7 +11,7 @@ LunarAdventure.SingleCrash.prototype = {
 			highScores = scoreList;
 			message = this.add.sprite(gameWidth/2 - 210, gameHeight/8, 'crash');
 			message.scale.setTo(0.6, 0.6);
-			this.game.debug.text(`Better luck next time! Your journey was ${successGlobalTime} seconds.`, gameWidth/3 - 30, gameHeight/3 - 35);
+			this.game.debug.text(`Better luck next time! Your journey was ${successGlobalTime} seconds.`, gameWidth/3 - 20, gameHeight/3 - 60);
 
 			//leaderBoard
 			let yVal = gameHeight/3 + 30;
@@ -20,7 +20,7 @@ LunarAdventure.SingleCrash.prototype = {
 				yVal += 30
 			}
 
-			this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 45, gameHeight - 30);
+			this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 45, gameHeight - 150);
 		})
 		.catch(err => console.error('error retrieving scores', err))
 

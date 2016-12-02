@@ -20,7 +20,7 @@ LunarAdventure.MainMenu.prototype = {
 
 
 		// astronaut = this.add.sprite(width/2 - 50, height/4.5, 'astronaut');
-		astronaut = this.add.sprite(width/2.2 + 5, height/6, 'astronaut');
+		astronaut = this.add.sprite(width/2.2 + 20, height/6, 'astronaut');
 
 		astronaut.scale.setTo(0.5, 0.5);
 
