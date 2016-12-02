@@ -296,9 +296,6 @@ LunarAdventure.Game.prototype = {
   },
 
 	hitTerrain: function(body1, body2) {
-
-		successGlobalTime = globalTime;
-		this.game.state.start('SingleSuccess', true, false)
 		//add penalty for when you hit terrain
     if(!this.invulnerable) {
       // change key
