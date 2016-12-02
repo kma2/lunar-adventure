@@ -1,10 +1,6 @@
 /*
 
-copy code to single success and make sure spacebar is copied over
-
 add leaderboard to fail state and show their time
-
-reset global vars in main menu
 
 */
 
