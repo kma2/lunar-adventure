@@ -8,6 +8,9 @@ LunarAdventure.Game.prototype = {
 
 	create: function() {
 
+		tempCursors = {spacebar: this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)}
+
+
 		//reset timer and global variables since might be coming from different play state
 		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
 
@@ -24,7 +27,7 @@ LunarAdventure.Game.prototype = {
 
     keyboardArray = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'];
 
-    cursorArray = ['up', 'left', 'right']
+    cursorArray = ['up', 'left', 'right', 'spacebar']
 
 		// initial angle for landing pad position
 		centerX = gameWidth/2
@@ -350,6 +353,9 @@ LunarAdventure.Game.prototype = {
   },
 
 	hitTerrain: function(body1, body2) {
+
+		successGlobalTime = globalTime;
+		this.game.state.start('SingleSuccess', true, false)
 		//add penalty for when you hit terrain
     if(!this.invulnerable) {
       console.log('ship landing unsuccessful');
@@ -552,7 +558,7 @@ LunarAdventure.Game.prototype = {
 	},
 
 	gameOverSuccess: function() {
-		this.game.state.start('Success', true, false);
+		this.game.state.start('SingleSuccess', true, false);
 	},
 
 	update: function() {

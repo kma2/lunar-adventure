@@ -20,7 +20,8 @@ LunarAdventure.Multiplayer.prototype = {
 		cursors = {
 			up: this.input.keyboard.addKey(Phaser.Keyboard.W),
 			left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
-			right: this.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
+			right: this.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
+			spacebar: this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
 		}
 
 		// initial angle for landing pad position
@@ -283,6 +284,8 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	hitTerrain: function(body1, body2) {
+		successGlobalTime = globalTime;
+		this.game.state.start('MultiSuccess', true, false)
 		//add penalty for when you hit terrain
 		penalty += 10;
 		console.log('hit terrain! 10 seconds added!');
@@ -401,7 +404,7 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	gameOverSuccess: function() {
-		this.game.state.start('Success', true, false);
+		this.game.state.start('MultiSuccess', true, false);
 	},
 
 	update: function() {
