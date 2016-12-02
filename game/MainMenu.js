@@ -20,7 +20,7 @@ LunarAdventure.MainMenu.prototype = {
 
 
 		// astronaut = this.add.sprite(width/2 - 50, height/4.5, 'astronaut');
-		astronaut = this.add.sprite(width/2.2 + 20, height/6, 'astronaut');
+		astronaut = this.add.sprite(width/2.2 + 15, height/6, 'astronaut');
 
 		astronaut.scale.setTo(0.5, 0.5);
 
@@ -38,11 +38,14 @@ LunarAdventure.MainMenu.prototype = {
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
 
-		let singlePlayer = this.game.add.text(width/2.6, height/2.3, 'Single player', textStyle(height/40, 'white'));
+		var fontStyle = { font: "22px Asap", fill: "#fff"};
+
+		let singlePlayer = this.game.add.text(width/2.7, height/2.3, "Single Player", fontStyle);
+		singlePlayer.strokeThickness = 1;
 		singlePlayer.inputEnabled = true;
 		singlePlayer.events.onInputDown.add(this.startSinglePlayer, this);
 
-		let multiPlayer = this.game.add.text(width/1.85, height/2.3, 'Cooperative', textStyle(height/40, 'white'));
+		let multiPlayer = this.game.add.text(width/1.85, height/2.3, "Cooperative", fontStyle);
 		multiPlayer.inputEnabled = true;
 		multiPlayer.events.onInputDown.add(this.startMultiPlayer, this);
 

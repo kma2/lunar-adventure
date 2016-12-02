@@ -5,11 +5,19 @@ var LunarAdventure = LunarAdventure || {};
 //1200 v 600 looks good
 LunarAdventure.game = new Phaser.Game(1280,800, Phaser.AUTO);
 
+// Google WebFont Loader
+WebFontConfig = {
+    google: {
+      families: ['Asap'] //  we can load as many fonts as we want in the array
+    }
+};
+
 // setup global variables
 var textStyle = function(size, color) {
 	var color = color === 'black' ? "#444" : "#ddd"
 	return { font: `${size}px Arial`, fill: color, align: "center" }
-}
+};
+
 
 let width = 1280;
 let height = 800;
