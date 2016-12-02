@@ -22,6 +22,18 @@ LunarAdventure.SingleSuccess.prototype = {
 				this.game.debug.text(`${highScores[i].time}  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
 				yVal += 30
 			}
+			// // input form
+			// this.game.add.plugin(Fabrique.Plugins.InputField);
+			// input = this.game.add.inputField(width/2.3, height/1.6, {
+			// 	font: '18px Arial',
+			// 	fill: '#212121',
+			// 	fontWeight: 'bold',
+			// 	width: 150,
+			// 	padding: 8,
+			// 	borderWidth: 1,
+			// 	borderColor: '#000',
+			// 	borderRadius: 6
+			// });
 		})
 		.catch(err => console.error('error retrieving scores', err))
 

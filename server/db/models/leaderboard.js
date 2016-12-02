@@ -6,7 +6,8 @@ const Leaderboard = db.define('leaderboard', {
 		type: Sequelize.STRING(15),
 		validate: {
 			notEmpty: true,
-		}
+		},
+		// allowNull: false
 	},
 	time: {
 		type: Sequelize.DOUBLE,
