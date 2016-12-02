@@ -398,7 +398,8 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	gameOverCrash: function() {
-			this.game.state.start('Crash', true, false);
+			successGlobalTime = globalTime;
+			this.game.state.start('MultiCrash', true, false);
 	},
 
 	gameOverSuccess: function() {

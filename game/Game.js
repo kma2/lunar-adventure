@@ -551,7 +551,8 @@ LunarAdventure.Game.prototype = {
 	},
 
 	gameOverCrash: function() {
-			this.game.state.start('Crash', true, false);
+			successGlobalTime = globalTime;
+			this.game.state.start('SingleCrash', true, false);
 	},
 
 	gameOverSuccess: function() {
