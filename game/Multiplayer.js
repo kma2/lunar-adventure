@@ -284,7 +284,7 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	hitTerrain: function(body1, body2) {
-		successGlobalTime = globalTime
+		successGlobalTime = globalTime;
 		this.game.state.start('MultiSuccess', true, false)
 		//add penalty for when you hit terrain
 		penalty += 10;

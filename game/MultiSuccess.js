@@ -1,19 +1,16 @@
 /*
-hook up spacebar
-run check to see if you have top score if so, show form to add name, then
-	display top scores with new score added
-else show top scores
 
 copy code to single success and make sure spacebar is copied over
 
 add leaderboard to fail state and show their time
+
+reset global vars in main menu
 
 */
 
 LunarAdventure.MultiSuccess = function(){};
 
 text = null;
-let putHasRun = false, submitBtnClicked = false, userName, input = null, achievedHighScore = false;
 
 LunarAdventure.MultiSuccess.prototype = {
 	create: function() {
@@ -39,7 +36,6 @@ LunarAdventure.MultiSuccess.prototype = {
 					borderRadius: 6,
 					placeHolder: 'Enter your name',
 					max: '15'
-					// blockInput: false
 				});
 
 				let submitBtn = this.game.add.sprite(gameWidth/1.9 + 20, gameHeight/4, 'submitBtn');
@@ -50,7 +46,6 @@ LunarAdventure.MultiSuccess.prototype = {
 				//leaderBoard
 				let yVal = gameHeight/2.2;
 				for (var i = 0; i < highScores.length; i++) {
-					// if (highScores[i].time.toString().length < 5)
 					this.game.debug.text(`${highScores[i].time}  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
 					yVal += 30
 				}
@@ -93,7 +88,6 @@ LunarAdventure.MultiSuccess.prototype = {
 				//leaderBoard
 				let yVal = gameHeight/2.2;
 				for (var i = 0; i < highScores.length; i++) {
-					// if (highScores[i].time.toString().length < 5)
 					this.game.debug.text(`${highScores[i].time}  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
 					yVal += 30
 				}

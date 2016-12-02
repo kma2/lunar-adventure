@@ -1,7 +1,12 @@
 LunarAdventure.MainMenu = function(){};
 
+let putHasRun = false, submitBtnClicked = false, userName, input = null, achievedHighScore = false;
+
 LunarAdventure.MainMenu.prototype = {
 	create: function() {
+
+		putHasRun = false, submitBtnClicked = false, userName, input = null, achievedHighScore = false;
+
 
 		this.physics.startSystem(Phaser.Physics.P2JS);
 
