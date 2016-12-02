@@ -24,12 +24,13 @@ LunarAdventure.Multiplayer.prototype = {
 		this.invulnerable = true;
     this.toggle = true;
     this.lifeCounter = 3;
-		// cursors = {
-		// 	up: this.input.keyboard.addKey(Phaser.Keyboard.W),
-		// 	left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
-		// 	right: this.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
-		// 	spacebar: this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
-		// }
+		
+		cursors = {
+			up: this.input.keyboard.addKey(Phaser.Keyboard.W),
+			left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
+			right: this.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
+			spacebar: this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+		}
 
 		keyboardArray = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'];
     cursorArray = ['up', 'left', 'right', 'spacebar'];
@@ -429,11 +430,11 @@ LunarAdventure.Multiplayer.prototype = {
           upKeyUp.destroy();
           upKeyDown.destroy();
 
-          upKeyUp = this.add.sprite(centerX - 35, this.world.height - 195, `upKeyLetter${newKey}Unpressed`);
+          upKeyUp = this.add.sprite(centerX - 300, this.world.height - 120, `upKeyLetter${newKey}Unpressed`);
           upKeyUp.scale.setTo(0.25, 0.25);
           upKeyUp.visible = true;
 
-          upKeyDown = this.add.sprite(centerX - 35, this.world.height - 182, `upKeyLetter${newKey}Pressed`);
+          upKeyDown = this.add.sprite(centerX - 300, this.world.height - 107, `upKeyLetter${newKey}Pressed`);
           upKeyDown.scale.setTo(0.25, 0.25);
           upKeyDown.visible = false;
         }
