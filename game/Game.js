@@ -124,11 +124,8 @@ LunarAdventure.Game.prototype = {
     rightIndicator.rotation = -1.5;
 
     // Arrow tweens
-
     this.add.tween(leftIndicator).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 3, true)
-
     this.add.tween(rightIndicator).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 3, true)
-
 		this.add.tween(landingArrow).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true)
 
 		// set boundaries on left and right of the screen
@@ -174,10 +171,6 @@ LunarAdventure.Game.prototype = {
 		this.physics.p2.enable(smallObstacles);
 		this.physics.p2.enable(mediumObstacles);
 		this.physics.p2.enable(largeObstacles);
-
-		// this.generateSmallObstacles();
-		// this.generateMediumObstacles();
-		// this.generateLargeObstacles();
 
 
 		// ======== create terrain ========
@@ -405,7 +398,7 @@ LunarAdventure.Game.prototype = {
             collisionToggle = false;
           }
         }
-          cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
+        cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
 
 
         // assign new key icons
