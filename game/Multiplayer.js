@@ -21,7 +21,7 @@ LunarAdventure.Multiplayer.prototype = {
 			up: this.input.keyboard.addKey(Phaser.Keyboard.W),
 			left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
 			right: this.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
-			enter: this.input.keyboard.addKey(Phaser.Keyboard.ENTER)
+			spacebar: this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
 		}
 
 		// initial angle for landing pad position

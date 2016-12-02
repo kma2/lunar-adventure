@@ -56,10 +56,6 @@ LunarAdventure.MultiSuccess.prototype = {
 				}
 			}
 
-			//hook up spacebar with this code:
-			// playAgain.inputEnabled = true;
-			// playAgain.events.onInputDown.add(restartGame, this);
-
 			this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 40, gameHeight - 30);
 		})
 		.catch(err => console.error('error retrieving scores', err))
@@ -130,6 +126,10 @@ LunarAdventure.MultiSuccess.prototype = {
 				})
 				.catch(err => console.error('error posting', err))
 			}
+		}
+		//press spacebar to play again
+		if (cursors.spacebar.isDown) {
+			this.game.state.start('MainMenu')
 		}
 	}
 };
