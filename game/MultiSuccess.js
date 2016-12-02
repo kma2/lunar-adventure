@@ -1,7 +1,19 @@
+/*
+hook up spacebar
+run check to see if you have top score if so, show form to add name, then
+	display top scores with new score added
+else show top scores
+
+copy code to single success and make sure spacebar is copied over
+
+add leaderboard to fail state and show their time
+
+*/
+
 LunarAdventure.MultiSuccess = function(){};
 
 text = null;
-let putHasRun = false, submitBtnClicked = false, userName, input = null;
+let putHasRun = false, submitBtnClicked = false, userName, input = null, achievedHighScore = false;
 
 LunarAdventure.MultiSuccess.prototype = {
 	create: function() {
@@ -13,40 +25,41 @@ LunarAdventure.MultiSuccess.prototype = {
 		.then(scoreList => {
 			highScores = scoreList;
 			this.game.debug.text(`Perfect landing! Your time is ${successGlobalTime} seconds!`, gameWidth/2.3 - 96, gameHeight/5.3);
+			if (highScores.length < 8 || highScores[highScores.length-1].time > successGlobalTime) {
+				// input form
+				this.game.add.plugin(Fabrique.Plugins.InputField);
+				input = this.game.add.inputField(gameWidth/2.6 - 14, gameHeight/4, {
+					font: '18px Arial',
+					fill: '#212121',
+					fontWeight: 'normal',
+					width: 150,
+					padding: 8,
+					borderWidth: 1,
+					borderColor: '#000',
+					borderRadius: 6,
+					placeHolder: 'Enter your name',
+					max: '15'
+					// blockInput: false
+				});
 
-			// input form
-			this.game.add.plugin(Fabrique.Plugins.InputField);
-			input = this.game.add.inputField(gameWidth/2.6 - 14, gameHeight/4, {
-				font: '18px Arial',
-				fill: '#212121',
-				fontWeight: 'normal',
-				width: 150,
-				padding: 8,
-				borderWidth: 1,
-				borderColor: '#000',
-				borderRadius: 6,
-				placeHolder: 'Enter your name',
-				max: '15'
-				// blockInput: false
-			});
+				let submitBtn = this.game.add.sprite(gameWidth/1.9 + 20, gameHeight/4, 'submitBtn');
+				submitBtn.inputEnabled = true;
+				submitBtn.events.onInputDown.add(listener, this);
+			}
+			else {
+				//leaderBoard
+				let yVal = gameHeight/2.2;
+				for (var i = 0; i < highScores.length; i++) {
+					// if (highScores[i].time.toString().length < 5)
+					this.game.debug.text(`${highScores[i].time}  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
+					yVal += 30
+				}
+			}
 
-
-			// let submitBtn = this.game.add.button(gameWidth/1.9 + 20, gameHeight/4, 'submitBtn');
-			// submitBtn.
-
+			//hook up spacebar with this code:
 			// playAgain.inputEnabled = true;
 			// playAgain.events.onInputDown.add(restartGame, this);
-			let submitBtn = this.game.add.sprite(gameWidth/1.9 + 20, gameHeight/4, 'submitBtn');
 
-			submitBtn.inputEnabled = true;
-			submitBtn.events.onInputDown.add(listener, this);
-
-			let yVal = gameHeight/2.2;
-			for (var i = 0; i < highScores.length; i++) {
-				// if (highScores[i].time.toString().length < 5)
-				this.game.debug.text(`${highScores[i].time}  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
-				yVal += 30
-			}
 			this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 40, gameHeight - 30);
 		})
 		.catch(err => console.error('error retrieving scores', err))
@@ -73,6 +86,27 @@ LunarAdventure.MultiSuccess.prototype = {
 		this.game.state.start('MainMenu');
 	},
 
+	retrieveHighScores: function() {
+		if (achievedHighScore) {
+			console.log('achieved high score')
+			fetch('/highScore/Cooperative')
+			.then(res => res.json())
+			.then(scoreList => {
+				highScores = scoreList;
+				this.game.debug.text(`Perfect landing! Your time is ${successGlobalTime} seconds!`, gameWidth/2.3 - 96, gameHeight/5.3);
+				//leaderBoard
+				let yVal = gameHeight/2.2;
+				for (var i = 0; i < highScores.length; i++) {
+					// if (highScores[i].time.toString().length < 5)
+					this.game.debug.text(`${highScores[i].time}  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
+					yVal += 30
+				}
+				this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 40, gameHeight - 30);
+			})
+			.catch(err => console.error(err))
+		}
+	},
+
 	update: function() {
 
 		terrain.body.rotation -= 0.003;
@@ -89,7 +123,11 @@ LunarAdventure.MultiSuccess.prototype = {
 						name: userName
 					})
 				})
-				.then(() => console.log('post request successful'))
+				.then(() => {
+					console.log('post request successful')
+					achievedHighScore = true;
+					this.retrieveHighScores()
+				})
 				.catch(err => console.error('error posting', err))
 			}
 		}

@@ -47,7 +47,7 @@ app.get('/highScore/:gameType', (req, res, next) => {
 			gameType: req.params.gameType
 		},
 		order: [['time']],
-		limit: 10
+		limit: 8
 	})
 	.then(scores => res.send(scores))
 	.catch(next)
