@@ -7,7 +7,7 @@ LunarAdventure.Multiplayer.prototype = {
 	create: function() {
 
 		//reset timer and global variables since might be coming from different play state
-		
+
 		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
 
 		this.physics.p2.gravity.y = 70;
@@ -260,7 +260,7 @@ LunarAdventure.Multiplayer.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle += 0.004;
+			this.landingPadAngle += 0.003;
 		} else {
 				this.landingPadAngle = 0;
 		}
@@ -272,7 +272,7 @@ LunarAdventure.Multiplayer.prototype = {
 		landingPad.body.x = x;
 		landingPad.body.y = y;
 		if(this.landingPadAngle <= 360){
-			this.landingPadAngle -= 0.004;
+			this.landingPadAngle -= 0.003;
 		} else {
 			this.landingPadAngle = 0;
 		}
@@ -443,14 +443,14 @@ LunarAdventure.Multiplayer.prototype = {
 				upKeyUp.visible = true;
 				upKeyDown.visible = false;
 			}
-			
+
 			if (ship.body.rotation < -3.15) { ship.body.rotation = 3.15; }
 			if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }
 
 			let radius = 820
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-				terrain.body.rotation += 0.004;
+				terrain.body.rotation += 0.003;
 				this.rotateLandingPadRight(radius, centerX, centerY);
 				// console.log(landingPad.body.y)
 					this.rotateLandingArrow();
@@ -459,7 +459,7 @@ LunarAdventure.Multiplayer.prototype = {
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
 				this.rotateLandingPadLeft(radius, centerX, centerY);
 					this.rotateLandingArrow();
-				terrain.body.rotation -= 0.004;
+				terrain.body.rotation -= 0.003;
 				tilesprite.tilePosition.x -= 0.6;
 				tilesprite.tilePosition.y -= 0.3;
 			}
