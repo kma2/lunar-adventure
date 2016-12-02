@@ -6,6 +6,12 @@ LunarAdventure.Multiplayer.prototype = {
 
 	create: function() {
 
+		//update the game count
+		fetch('/incrementGame/Cooperative', {
+			method: 'PUT'
+		})
+		.catch(err => console.error('updating multi did not work', err))
+
 		//reset timer and global variables since might be coming from different play state
 		
 		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;

@@ -73,23 +73,53 @@ app.post('/newHighScore/:gameType/:time', (req, res, next) => {
 })
 
 //put route for games played
-app.put('/gamesPlayed', (req, res, next) => {
+app.put('/incrementGame/:gameType', (req, res, next) => {
+	if (req.params.gameType === 'SinglePlayer') {
+		GamesPlayed.findById(1)
+		.then(game => {
+			game.incrementSingle()
+			res.sendStatus(200)
+		})
+		.catch((err) => console.error("Problem updating single", err))
+	}
+	else if (req.params.gameType === 'Cooperative') {
+		GamesPlayed.findById(1)
+		.then(game => {
+			game.incrementMulti()
+			res.sendStatus(200)
+		})
+		.catch((err) => console.error("Problem updating multi", err))
+	}
+})
+
+//get route for getting total game count
+app.get('/totalTimesPlayed', (req, res, next) => {
 	GamesPlayed.findById(1)
 	.then(game => {
-		game.increment()
+		res.json(game.totalCount)
 	})
-	.then(() => res.sendStatus(200))
-	.catch(next)
+	.catch(err => console.error('Problem getting total count', err))
 })
 
 function startServer() {
 	http.listen(PORT)
-	console.log('listening on port', PORT)
-	console.log('syncing the db')
-	db.sync()
-	.then(() => console.log('db successfully synced'))
-	.then(() => GamesPlayed.create())
-	.catch((err) => console.error('Probs syncing database', err))
+	console.log('Listening on port', PORT)
+	console.log('Syncing the db')
+	db.sync({force: false})
+	.then(() => {
+		console.log('Database successfully synced')
+		GamesPlayed.findById(1)
+		.then(game => {
+			if (!game) {
+				GamesPlayed.create({
+					singleCount: 0,
+					multiCount: 0
+				})
+				.catch(err => console.error(err))
+			}
+		})
+	.catch((err) => console.error('Problem syncing database', err))
+	})
 }
 startServer()
 

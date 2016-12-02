@@ -8,6 +8,12 @@ LunarAdventure.Game.prototype = {
 
 	create: function() {
 
+		//update the game count
+		fetch('/incrementGame/SinglePlayer', {
+			method: 'PUT'
+		})
+		.catch(err => console.error('updating single did not work', err))
+
 		tempCursors = {spacebar: this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)}
 
 
