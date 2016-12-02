@@ -1,8 +1,6 @@
-LunarAdventure.MainMenu = function(){};
+LunarAdventure.HowToPlay = function(){};
 
-let putHasRun = false, submitBtnClicked = false, userName, input = null, achievedHighScore = false;
-
-LunarAdventure.MainMenu.prototype = {
+LunarAdventure.HowToPlay.prototype = {
 	create: function() {
 
 		gameWidth = this.world.width;
@@ -15,17 +13,10 @@ LunarAdventure.MainMenu.prototype = {
 
 		this.physics.startSystem(Phaser.Physics.P2JS);
 
-		// this.background = this.game.add.tileSprite(0, 0, width, height, 'starfield');
 		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
 
-
-		// astronaut = this.add.sprite(width/2 - 50, height/4.5, 'astronaut');
-		astronaut = this.add.sprite(width/2.2 + 20, height/6, 'astronaut');
-
-		astronaut.scale.setTo(0.5, 0.5);
-
 		// logo = this.add.sprite(width/2 - 240, height/2.5, 'logo');
-		logo = this.add.sprite(width/3 - 20, height/3, 'logo');
+		logo = this.add.sprite(width/3 - 20, height/8.4, 'logo');
 
 		logo.scale.setTo(0.8, 0.8);
 
@@ -37,36 +28,19 @@ LunarAdventure.MainMenu.prototype = {
 		terrain.body.clearShapes();
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
-
-		let singlePlayer = this.game.add.text(width/2.6, height/2.3, 'Single player', textStyle(height/40, 'white'));
-		singlePlayer.inputEnabled = true;
-		singlePlayer.events.onInputDown.add(this.startSinglePlayer, this);
-
-		let multiPlayer = this.game.add.text(width/1.85, height/2.3, 'Cooperative', textStyle(height/40, 'white'));
-		multiPlayer.inputEnabled = true;
-		multiPlayer.events.onInputDown.add(this.startMultiPlayer, this);
-
 		//how to play
-		let howToPlay = this.game.add.text(width/2.2 + 15, height/2, 'How to play', textStyle(height/40, 'white'));
-		howToPlay.inputEnabled = true;
-		howToPlay.events.onInputDown.add(this.showHowToPlay, this);
+		let Cancel = this.game.add.text(width/1.1, height/2.7, 'CANCEL', textStyle(height/40, 'white'));
+		let Objective = this.game.add.text(width/3.5, height/4.5, 'Objective: Land safely on the landing pad while avoiding obstacles', textStyle(height/40, 'white'));
+		let Obstacles = this.game.add.text(width/3.5, height/3.7, 'Obstacles: Terrain = kills you. Asteroids = +5 second penalty', textStyle(height/40, 'white'));
+		let Controls = this.game.add.text(width/1.9, height/1.5, 'Controls:', textStyle(height/40, 'white'));
 
-
-		gyro.frequency = 10;
-		// start gyroscope detection
-		gyro.startTracking(function(o) {
-			// console.log(o.gamma)
-			// if (o.gamma > -30) {
-
-			// }
-			// // updating player velocity
-			// player.body.velocity.x += o.gamma/20;
-			// player.body.velocity.y += o.beta/20;
-		});
+		// CANCEL
+		Cancel.inputEnabled = true;
+		Cancel.events.onInputDown.add(this.showMainMenu, this);
 
 
 		// ======== create ship ========
-		ship = this.add.sprite(gameWidth/3.3, gameHeight/2.6, 'ship');
+		ship = this.add.sprite(gameWidth/3.3, gameHeight/6.2, 'ship');
 		ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
 
@@ -165,20 +139,6 @@ LunarAdventure.MainMenu.prototype = {
 		this.world.bringToTop(rotateRightUI);
 		this.world.bringToTop(rotateLeftUI);
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
-
-
-		// // input form
-		// this.game.add.plugin(Fabrique.Plugins.InputField);
-		// input = this.game.add.inputField(width/2.3, height/1.6, {
-		// 	font: '18px Arial',
-		// 	fill: '#212121',
-		// 	fontWeight: 'bold',
-		// 	width: 150,
-		// 	padding: 8,
-		// 	borderWidth: 1,
-		// 	borderColor: '#000',
-		// 	borderRadius: 6
-		// });
 	},
 
 	update: function() {
@@ -223,18 +183,8 @@ LunarAdventure.MainMenu.prototype = {
 		if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }
 	},
 
-	startSinglePlayer: function() {
-		this.game.state.start('Game');
-	},
-
-	startMultiPlayer: function() {
-		// if (input.value) {
-			this.game.state.start('Multiplayer');
-		// }
-	},
-
-	showHowToPlay: function() {
-		this.game.state.start('HowToPlay');
+	showMainMenu: function() {
+		this.game.state.start('MainMenu');
 	}
 
 };

@@ -16,6 +16,7 @@ let height = 800;
 
 // setup game states
 LunarAdventure.game.state.add('Preload', LunarAdventure.Preload);
+LunarAdventure.game.state.add('HowToPlay', LunarAdventure.HowToPlay);
 LunarAdventure.game.state.add('MainMenu', LunarAdventure.MainMenu);
 LunarAdventure.game.state.add('SingleCrash', LunarAdventure.SingleCrash);
 LunarAdventure.game.state.add('MultiCrash', LunarAdventure.MultiCrash);
