@@ -142,8 +142,8 @@ app.use((req, res) => res.sendStatus(404))
 // 		var game = games[this.gameId];
 
 // 		if(this.id in game.players) {
-// 			delete game.players[this.id];	
-// 			io.in(this.gameId).emit("remove player", {id: this.id});    
+// 			delete game.players[this.id];
+// 			io.in(this.gameId).emit("remove player", {id: this.id});
 // 		}
 
 // 		if(game.numPlayers < 2) {
@@ -175,7 +175,7 @@ app.use((req, res) => res.sendStatus(404))
 // 	lobbySlots[this.gameId].state = "inprogress";
 // 	Lobby.broadcastSlotStateUpdate(this.gameId, "inprogress", io);
 // 	var ids = gameRoom.getPlayerIds();
-	
+
 // 	for(var i = 0; i < ids.length; i++) {
 // 		var playerId = ids[i];
 // 		// var newPlayer = new Player(spawnPoint.x * TILE_SIZE, spawnPoint.y * TILE_SIZE, "down", playerId, pendingGame.players[playerId].color);
