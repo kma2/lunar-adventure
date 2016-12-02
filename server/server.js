@@ -86,7 +86,7 @@ function startServer() {
 	http.listen(PORT)
 	console.log('listening on port', PORT)
 	console.log('syncing the db')
-	db.sync({force: true})
+	db.sync()
 	.then(() => console.log('db successfully synced'))
 	.then(() => GamesPlayed.create())
 	.catch((err) => console.error('Probs syncing database', err))

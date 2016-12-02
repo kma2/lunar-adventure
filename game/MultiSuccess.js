@@ -1,8 +1,8 @@
-LunarAdventure.Success = function(){};
+LunarAdventure.MultiSuccess = function(){};
 
-let text = null;
+text = null;
 
-LunarAdventure.Success.prototype = {
+LunarAdventure.MultiSuccess.prototype = {
 	create: function() {
 
 
