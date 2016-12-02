@@ -284,14 +284,15 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	hitTerrain: function(body1, body2) {
-		successGlobalTime = globalTime
-		this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
-
-		//add penalty for when you hit terrain
-		penalty += 10;
-		console.log('hit terrain! 10 seconds added!');
-		//penalty emitter
-		tenPenaltyEmitter.start(true, 1000, null, 1)
+		if(!this.invulnerable) {
+				let posX = ship.x;
+				let posY = ship.y;
+				ship.destroy();
+				explosion = this.add.sprite(posX - 30, posY, 'explosion')
+				explosion.scale.setTo(0.05, 0.05);
+				this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+    }
+    console.log("PHEW! You were invulnerable!");
 	},
 
 	hitObstacle: function(body1, body2) {

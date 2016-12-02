@@ -15,11 +15,11 @@ LunarAdventure.SingleSuccess.prototype = {
 			message.scale.setTo(0.6, 0.6);
 
 			if (highScores.length < 8 || highScores[highScores.length-1].time > successGlobalTime) {
-				this.game.debug.text(`Your time of ${successGlobalTime}s made it to the high score leaderboard`, gameWidth/3.3, gameHeight/4 + 15);
+				this.game.debug.text(`Your time of ${successGlobalTime}s made it to the high score leaderboard`, gameWidth/3.5, gameHeight/4 + 15);
 
 				// input form
 				this.game.add.plugin(Fabrique.Plugins.InputField);
-				input = this.game.add.inputField(gameWidth/2.6 - 14, gameHeight/3, {
+				input = this.game.add.inputField(gameWidth/2.6 - 14, gameHeight/3.2, {
 					font: '18px Arial',
 					fill: '#212121',
 					fontWeight: 'normal',
@@ -32,7 +32,7 @@ LunarAdventure.SingleSuccess.prototype = {
 					max: '15'
 				});
 
-				let submitBtn = this.game.add.sprite(gameWidth/1.9 + 20, gameHeight/3, 'submitBtn');
+				let submitBtn = this.game.add.sprite(gameWidth/1.9 + 20, gameHeight/3.2, 'submitBtn');
 				submitBtn.inputEnabled = true;
 				submitBtn.events.onInputDown.add(listener, this);
 			}
@@ -47,7 +47,7 @@ LunarAdventure.SingleSuccess.prototype = {
 				}
 			}
 
-			this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 40, gameHeight - 30);
+			this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 40, gameHeight - 150);
 		})
 		.catch(err => console.error('error retrieving scores', err))
 
@@ -80,12 +80,12 @@ LunarAdventure.SingleSuccess.prototype = {
 				highScores = scoreList;
 				this.game.debug.text(`You're on the leaderboard!`, gameWidth/2.5, gameHeight/4 + 15);
 				//leaderBoard
-				let yVal = gameHeight/2.1;
+				let yVal = gameHeight/2.3;
 				for (var i = 0; i < highScores.length; i++) {
 					this.game.debug.text(`${highScores[i].time}s  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
 					yVal += 30
 				}
-				this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 45, gameHeight - 30);
+				this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 45, gameHeight - 150);
 			})
 			.catch(err => console.error(err))
 		}

@@ -353,9 +353,7 @@ LunarAdventure.Game.prototype = {
   },
 
 	hitTerrain: function(body1, body2) {
-		//add penalty for when you hit terrain
     if(!this.invulnerable) {
-      console.log('ship landing unsuccessful');
 				let posX = ship.x;
 				let posY = ship.y;
 				ship.destroy();
