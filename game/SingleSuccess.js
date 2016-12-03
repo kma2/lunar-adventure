@@ -14,8 +14,8 @@ LunarAdventure.SingleSuccess.prototype = {
 			message = this.add.sprite(gameWidth/2 - 220, gameHeight/8, 'success');
 			message.scale.setTo(0.6, 0.6);
 
-			if (highScores.length < 8 || highScores[highScores.length-1].time > successGlobalTime) {
-				madeLeaderboardMessage = this.game.add.text(gameWidth/3.2, gameHeight/4 - 10, `Your time of ${successGlobalTime}s made it to the high score leaderboard`, fontStyle);
+			if (highScores.length < 8 || highScores[highScores.length-1].time > endGameTime) {
+				madeLeaderboardMessage = this.game.add.text(gameWidth/3.2, gameHeight/4 - 10, `Your time of ${endGameTime}s made it to the high score leaderboard`, fontStyle);
 				// input form
 				this.game.add.plugin(Fabrique.Plugins.InputField);
 				input = this.game.add.inputField(gameWidth/2.6 - 14, gameHeight/3.2, {
@@ -36,7 +36,7 @@ LunarAdventure.SingleSuccess.prototype = {
 				submitBtn.events.onInputDown.add(listener, this);
 			}
 			else {
-				this.game.add.text(gameWidth/3 + 30, gameHeight/4, `Your time was ${successGlobalTime}s. Try to land faster next time!`, fontStyle);
+				this.game.add.text(gameWidth/3 + 30, gameHeight/4, `Your time was ${endGameTime}s. Try to land faster next time!`, fontStyle);
 				//leaderBoard
 				let yVal = gameHeight/3 + 30;
 				for (var i = 0; i < highScores.length; i++) {
