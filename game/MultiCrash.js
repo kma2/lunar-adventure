@@ -12,7 +12,7 @@ LunarAdventure.MultiCrash.prototype = {
 			message = this.add.sprite(gameWidth/2 - 210, gameHeight/8, 'crash');
 			message.scale.setTo(0.6, 0.6);
 
-			this.game.add.text(gameWidth/3 - 20, gameHeight/3 - 60, `Better luck next time! Your journey was ${successGlobalTime} seconds.`, fontStyle);
+			this.game.add.text(gameWidth/3 - 20, gameHeight/3 - 60, `Better luck next time! Your journey was ${endGameTime} seconds.`, fontStyle);
 
 			//leaderBoard
 			let yVal = gameHeight/3 + 30;
