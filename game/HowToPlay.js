@@ -28,15 +28,18 @@ LunarAdventure.HowToPlay.prototype = {
 		terrain.body.clearShapes();
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
-		//how to play
-		let Cancel = this.game.add.text(width/1.3, height/6, 'CANCEL', textStyle(height/40, 'white'));
-		let Objective = this.game.add.text(width/3.5, height/4.5, 'Your objective is to land safely on the landing pad while avoiding obstacles', textStyle(height/40, 'white'));
-		let Obstacles = this.game.add.text(width/3.5, height/3.7, 'Colliding with asteroids will cause a time penalty, but colliding with terrain will destroy your ship', textStyle(height/40, 'white'));
-		let Controls = this.game.add.text(width/2.2, height/1.5, 'Controls:', textStyle(height/40, 'white'));
+		let style = { font: '18pt Arial', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 410 };
 
-		// CANCEL
-		Cancel.inputEnabled = true;
-		Cancel.events.onInputDown.add(this.showMainMenu, this);
+		//how to play
+		// let Cancel = this.game.add.text(width/1.3, height/6, 'CANCEL', style);
+		let GoBack = this.game.add.text(width/2.2, height/2, 'Go Back', style);
+		let Objective = this.game.add.text(width/2.9, height/4.5, 'Objective: Land safely on the landing pad while avoiding obstacles', style);
+		let Obstacles = this.game.add.text(width/2.9, height/3, 'Colliding with asteroids will cause a time penalty while colliding with terrain will destroy your ship', style);
+		let Controls = this.game.add.text(width/2.2, height/1.5, 'Controls:', style);
+
+		// GoBack
+		GoBack.inputEnabled = true;
+		GoBack.events.onInputDown.add(this.showMainMenu, this);
 
 
 		// ======== create ship ========

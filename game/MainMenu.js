@@ -66,9 +66,9 @@ LunarAdventure.MainMenu.prototype = {
 
 
 		// ======== create ship ========
-		ship = this.add.sprite(gameWidth/3.3, gameHeight/2.6, 'ship');
-		ship.scale.setTo(0.06, 0.06);
-		this.physics.p2.enable(ship, false);
+		// ship = this.add.sprite(gameWidth/3.3, gameHeight/2.6, 'ship');
+		// ship.scale.setTo(0.06, 0.06);
+		// this.physics.p2.enable(ship, false);
 
 
 		// ======== make collision groups ========
@@ -95,75 +95,75 @@ LunarAdventure.MainMenu.prototype = {
 		terrainContactMaterial.frictionRelaxation = 3;
 		terrainContactMaterial.surfaceVelocity = 0;
 
-		// define key UI images
-		// leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
-		leftKeyUp = this.add.sprite(centerX - 115, this.world.height - 120, 'leftKeyUp');
-		leftKeyUp.scale.setTo(0.25, 0.25);
-		leftKeyUp.visible = true;
+		// // define key UI images
+		// // leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
+		// leftKeyUp = this.add.sprite(centerX - 115, this.world.height - 120, 'leftKeyUp');
+		// leftKeyUp.scale.setTo(0.25, 0.25);
+		// leftKeyUp.visible = true;
 
-		// rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
-		rightKeyUp = this.add.sprite(centerX + 48, this.world.height - 120, 'rightKeyUp');
-		rightKeyUp.scale.setTo(0.25, 0.25);
-		rightKeyUp.visible = true;
+		// // rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
+		// rightKeyUp = this.add.sprite(centerX + 48, this.world.height - 120, 'rightKeyUp');
+		// rightKeyUp.scale.setTo(0.25, 0.25);
+		// rightKeyUp.visible = true;
 
-		// upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
-		upKeyUp = this.add.sprite(centerX - 35, this.world.height - 195, 'upKeyUp');
-		upKeyUp.scale.setTo(0.25, 0.25);
-		upKeyUp.visible = true;
+		// // upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
+		// upKeyUp = this.add.sprite(centerX - 35, this.world.height - 195, 'upKeyUp');
+		// upKeyUp.scale.setTo(0.25, 0.25);
+		// upKeyUp.visible = true;
 
-		// leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
-		leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, 'leftKeyDown');
-		leftKeyDown.scale.setTo(0.25, 0.25);
-		leftKeyDown.visible = false;
+		// // leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
+		// leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, 'leftKeyDown');
+		// leftKeyDown.scale.setTo(0.25, 0.25);
+		// leftKeyDown.visible = false;
 
 
-		// rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
-		rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, 'rightKeyDown');
-		rightKeyDown.scale.setTo(0.25, 0.25);
-		rightKeyDown.visible = false;
+		// // rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
+		// rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, 'rightKeyDown');
+		// rightKeyDown.scale.setTo(0.25, 0.25);
+		// rightKeyDown.visible = false;
 
-		// upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
-		upKeyDown = this.add.sprite(centerX - 35, this.world.height - 182, 'upKeyDown');
-		upKeyDown.scale.setTo(0.25, 0.25);
-		upKeyDown.visible = false;
+		// // upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
+		// upKeyDown = this.add.sprite(centerX - 35, this.world.height - 182, 'upKeyDown');
+		// upKeyDown.scale.setTo(0.25, 0.25);
+		// upKeyDown.visible = false;
 
-		// thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
-		thrustUI = this.add.sprite(centerX - 35, this.world.height - 215, 'thrust');
-		thrustUI.scale.setTo(0.25, 0.25);
+		// // thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
+		// thrustUI = this.add.sprite(centerX - 35, this.world.height - 215, 'thrust');
+		// thrustUI.scale.setTo(0.25, 0.25);
 
-		// rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
-		rotateRightUI = this.add.sprite(centerX + 48, this.world.height - 40, 'rotateR');
-		rotateRightUI.scale.setTo(0.25, 0.25);
+		// // rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
+		// rotateRightUI = this.add.sprite(centerX + 48, this.world.height - 40, 'rotateR');
+		// rotateRightUI.scale.setTo(0.25, 0.25);
 
-		// rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
-		rotateLeftUI = this.add.sprite(centerX - 152, this.world.height - 40, 'rotateL');
-		rotateLeftUI.scale.setTo(0.25, 0.25);
+		// // rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
+		// rotateLeftUI = this.add.sprite(centerX - 152, this.world.height - 40, 'rotateL');
+		// rotateLeftUI.scale.setTo(0.25, 0.25);
 
-		landingArrow = this.add.sprite(centerX, 2000, 'landingArrow');
-		landingArrow.scale.setTo(0.25, 0.25);
-		landingArrow.alpha = 0;
+		// landingArrow = this.add.sprite(centerX, 2000, 'landingArrow');
+		// landingArrow.scale.setTo(0.25, 0.25);
+		// landingArrow.alpha = 0;
 
-    leftIndicator = this.add.sprite(100, 400, 'landingArrow');
-    leftIndicator.scale.setTo(0.20, 0.20);
-    leftIndicator.alpha = 0;
-    leftIndicator.anchor.set(0.5);
-    leftIndicator.rotation = 1.5;
+  //   leftIndicator = this.add.sprite(100, 400, 'landingArrow');
+  //   leftIndicator.scale.setTo(0.20, 0.20);
+  //   leftIndicator.alpha = 0;
+  //   leftIndicator.anchor.set(0.5);
+  //   leftIndicator.rotation = 1.5;
 
-    rightIndicator = this.add.sprite(gameWidth - 100, 400, 'landingArrow');
-    rightIndicator.scale.setTo(0.20, 0.20);
-    rightIndicator.alpha = 0;
-    rightIndicator.anchor.set(0.5);
-    rightIndicator.rotation = -1.5;
+  //   rightIndicator = this.add.sprite(gameWidth - 100, 400, 'landingArrow');
+  //   rightIndicator.scale.setTo(0.20, 0.20);
+  //   rightIndicator.alpha = 0;
+  //   rightIndicator.anchor.set(0.5);
+  //   rightIndicator.rotation = -1.5;
 
-		this.world.bringToTop(leftKeyUp);
-		this.world.bringToTop(leftKeyDown);
-		this.world.bringToTop(rightKeyUp);
-		this.world.bringToTop(rightKeyDown);
-		this.world.bringToTop(upKeyUp);
-		this.world.bringToTop(upKeyDown);
-		this.world.bringToTop(thrustUI);
-		this.world.bringToTop(rotateRightUI);
-		this.world.bringToTop(rotateLeftUI);
+		// this.world.bringToTop(leftKeyUp);
+		// this.world.bringToTop(leftKeyDown);
+		// this.world.bringToTop(rightKeyUp);
+		// this.world.bringToTop(rightKeyDown);
+		// this.world.bringToTop(upKeyUp);
+		// this.world.bringToTop(upKeyDown);
+		// this.world.bringToTop(thrustUI);
+		// this.world.bringToTop(rotateRightUI);
+		// this.world.bringToTop(rotateLeftUI);
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
 
@@ -192,13 +192,13 @@ LunarAdventure.MainMenu.prototype = {
 		if (cursors.left.isDown) {
 			leftKeyUp.visible = false;
 			leftKeyDown.visible = true;
-			ship.body.rotateLeft(100);
+			// ship.body.rotateLeft(100);
 		}
 		// right key, rotate ship
 		else if (cursors.right.isDown){
 			rightKeyUp.visible = false;
 			rightKeyDown.visible = true;
-			ship.body.rotateRight(100);
+			// ship.body.rotateRight(100);
 		}
 		// stop rotating if key is not pressed
 		else {
@@ -206,21 +206,21 @@ LunarAdventure.MainMenu.prototype = {
 			leftKeyDown.visible = false;
 			rightKeyUp.visible = true;
 			rightKeyDown.visible = false;
-			ship.body.setZeroRotation();
+			// ship.body.setZeroRotation();
 		}
 		// up key, accelerate
 		if (cursors.up.isDown){
 			upKeyUp.visible = false;
 			upKeyDown.visible = true;
-			ship.body.thrust(200);
+			// ship.body.thrust(200);
 		} else {
 			upKeyUp.visible = true;
 			upKeyDown.visible = false;
 		}
 
 
-		if (ship.body.rotation < -3.15) { ship.body.rotation = 3.15; }
-		if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }
+		// if (ship.body.rotation < -3.15) { ship.body.rotation = 3.15; }
+		// if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }
 	},
 
 	startSinglePlayer: function() {
