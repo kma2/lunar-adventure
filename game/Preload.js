@@ -53,6 +53,9 @@ LunarAdventure.Preload.prototype = {
 		this.load.image('thrust', 'images/thrustUI.png');
 		this.load.image('rotateL', 'images/rotateLeftUI.png');
 		this.load.image('rotateR', 'images/rotateRightUI.png');
+
+		// Mobile
+		this.load.image('Mcontroler', 'images/Mcontroler.png');
 	},
 	loadKeyImage: function(arr) {
 		arr.forEach(char => {
@@ -68,6 +71,7 @@ LunarAdventure.Preload.prototype = {
 	this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 	this.game.scale.pageAlignVertically = true;
 	this.game.scale.pageAlignHorizontally = true;
-	this.state.start('MainMenu');
+	if (this.game.device.desktop) this.state.start('MainMenu');
+	else this.state.start('MMainMenu');
 	}
 };
