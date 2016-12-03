@@ -14,8 +14,8 @@ LunarAdventure.MultiSuccess.prototype = {
 			message = this.add.sprite(gameWidth/2 - 220, gameHeight/8, 'success');
 			message.scale.setTo(0.6, 0.6);
 
-			if (highScores.length < 8 || highScores[highScores.length-1].time > successGlobalTime) {
-				this.game.debug.text(`Your time of ${successGlobalTime}s made it to the high score leaderboard`, gameWidth/3.3, gameHeight/4 + 15);
+			if (highScores.length < 8 || highScores[highScores.length-1].time > endGameTime) {
+				this.game.debug.text(`Your time of ${endGameTime}s made it to the high score leaderboard`, gameWidth/3.3, gameHeight/4 + 15);
 
 				// input form
 				this.game.add.plugin(Fabrique.Plugins.InputField);
@@ -37,7 +37,7 @@ LunarAdventure.MultiSuccess.prototype = {
 				submitBtn.events.onInputDown.add(listener, this);
 			}
 			else {
-				this.game.debug.text(`Your time was ${successGlobalTime}s. Try to land faster next time!`, gameWidth/3, gameHeight/4 + 15);
+				this.game.debug.text(`Your time was ${endGameTime}s. Try to land faster next time!`, gameWidth/3, gameHeight/4 + 15);
 
 				//leaderBoard
 				let yVal = gameHeight/2.5;
@@ -99,7 +99,7 @@ LunarAdventure.MultiSuccess.prototype = {
 			userName = input.value;
 			if (userName.length > 0 && submitBtnClicked) {
 				putHasRun = true;
-				fetch(`/newHighScore/Cooperative/${successGlobalTime}`, {
+				fetch(`/newHighScore/Cooperative/${endGameTime}`, {
 					method: 'POST',
 					headers: {
 						"Content-type": "application/json; charset=UTF-8"

@@ -378,7 +378,7 @@ LunarAdventure.Multiplayer.prototype = {
 
 	hitTerrain: function(body1, body2) {
 		if(!this.invulnerable) {
-			successGlobalTime = globalTime;
+			endGameTime = globalTime;
 				let posX = ship.x;
 				let posY = ship.y;
 				ship.destroy();
@@ -476,7 +476,7 @@ LunarAdventure.Multiplayer.prototype = {
 
 	landedShip: function(body1, body2) {
 		if (ship.body) {
-			successGlobalTime = globalTime
+			endGameTime = globalTime
 			// if ship lands carefully, the landing is successful
 			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
 				console.log('ship landing successful');
