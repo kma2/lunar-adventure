@@ -15,7 +15,7 @@ LunarAdventure.SingleSuccess.prototype = {
 			message.scale.setTo(0.6, 0.6);
 
 			if (highScores.length < 8 || highScores[highScores.length-1].time > successGlobalTime) {
-				this.game.debug.text(`Your time of ${successGlobalTime}s made it to the high score leaderboard`, gameWidth/3.5, gameHeight/4 + 15);
+				this.game.add.text(gameWidth/3.5, gameHeight/4 + 15, `Your time of ${successGlobalTime}s made it to the high score leaderboard`, fontStyle);
 
 				// input form
 				this.game.add.plugin(Fabrique.Plugins.InputField);
@@ -37,17 +37,16 @@ LunarAdventure.SingleSuccess.prototype = {
 				submitBtn.events.onInputDown.add(listener, this);
 			}
 			else {
-				this.game.debug.text(`Your time was ${successGlobalTime}s. Try to land faster next time!`, gameWidth/3, gameHeight/4 + 15);
+				this.game.add.text(gameWidth/3, gameHeight/4 + 15, `Your time was ${successGlobalTime}s. Try to land faster next time!`, fontStyle);
 
 				//leaderBoard
 				let yVal = gameHeight/2.5;
 				for (var i = 0; i < highScores.length; i++) {
-					this.game.debug.text(`${highScores[i].time}s  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
+					this.game.add.text(gameWidth/2 - 85, yVal, `${highScores[i].time}s  -  ${highScores[i].name}`, fontStyle);
 					yVal += 30
 				}
 			}
-
-			this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 40, gameHeight - 150);
+			this.game.add.text(gameWidth/2.3 - 40, gameHeight - 150, 'Press spacebar to play again', fontStyle);
 		})
 		.catch(err => console.error('error retrieving scores', err))
 
@@ -78,14 +77,14 @@ LunarAdventure.SingleSuccess.prototype = {
 			.then(res => res.json())
 			.then(scoreList => {
 				highScores = scoreList;
-				this.game.debug.text(`You're on the leaderboard!`, gameWidth/2.5, gameHeight/4 + 15);
+				this.game.add.text(gameWidth/2.5, gameHeight/4 + 15, `You're on the leaderboard!`, fontStyle);
 				//leaderBoard
 				let yVal = gameHeight/2.3;
 				for (var i = 0; i < highScores.length; i++) {
-					this.game.debug.text(`${highScores[i].time}s  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
+					this.game.add.text(gameWidth/2 - 85, yVal, `${highScores[i].time}s  -  ${highScores[i].name}`, fontStyle);
 					yVal += 30
 				}
-				this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 45, gameHeight - 150);
+				this.game.add.text(gameWidth/2.3 - 45, gameHeight - 150, 'Press spacebar to play again', fontStyle);
 			})
 			.catch(err => console.error(err))
 		}

@@ -38,8 +38,6 @@ LunarAdventure.MainMenu.prototype = {
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
 
-		var fontStyle = { font: "22px Asap", fill: "#fff"};
-
 		let singlePlayer = this.game.add.text(width/2.7, height/2.3, "Single Player", fontStyle);
 		singlePlayer.strokeThickness = 1;
 		singlePlayer.inputEnabled = true;

@@ -24,7 +24,7 @@ LunarAdventure.Multiplayer.prototype = {
 		this.invulnerable = true;
     this.toggle = true;
     this.lifeCounter = 3;
-		
+
 		cursors = {
 			up: this.input.keyboard.addKey(Phaser.Keyboard.W),
 			left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
@@ -354,6 +354,10 @@ LunarAdventure.Multiplayer.prototype = {
   },
 
 	hitTerrain: function(body1, body2) {
+		successGlobalTime = globalTime
+		this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
+
+
 		if(!this.invulnerable) {
 				let posX = ship.x;
 				let posY = ship.y;
@@ -596,7 +600,6 @@ LunarAdventure.Multiplayer.prototype = {
 			this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
 
 			// left key, rotate ship
-
 			if (cursors.left.isDown) {
 				leftKeyUp.visible = false;
 				leftKeyDown.visible = true;

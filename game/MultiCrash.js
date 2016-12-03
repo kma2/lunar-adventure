@@ -11,16 +11,15 @@ LunarAdventure.MultiCrash.prototype = {
 			highScores = scoreList;
 			message = this.add.sprite(gameWidth/2 - 210, gameHeight/8, 'crash');
 			message.scale.setTo(0.6, 0.6);
-			this.game.debug.text(`Better luck next time! Your journey was ${successGlobalTime} seconds.`, gameWidth/3 - 30, gameHeight/3 - 60);
+			this.game.add.text(gameWidth/3 - 20, gameHeight/3 - 60, `Better luck next time! Your journey was ${successGlobalTime} seconds.`, fontStyle);
 
 			//leaderBoard
 			let yVal = gameHeight/3 + 30;
 			for (var i = 0; i < highScores.length; i++) {
-				this.game.debug.text(`${highScores[i].time}s  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
+				this.game.add.text(gameWidth/2 - 85, yVal, `${highScores[i].time}s   -   ${highScores[i].name}`, fontStyle);
 				yVal += 30
 			}
-
-			this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 45, gameHeight - 150);
+			this.game.add.text(gameWidth/2.3 - 45, gameHeight - 150, "Press spacebar to play again", fontStyle);
 		})
 		.catch(err => console.error('error retrieving scores', err))
 
