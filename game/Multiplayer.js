@@ -15,6 +15,9 @@ LunarAdventure.Multiplayer.prototype = {
 		//reset timer and global variables since might be coming from different play state
 		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
 
+		//create variable for our timer text
+		timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
+
 		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
@@ -612,11 +615,10 @@ LunarAdventure.Multiplayer.prototype = {
     }
 
 		if (ship.body) {
-			// debug info in top left corner
-			this.game.debug.text('time elapsed: ' + globalTime + "s", 32, 32);
-			this.game.debug.text('velocity x: ' + Math.floor(ship.body.velocity.x), 32, 52);
-			this.game.debug.text('velocity y: ' + Math.floor(ship.body.velocity.y), 32, 72);
-			this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
+
+			//move time to middle of screen
+			timerText.destroy()
+			timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
 
 			// left key, rotate ship
 			if (cursors.left.isDown) {
