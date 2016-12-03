@@ -96,7 +96,6 @@ app.put('/incrementGame/:gameType', (req, res, next) => {
 app.get('/totalTimesPlayed', (req, res, next) => {
 	GamesPlayed.findById(1)
 	.then(game => {
-		console.log(game)
 		let results = {'Single Count': game.singleCount, 'Multi Count': game.multiCount, 'Total Count': game.totalCount}
 		res.json(results)
 	})
@@ -107,7 +106,7 @@ function startServer() {
 	http.listen(PORT)
 	console.log('Listening on port', PORT)
 	console.log('Syncing the db')
-	db.sync()
+	db.sync({force: false})
 	.then(() => {
 		console.log('Database successfully synced')
 		GamesPlayed.findById(1)
