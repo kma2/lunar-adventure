@@ -14,6 +14,9 @@ LunarAdventure.Game.prototype = {
 		})
 		.catch(err => console.error('updating single did not work', err))
 
+		//create variable for our timer text
+		timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
+
 		tempCursors = {spacebar: this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)}
 
 
@@ -613,11 +616,10 @@ LunarAdventure.Game.prototype = {
     }
 
 		if (ship.body) {
-			// debug info in top left corner
-			this.game.debug.text('time elapsed: ' + globalTime + "s", 32, 32);
-			this.game.debug.text('velocity x: ' + Math.floor(ship.body.velocity.x), 32, 52);
-			this.game.debug.text('velocity y: ' + Math.floor(ship.body.velocity.y), 32, 72);
-			this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
+
+			//move time to middle of screen
+			timerText.destroy()
+			timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
 
 			// left key, rotate ship
 
