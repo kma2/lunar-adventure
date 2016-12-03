@@ -38,5 +38,7 @@ LunarAdventure.game.state.add('Game', LunarAdventure.Game);
 LunarAdventure.game.state.add('Multiplayer', LunarAdventure.Multiplayer);
 LunarAdventure.game.state.add('Lobby', LunarAdventure.Lobby);
 LunarAdventure.game.state.add('GameRoom', LunarAdventure.GameRoom);
+LunarAdventure.game.state.add('MGame', LunarAdventure.MGame);
+LunarAdventure.game.state.add('MMainMenu', LunarAdventure.MMainMenu);
 
 LunarAdventure.game.state.start('Preload');

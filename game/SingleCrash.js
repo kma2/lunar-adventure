@@ -40,8 +40,10 @@ LunarAdventure.SingleCrash.prototype = {
 		terrain.body.rotation -= 0.003;
 
 		//press spacebar to play again
-		if (tempCursors.spacebar.isDown) {
+		if (this.game.device.desktop && tempCursors.spacebar.isDown) {
 			this.game.state.start('MainMenu')
+		} else if (!this.game.device.desktop && this.game.input.activePointer.justPressed()) {
+			this.game.state.start('MMainMenu')
 		}
 	}
 };
