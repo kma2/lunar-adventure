@@ -15,9 +15,7 @@ LunarAdventure.HowToPlay.prototype = {
 
 		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
 
-		// logo = this.add.sprite(width/2 - 240, height/2.5, 'logo');
 		logo = this.add.sprite(width/3 - 20, height/8.4, 'logo');
-
 		logo.scale.setTo(0.8, 0.8);
 
 		// creating static terrain
@@ -28,14 +26,12 @@ LunarAdventure.HowToPlay.prototype = {
 		terrain.body.clearShapes();
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
-		let style = { font: '18pt Arial', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 410 };
+		let style = { font: '16pt Asap', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 420 };
 
 		//how to play
-		// let Cancel = this.game.add.text(width/1.3, height/6, 'CANCEL', style);
-		let GoBack = this.game.add.text(width/2.2, height/2, 'Go Back', style);
-		let Objective = this.game.add.text(width/2.9, height/4.5, 'Objective: Land safely on the landing pad while avoiding obstacles', style);
-		let Obstacles = this.game.add.text(width/2.9, height/3, 'Colliding with asteroids will cause a time penalty while colliding with terrain will destroy your ship', style);
-		let Controls = this.game.add.text(width/2.2, height/1.5, 'Controls:', style);
+		let Objective = this.game.add.text(width/2.9, height/4.5, 'Objective:  Land safely on the landing pad while avoiding obstacles.', style);
+		let Obstacles = this.game.add.text(width/2.9, height/3, 'Colliding with asteroids will cause a time penalty, but colliding with the terrain will destroy your ship!', style);
+		let GoBack = this.game.add.text(width/2.25, height/2 + 20, 'back to menu', style);
 
 		// GoBack
 		GoBack.inputEnabled = true;

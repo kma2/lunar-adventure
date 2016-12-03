@@ -6,7 +6,6 @@ var LunarAdventure = LunarAdventure || {};
 
 // global font style
 var fontStyle = { font: "22px Asap", fill: "#fff"};
-var fontStyle_small = { font: "18px Asap", fill: "#fff"};
 
 LunarAdventure.game = new Phaser.Game(1280,800, Phaser.AUTO);
 
