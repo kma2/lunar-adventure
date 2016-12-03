@@ -1,46 +1,32 @@
-//MODELS
-const Leaderboard = require('./db/models/leaderboard.js')
-const GamesPlayed = require('./db/models/gamesPlayed.js')
-
-//BODY PARSER
+// import modeules
 const bodyParser = require('body-parser');
-
-// MODULES
 const {resolve} = require('path');
-
-// APP
 const express = require('express');
-const app = express();
-
-const http = require('http').Server(app);
-// const io = require('socket.io')(http);
-const PORT = process.env.PORT || 3000
-
-//DATABASE
 const db = require('./db/db');
 
-// GAME OBJECTS
-// const Player = require("./entities/player");
-// const Game = require("./entities/game");
-// const Lobby = require("./lobby");
-// const GameRoom = require("./entities/gameRoom.js");
+// import models
+const Leaderboard = require('./db/models/leaderboard.js');
+const GamesPlayed = require('./db/models/gamesPlayed.js');
 
-// let games = {};
+// set up server
+const app = express();
+const http = require('http').Server(app);
+const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+// set up bodyParser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-// Set static dir
+// set static directory
 app.use(express.static(resolve(__dirname, '..', 'public')))
 .use(express.static(resolve(__dirname, '..', 'game')))
-.use(express.static(resolve(__dirname, '..', 'node_modules')))
+.use(express.static(resolve(__dirname, '..', 'node_modules')));
 
 app.get('/', (req, res, next) => {
-	res.sendFile(resolve(__dirname, '..','public', 'index.html'))
-})
+	res.sendFile(resolve(__dirname, '..','public', 'index.html'));
+});
 
-//get route for high scores
-
+// get route for high scores
 app.get('/highScore/:gameType', (req, res, next) => {
 	Leaderboard.findAll({
 		where: {
@@ -51,17 +37,9 @@ app.get('/highScore/:gameType', (req, res, next) => {
 	})
 	.then(scores => res.send(scores))
 	.catch(next)
-})
+});
 
-//get route for number of games played
-app.get('/gamesPlayed', (req, res, next) => {
-	GamesPlayed.findById(1)
-	.then(number => res.send(number))
-	.catch(next)
-})
-
-//post route for new high score
-
+// post route for new high score
 app.post('/newHighScore/:gameType/:time', (req, res, next) => {
 	Leaderboard.create({
 		name: req.body.name,
@@ -70,9 +48,9 @@ app.post('/newHighScore/:gameType/:time', (req, res, next) => {
 	})
 	.then(highScore => res.send(highScore))
 	.catch(next)
-})
+});
 
-//put route for games played
+// put route for updating the number of times game has been played
 app.put('/incrementGame/:gameType', (req, res, next) => {
 	if (req.params.gameType === 'SinglePlayer') {
 		GamesPlayed.findById(1)
@@ -90,9 +68,9 @@ app.put('/incrementGame/:gameType', (req, res, next) => {
 		})
 		.catch((err) => console.error("Problem updating multi", err))
 	}
-})
+});
 
-//get route for getting total game count
+// get route for getting total game count
 app.get('/totalTimesPlayed', (req, res, next) => {
 	GamesPlayed.findById(1)
 	.then(game => {
@@ -100,15 +78,14 @@ app.get('/totalTimesPlayed', (req, res, next) => {
 		res.json(results)
 	})
 	.catch(err => console.error('Problem getting total count', err))
-})
+});
 
 function startServer() {
-	http.listen(PORT)
-	console.log('Listening on port', PORT)
-	console.log('Syncing the db')
+	http.listen(PORT);
+	console.log('Listening on port', PORT);
 	db.sync({force: false})
 	.then(() => {
-		console.log('Database successfully synced')
+		console.log('Database successfully synced');
 		GamesPlayed.findById(1)
 		.then(game => {
 			if (!game) {
@@ -119,16 +96,18 @@ function startServer() {
 				.catch(err => console.error(err))
 			}
 		})
-	.catch((err) => console.error('Problem syncing database', err))
-	})
+		.catch((err) => console.error('Problem syncing database', err))
+	});
 }
-startServer()
 
+startServer();
+
+// error handler
 app.use((err, req, res, next) => {
-	res.status(500).send(err)
-})
+	res.status(500).send(err);
+});
 
-app.use((req, res) => res.sendStatus(404))
+app.use((req, res) => res.sendStatus(404));
 
 
 // SOCKET SETUP
