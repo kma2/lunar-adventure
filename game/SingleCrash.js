@@ -16,7 +16,7 @@ LunarAdventure.SingleCrash.prototype = {
 			//leaderBoard
 			let yVal = gameHeight/3 + 30;
 			for (var i = 0; i < highScores.length; i++) {
-				this.game.add.text(gameWidth/2 - 85, yVal, `${highScores[i].time}s   -   ${highScores[i].name}`, fontStyle);
+				this.game.debug.text(`${highScores[i].time}s   -   ${highScores[i].name}`, gameWidth/2 - 85, yVal);
 				yVal += 30
 			}
 			this.game.add.text(gameWidth/2.3 - 45, gameHeight - 150, "Press spacebar to play again", fontStyle);

@@ -354,10 +354,6 @@ LunarAdventure.Multiplayer.prototype = {
   },
 
 	hitTerrain: function(body1, body2) {
-		successGlobalTime = globalTime
-		this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
-
-
 		if(!this.invulnerable) {
 				let posX = ship.x;
 				let posY = ship.y;
