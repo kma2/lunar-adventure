@@ -376,8 +376,6 @@ LunarAdventure.Game.prototype = {
 
 	hitTerrain: function(body1, body2) {
 
-	this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverSuccess, this);
-
 	    if(!this.invulnerable) {
 	    	endGameTime = globalTime;
 			let posX = ship.x;
