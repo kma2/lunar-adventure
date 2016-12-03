@@ -14,9 +14,8 @@ LunarAdventure.SingleSuccess.prototype = {
 			message = this.add.sprite(gameWidth/2 - 220, gameHeight/8, 'success');
 			message.scale.setTo(0.6, 0.6);
 
-			if (highScores.length < 8 || highScores[highScores.length-1].time > endGameTime) {
-				this.game.debug.text(`Your time of ${endGameTime}s made it to the high score leaderboard`, gameWidth/3.5, gameHeight/4 + 15);
-
+			if (highScores.length < 8 || highScores[highScores.length-1].time > successGlobalTime) {
+				madeLeaderboardMessage = this.game.add.text(gameWidth/3.2, gameHeight/4 - 10, `Your time of ${successGlobalTime}s made it to the high score leaderboard`, fontStyle);
 				// input form
 				this.game.add.plugin(Fabrique.Plugins.InputField);
 				input = this.game.add.inputField(gameWidth/2.6 - 14, gameHeight/3.2, {
@@ -32,22 +31,20 @@ LunarAdventure.SingleSuccess.prototype = {
 					max: '15'
 				});
 
-				let submitBtn = this.game.add.sprite(gameWidth/1.9 + 20, gameHeight/3.2, 'submitBtn');
+				submitBtn = this.game.add.sprite(gameWidth/1.9 + 20, gameHeight/3.2, 'submitBtn');
 				submitBtn.inputEnabled = true;
 				submitBtn.events.onInputDown.add(listener, this);
 			}
 			else {
-				this.game.debug.text(`Your time was ${endGameTime}s. Try to land faster next time!`, gameWidth/3, gameHeight/4 + 15);
-
+				this.game.add.text(gameWidth/3 + 30, gameHeight/4, `Your time was ${successGlobalTime}s. Try to land faster next time!`, fontStyle);
 				//leaderBoard
-				let yVal = gameHeight/2.5;
+				let yVal = gameHeight/3 + 30;
 				for (var i = 0; i < highScores.length; i++) {
-					this.game.debug.text(`${highScores[i].time}s  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
-					yVal += 30
+					this.game.debug.text(`${highScores[i].time}s   -   ${highScores[i].name}`, gameWidth/2 - 85, yVal);
+					yVal += 30;
 				}
 			}
-
-			this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 40, gameHeight - 150);
+			this.game.add.text(gameWidth/2.3 - 40, gameHeight - 150, 'Press spacebar to play again', fontStyle);
 		})
 		.catch(err => console.error('error retrieving scores', err))
 
@@ -78,14 +75,17 @@ LunarAdventure.SingleSuccess.prototype = {
 			.then(res => res.json())
 			.then(scoreList => {
 				highScores = scoreList;
-				this.game.debug.text(`You're on the leaderboard!`, gameWidth/2.5, gameHeight/4 + 15);
+				madeLeaderboardMessage.destroy();
+				input.destroy();
+				submitBtn.destroy();
+				this.game.add.text(gameWidth/2.5, gameHeight/3 - 60, `You're on the leaderboard!`, fontStyle);
+
 				//leaderBoard
-				let yVal = gameHeight/2.3;
+				let yVal = gameHeight/3 + 30;
 				for (var i = 0; i < highScores.length; i++) {
-					this.game.debug.text(`${highScores[i].time}s  -  ${highScores[i].name}`, gameWidth/2 - 85, yVal)
+					this.game.debug.text(`${highScores[i].time}s   -   ${highScores[i].name}`, gameWidth/2 - 85, yVal);
 					yVal += 30
 				}
-				this.game.debug.text('Press spacebar to play again', gameWidth/2.3 - 45, gameHeight - 150);
 			})
 			.catch(err => console.error(err))
 		}

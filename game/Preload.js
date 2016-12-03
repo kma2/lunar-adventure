@@ -11,6 +11,9 @@ LunarAdventure.Preload.prototype = {
 		// this.preloadBar.anchor.setTo(0.5);
 		// this.load.setPreloadSprite(this.preloadBar);
 
+		// Load the Google WebFont Loader script
+    this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
 		//load game assets
 		this.load.image('astronaut', 'images/TheAstronautWhite.png');
 		this.load.image('logo', 'images/logo.png');

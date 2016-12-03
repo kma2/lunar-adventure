@@ -107,7 +107,7 @@ function startServer() {
 	http.listen(PORT)
 	console.log('Listening on port', PORT)
 	console.log('Syncing the db')
-	db.sync({force: false})
+	db.sync()
 	.then(() => {
 		console.log('Database successfully synced')
 		GamesPlayed.findById(1)
