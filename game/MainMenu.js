@@ -12,20 +12,15 @@ LunarAdventure.MainMenu.prototype = {
 		centerY = gameHeight + 500
 		cursors = this.input.keyboard.createCursorKeys();
 
-
 		this.physics.startSystem(Phaser.Physics.P2JS);
 
-		// this.background = this.game.add.tileSprite(0, 0, width, height, 'starfield');
 		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
 
-
-		// astronaut = this.add.sprite(width/2 - 50, height/4.5, 'astronaut');
-		astronaut = this.add.sprite(width/2.2 + 20, height/6, 'astronaut');
+		astronaut = this.add.sprite(width/2.2 + 20, height/10, 'astronaut');
 
 		astronaut.scale.setTo(0.5, 0.5);
 
-		// logo = this.add.sprite(width/2 - 240, height/2.5, 'logo');
-		logo = this.add.sprite(width/3 - 20, height/3, 'logo');
+		logo = this.add.sprite(width/3 - 20, height/4, 'logo');
 
 		logo.scale.setTo(0.8, 0.8);
 
@@ -37,32 +32,20 @@ LunarAdventure.MainMenu.prototype = {
 		terrain.body.clearShapes();
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
+		let style = { font: '16pt Arial', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 410 };
 
-		let singlePlayer = this.game.add.text(width/2.6, height/2.3, 'Single player', textStyle(height/40, 'white'));
+		let singlePlayer = this.game.add.text(width/2.6, height/2.6, 'Single player', style);
 		singlePlayer.inputEnabled = true;
 		singlePlayer.events.onInputDown.add(this.startSinglePlayer, this);
 
-		let multiPlayer = this.game.add.text(width/1.85, height/2.3, 'Cooperative', textStyle(height/40, 'white'));
+		let multiPlayer = this.game.add.text(width/1.85, height/2.6, 'Cooperative', style);
 		multiPlayer.inputEnabled = true;
 		multiPlayer.events.onInputDown.add(this.startMultiPlayer, this);
 
 		//how to play
-		let howToPlay = this.game.add.text(width/2.2 + 15, height/2, 'How to play', textStyle(height/40, 'white'));
+		let howToPlay = this.game.add.text(width/2.2 + 15, height/2, 'How to play', style);
 		howToPlay.inputEnabled = true;
 		howToPlay.events.onInputDown.add(this.showHowToPlay, this);
-
-
-		gyro.frequency = 10;
-		// start gyroscope detection
-		gyro.startTracking(function(o) {
-			// console.log(o.gamma)
-			// if (o.gamma > -30) {
-
-			// }
-			// // updating player velocity
-			// player.body.velocity.x += o.gamma/20;
-			// player.body.velocity.y += o.beta/20;
-		});
 
 
 		// ======== create ship ========
@@ -72,28 +55,28 @@ LunarAdventure.MainMenu.prototype = {
 
 
 		// ======== make collision groups ========
-		terrainCollisionGroup = this.physics.p2.createCollisionGroup();
-		shipCollisionGroup = this.physics.p2.createCollisionGroup();
+		// terrainCollisionGroup = this.physics.p2.createCollisionGroup();
+		// shipCollisionGroup = this.physics.p2.createCollisionGroup();
 
 		// ======== set collision groups ========
-		terrain.body.setCollisionGroup(terrainCollisionGroup);
-		ship.body.setCollisionGroup(shipCollisionGroup);
+		// terrain.body.setCollisionGroup(terrainCollisionGroup);
+		// ship.body.setCollisionGroup(shipCollisionGroup);
 
 		// ship and terrain collision
-		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
-		ship.body.collides(terrainCollisionGroup, this.hitTerrain, this);
+		// terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
+		// ship.body.collides(terrainCollisionGroup, this.hitTerrain, this);
 
 		// setting terrain bounce
-		var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
-		var terrainMaterial = this.game.physics.p2.createMaterial('terrainMaterial', terrain.body);
-		var terrainContactMaterial = this.game.physics.p2.createContactMaterial(shipMaterial, terrainMaterial);
-		terrainContactMaterial.friction = 0.3;
-		terrainContactMaterial.restitution = 1.3;
-		terrainContactMaterial.stiffness = 1e7;
-		terrainContactMaterial.relaxation = 3;
-		terrainContactMaterial.frictionStiffness = 1e7;
-		terrainContactMaterial.frictionRelaxation = 3;
-		terrainContactMaterial.surfaceVelocity = 0;
+		// var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
+		// var terrainMaterial = this.game.physics.p2.createMaterial('terrainMaterial', terrain.body);
+		// var terrainContactMaterial = this.game.physics.p2.createContactMaterial(shipMaterial, terrainMaterial);
+		// terrainContactMaterial.friction = 0.3;
+		// terrainContactMaterial.restitution = 1.3;
+		// terrainContactMaterial.stiffness = 1e7;
+		// terrainContactMaterial.relaxation = 3;
+		// terrainContactMaterial.frictionStiffness = 1e7;
+		// terrainContactMaterial.frictionRelaxation = 3;
+		// terrainContactMaterial.surfaceVelocity = 0;
 
 		// // define key UI images
 		// // leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
@@ -165,20 +148,6 @@ LunarAdventure.MainMenu.prototype = {
 		// this.world.bringToTop(rotateRightUI);
 		// this.world.bringToTop(rotateLeftUI);
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
-
-
-		// // input form
-		// this.game.add.plugin(Fabrique.Plugins.InputField);
-		// input = this.game.add.inputField(width/2.3, height/1.6, {
-		// 	font: '18px Arial',
-		// 	fill: '#212121',
-		// 	fontWeight: 'bold',
-		// 	width: 150,
-		// 	padding: 8,
-		// 	borderWidth: 1,
-		// 	borderColor: '#000',
-		// 	borderRadius: 6
-		// });
 	},
 
 	update: function() {
@@ -190,34 +159,33 @@ LunarAdventure.MainMenu.prototype = {
 			this.physics.p2.gravity.y = 70;
 		}
 		if (cursors.left.isDown) {
-			leftKeyUp.visible = false;
-			leftKeyDown.visible = true;
+			// leftKeyUp.visible = false;
+			// leftKeyDown.visible = true;
 			// ship.body.rotateLeft(100);
 		}
 		// right key, rotate ship
 		else if (cursors.right.isDown){
-			rightKeyUp.visible = false;
-			rightKeyDown.visible = true;
+			// rightKeyUp.visible = false;
+			// rightKeyDown.visible = true;
 			// ship.body.rotateRight(100);
 		}
 		// stop rotating if key is not pressed
 		else {
-			leftKeyUp.visible = true;
-			leftKeyDown.visible = false;
-			rightKeyUp.visible = true;
-			rightKeyDown.visible = false;
+			// leftKeyUp.visible = true;
+			// leftKeyDown.visible = false;
+			// rightKeyUp.visible = true;
+			// rightKeyDown.visible = false;
 			// ship.body.setZeroRotation();
 		}
 		// up key, accelerate
 		if (cursors.up.isDown){
-			upKeyUp.visible = false;
-			upKeyDown.visible = true;
+			// upKeyUp.visible = false;
+			// upKeyDown.visible = true;
 			// ship.body.thrust(200);
 		} else {
-			upKeyUp.visible = true;
-			upKeyDown.visible = false;
+			// upKeyUp.visible = true;
+			// upKeyDown.visible = false;
 		}
-
 
 		// if (ship.body.rotation < -3.15) { ship.body.rotation = 3.15; }
 		// if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }
@@ -228,9 +196,7 @@ LunarAdventure.MainMenu.prototype = {
 	},
 
 	startMultiPlayer: function() {
-		// if (input.value) {
-			this.game.state.start('Multiplayer');
-		// }
+		this.game.state.start('Multiplayer');
 	},
 
 	showHowToPlay: function() {
