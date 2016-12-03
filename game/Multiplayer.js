@@ -384,7 +384,7 @@ LunarAdventure.Multiplayer.prototype = {
 				ship.destroy();
 				explosion = this.add.sprite(posX - 30, posY, 'explosion')
 				explosion.scale.setTo(0.05, 0.05);
-				this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+				this.game.time.events.add(Phaser.Timer.SECOND * .5, this.gameOverCrash, this);
     }
     console.log("PHEW! You were invulnerable!");
 	},
