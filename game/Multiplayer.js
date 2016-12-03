@@ -292,11 +292,34 @@ LunarAdventure.Multiplayer.prototype = {
 		let currentTime = new Date();
 		let timeDifference = me.startTime.getTime() - currentTime.getTime();
 
-		//Time elapsed in seconds
-		me.timeElapsed = Math.abs(timeDifference / 1000);
+		//time elapsed in seconds
+		timeElapsedNoRound = Math.abs(timeDifference / 1000)
 
-		result = Math.floor(me.timeElapsed) + penalty;
+		//add penalty for hitting obstacles
+		timeElapsedNoRound += penalty
+
+		timeString = timeElapsedNoRound.toString()
+
+		//returns floating pt number
+		floatNum = parseFloat(Math.round(timeString * 100) / 100).toFixed(2)
+		result = floatNum;
+
+		//make sure we always show 2 decimal points
+		if (result.length === 5) {
+			result = result.slice(0,5)
+		}
+		else if (result.length === 6) {
+			result = result.slice(0,6)
+		}
+		else if (result.length === 7) {
+			result = result.slice(0,7)
+		}
+		else if (result.length === 8) {
+			result = result.slice(0,8)
+		}
+
 		me.timeLabel.text = result;
+
 		//make time text globally accessible
 		globalTime = me.timeLabel.text;
 	},
@@ -355,6 +378,7 @@ LunarAdventure.Multiplayer.prototype = {
 
 	hitTerrain: function(body1, body2) {
 		if(!this.invulnerable) {
+			successGlobalTime = globalTime;
 				let posX = ship.x;
 				let posY = ship.y;
 				ship.destroy();
@@ -452,12 +476,12 @@ LunarAdventure.Multiplayer.prototype = {
 
 	landedShip: function(body1, body2) {
 		if (ship.body) {
+			successGlobalTime = globalTime
 			// if ship lands carefully, the landing is successful
 			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
-				successGlobalTime = globalTime
 				console.log('ship landing successful');
 				ship.body = null; // disables the ship from moving
-				this.game.time.events.add(Phaser.Timer.SECOND * 2, this.gameOverSuccess, this);
+				this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverSuccess, this);
 			} else {
 				console.log('ship landing unsuccessful');
 				let posX = ship.x;
@@ -465,7 +489,7 @@ LunarAdventure.Multiplayer.prototype = {
 				ship.destroy();
 				explosion = this.add.sprite(posX - 30, posY, 'explosion')
 				explosion.scale.setTo(0.05, 0.05);
-				this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+				this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverCrash, this);
 			}
 		}
 	},
@@ -548,8 +572,7 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	gameOverCrash: function() {
-			successGlobalTime = globalTime;
-			this.game.state.start('MultiCrash', true, false);
+		this.game.state.start('MultiCrash', true, false);
 	},
 
 	gameOverSuccess: function() {

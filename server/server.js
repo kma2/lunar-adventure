@@ -96,7 +96,9 @@ app.put('/incrementGame/:gameType', (req, res, next) => {
 app.get('/totalTimesPlayed', (req, res, next) => {
 	GamesPlayed.findById(1)
 	.then(game => {
-		res.json(game.totalCount)
+		console.log(game)
+		let results = {'Single Count': game.singleCount, 'Multi Count': game.multiCount, 'Total Count': game.totalCount}
+		res.json(results)
 	})
 	.catch(err => console.error('Problem getting total count', err))
 })
