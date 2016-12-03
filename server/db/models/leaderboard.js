@@ -7,7 +7,6 @@ const Leaderboard = db.define('leaderboard', {
 		validate: {
 			notEmpty: true,
 		},
-		// allowNull: false
 	},
 	time: {
 		type: Sequelize.DOUBLE,
