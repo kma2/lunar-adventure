@@ -2,23 +2,37 @@ LunarAdventure.HowToPlay = function(){};
 
 LunarAdventure.HowToPlay.prototype = {
 	create: function() {
-
+		// ======== set up game world ========
 		gameWidth = this.world.width;
 		gameHeight = this.world.height;
 		putHasRun = false, submitBtnClicked = false, userName, input = null, achievedHighScore = false;
-		centerX = gameWidth/2
-		centerY = gameHeight + 500
+		centerX = gameWidth/2;
+		centerY = gameHeight + 500;
 		cursors = this.input.keyboard.createCursorKeys();
 
-
 		this.physics.startSystem(Phaser.Physics.P2JS);
-
 		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
+		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
+
+		// ======== add assets and text ========
 		logo = this.add.sprite(width/3 - 20, height/8.4, 'logo');
 		logo.scale.setTo(0.8, 0.8);
 
-		// creating static terrain
+		// text style
+		let style = { font: '16pt Asap', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 420 };
+
+		// how to play
+		this.game.add.text(width/2.9, height/4.5, 'Objective:  Land safely on the landing pad while avoiding obstacles.', style);
+		this.game.add.text(width/2.9, height/3, 'Colliding with asteroids will cause a time penalty, but colliding with the terrain will destroy your ship!', style);
+		this.game.add.text(width/2.25, height/2 + 20, 'back to menu', style);
+
+		// backToMenu click handler
+		backToMenu.inputEnabled = true;
+		backToMenu.events.onInputDown.add(this.showMainMenu, this);
+
+
+		// ======== create terrain & ship ========
 		terrain = this.add.sprite(width/2, height + 500, 'terrain');
 		terrain.anchor.set(0.5)
 		this.physics.p2.enable(terrain, false)
@@ -26,19 +40,6 @@ LunarAdventure.HowToPlay.prototype = {
 		terrain.body.clearShapes();
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
-		let style = { font: '16pt Asap', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 420 };
-
-		//how to play
-		let Objective = this.game.add.text(width/2.9, height/4.5, 'Objective:  Land safely on the landing pad while avoiding obstacles.', style);
-		let Obstacles = this.game.add.text(width/2.9, height/3, 'Colliding with asteroids will cause a time penalty, but colliding with the terrain will destroy your ship!', style);
-		let GoBack = this.game.add.text(width/2.25, height/2 + 20, 'back to menu', style);
-
-		// GoBack
-		GoBack.inputEnabled = true;
-		GoBack.events.onInputDown.add(this.showMainMenu, this);
-
-
-		// ======== create ship ========
 		ship = this.add.sprite(gameWidth/3.3, gameHeight/6.2, 'ship');
 		ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
@@ -48,15 +49,14 @@ LunarAdventure.HowToPlay.prototype = {
 		terrainCollisionGroup = this.physics.p2.createCollisionGroup();
 		shipCollisionGroup = this.physics.p2.createCollisionGroup();
 
-		// ======== set collision groups ========
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 
-		// ship and terrain collision
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
 		ship.body.collides(terrainCollisionGroup, this.hitTerrain, this);
 
-		// setting terrain bounce
+
+		// ======== terrain bounce ========
 		var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
 		var terrainMaterial = this.game.physics.p2.createMaterial('terrainMaterial', terrain.body);
 		var terrainContactMaterial = this.game.physics.p2.createContactMaterial(shipMaterial, terrainMaterial);
@@ -68,47 +68,38 @@ LunarAdventure.HowToPlay.prototype = {
 		terrainContactMaterial.frictionRelaxation = 3;
 		terrainContactMaterial.surfaceVelocity = 0;
 
-		// define key UI images
-		// leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
+
+		// ======== define key UI images ========
 		leftKeyUp = this.add.sprite(centerX - 115, this.world.height - 120, 'leftKeyUp');
 		leftKeyUp.scale.setTo(0.25, 0.25);
 		leftKeyUp.visible = true;
 
-		// rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
 		rightKeyUp = this.add.sprite(centerX + 48, this.world.height - 120, 'rightKeyUp');
 		rightKeyUp.scale.setTo(0.25, 0.25);
 		rightKeyUp.visible = true;
 
-		// upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
 		upKeyUp = this.add.sprite(centerX - 35, this.world.height - 195, 'upKeyUp');
 		upKeyUp.scale.setTo(0.25, 0.25);
 		upKeyUp.visible = true;
 
-		// leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
 		leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, 'leftKeyDown');
 		leftKeyDown.scale.setTo(0.25, 0.25);
 		leftKeyDown.visible = false;
 
-
-		// rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
 		rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, 'rightKeyDown');
 		rightKeyDown.scale.setTo(0.25, 0.25);
 		rightKeyDown.visible = false;
 
-		// upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
 		upKeyDown = this.add.sprite(centerX - 35, this.world.height - 182, 'upKeyDown');
 		upKeyDown.scale.setTo(0.25, 0.25);
 		upKeyDown.visible = false;
 
-		// thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
 		thrustUI = this.add.sprite(centerX - 35, this.world.height - 215, 'thrust');
 		thrustUI.scale.setTo(0.25, 0.25);
 
-		// rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
 		rotateRightUI = this.add.sprite(centerX + 48, this.world.height - 40, 'rotateR');
 		rotateRightUI.scale.setTo(0.25, 0.25);
 
-		// rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
 		rotateLeftUI = this.add.sprite(centerX - 152, this.world.height - 40, 'rotateL');
 		rotateLeftUI.scale.setTo(0.25, 0.25);
 
@@ -137,7 +128,6 @@ LunarAdventure.HowToPlay.prototype = {
 		this.world.bringToTop(thrustUI);
 		this.world.bringToTop(rotateRightUI);
 		this.world.bringToTop(rotateLeftUI);
-		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 	},
 
 	update: function() {
@@ -145,9 +135,11 @@ LunarAdventure.HowToPlay.prototype = {
 		this.background.tilePosition.x += 0.2;
 		this.background.tilePosition.y -= 0.2;
 
+		// ======== key controls ========
 		if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown) {
 			this.physics.p2.gravity.y = 70;
 		}
+		// left key, rotate ship
 		if (cursors.left.isDown) {
 			leftKeyUp.visible = false;
 			leftKeyDown.visible = true;
@@ -176,14 +168,15 @@ LunarAdventure.HowToPlay.prototype = {
 			upKeyUp.visible = true;
 			upKeyDown.visible = false;
 		}
-
-
-		if (ship.body.rotation < -3.15) { ship.body.rotation = 3.15; }
-		if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }
+		if (ship.body.rotation < -3.15) {
+			ship.body.rotation = 3.15;
+		}
+		if (ship.body.rotation > 3.15) {
+			ship.body.rotation = -3.15;
+		}
 	},
 
 	showMainMenu: function() {
 		this.game.state.start('MainMenu');
 	}
-
 };

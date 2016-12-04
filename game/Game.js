@@ -8,19 +8,19 @@ LunarAdventure.Game.prototype = {
 
 	create: function() {
 
-		//update the game count
+		// update the game count
 		fetch('/incrementGame/SinglePlayer', {
 			method: 'PUT'
 		})
 		.catch(err => console.error('updating single did not work', err))
 
-		//create variable for our timer text
+		// create variable for our timer text
 		timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
 
 		tempCursors = {spacebar: this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)}
 
 
-		//reset timer and global variables since might be coming from different play state
+		// reset timer and global variables since might be coming from different play state
 		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
 
 		this.physics.p2.gravity.y = 70;
