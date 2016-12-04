@@ -39,7 +39,7 @@ LunarAdventure.SingleSuccess.prototype = {
 				// submit button
 				submitBtn = this.game.add.sprite(gameWidth/1.9 + 20, gameHeight/3.2, 'submitBtn');
 				submitBtn.inputEnabled = true;
-				submitBtn.events.onInputDown.add(listener, this);
+				submitBtn.events.onInputDown.add(submitButtonListener, this);
 
 			// player doesn't achieve a high score
 			} else {
