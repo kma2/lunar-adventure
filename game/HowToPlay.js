@@ -14,7 +14,8 @@ LunarAdventure.HowToPlay.prototype = {
 		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
-		// lunar adventure logo
+
+		// ======== add assets and text ========
 		logo = this.add.sprite(width/3 - 20, height/8.4, 'logo');
 		logo.scale.setTo(0.8, 0.8);
 
@@ -134,6 +135,7 @@ LunarAdventure.HowToPlay.prototype = {
 		this.background.tilePosition.x += 0.2;
 		this.background.tilePosition.y -= 0.2;
 
+		// ======== key controls ========
 		if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown) {
 			this.physics.p2.gravity.y = 70;
 		}

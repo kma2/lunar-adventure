@@ -4,7 +4,7 @@ LunarAdventure.Preload = function(){};
 
 LunarAdventure.Preload.prototype = {
 	preload: function() {
-		// Load the Google WebFont Loader script
+		// load the Google WebFont Loader script
     this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 
 		// load game assets
@@ -65,7 +65,12 @@ LunarAdventure.Preload.prototype = {
 		this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		this.game.scale.pageAlignVertically = true;
 		this.game.scale.pageAlignHorizontally = true;
-		if (this.game.device.desktop) this.state.start('MainMenu');
-		else this.state.start('MMainMenu');
+
+		// check if device is desktop or mobile device
+		if (this.game.device.desktop) {
+			this.state.start('MainMenu');
+		} else {
+			this.state.start('MMainMenu');
+		}
 	}
 };

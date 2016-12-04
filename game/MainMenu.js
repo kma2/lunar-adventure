@@ -8,6 +8,7 @@ LunarAdventure.MainMenu.prototype = {
 		// reset global variables
 		putHasRun = false, submitBtnClicked = false, userName, formInput = null, achievedHighScore = false;
 
+		// ======== set up game world ========
 		gameWidth = this.world.width;
 		gameHeight = this.world.height;
 		centerX = gameWidth/2;
@@ -18,6 +19,8 @@ LunarAdventure.MainMenu.prototype = {
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
 
+
+		// ======== add assets and text ========
 		astronaut = this.add.sprite(width/2.2 + 15, height/5, 'astronaut');
 		astronaut.scale.setTo(0.5, 0.5);
 
@@ -64,5 +67,4 @@ LunarAdventure.MainMenu.prototype = {
 	showHowToPlay: function() {
 		this.game.state.start('HowToPlay');
 	}
-
 };

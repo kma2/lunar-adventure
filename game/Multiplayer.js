@@ -5,29 +5,42 @@ LunarAdventure.Multiplayer = function(){};
 LunarAdventure.Multiplayer.prototype = {
 
 	create: function() {
-
-		//update the game count
+		// update cooperative game count
 		fetch('/incrementGame/Cooperative', {
 			method: 'PUT'
 		})
-		.catch(err => console.error('updating multi did not work', err))
+		.catch(err => console.error('updating multi did not work', err));
 
-		//reset timer and global variables since might be coming from different play state
+
+		// ======== set timer ========
+		me = this;
+		me.startTime = new Date();
+		me.timeElapsed = 0;
+		me.createTimer();
+
+		me.gameTimer = this.game.time.events.loop(100, function() {
+			me.updateTimer();
+		});
+
 		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
+		timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle);
 
-		//create variable for our timer text
-		timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
 
+		// ======== set up game world ========
 		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);
+		this.invulnerable = true;
+    this.toggle = true;
+    this.lifeCounter = 3;
 		gameWidth = this.world.width;
 		gameHeight = this.world.height;
 		divide = 15;
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
-		this.invulnerable = true;
-    this.toggle = true;
-    this.lifeCounter = 3;
+		centerX = gameWidth/2;
+		centerY = gameHeight + 500;
 
+
+		// ======== define key controls ========
 		cursors = {
 			up: this.input.keyboard.addKey(Phaser.Keyboard.W),
 			left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
@@ -38,11 +51,8 @@ LunarAdventure.Multiplayer.prototype = {
 		keyboardArray = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'];
     cursorArray = ['up', 'left', 'right', 'spacebar'];
 
-		// initial angle for landing pad position
-		centerX = gameWidth/2
-		centerY = gameHeight + 500
 
-    // HEALTH BAR UI
+		// ======== health bar UI ========
     fullHealth = this.add.sprite(gameWidth - 200, 20, 'fullHealth');
     fullHealth.scale.setTo(0.25, 0.20);
     fullHealth.alpha = 1;
@@ -65,46 +75,38 @@ LunarAdventure.Multiplayer.prototype = {
     invulnerableUI.scale.setTo(0.25, 0.25);
     invulnerableUI.alpha = 0;
 
-		// define key UI images
-		// leftKeyUp = this.add.sprite(centerX + 395, 110, 'leftKeyUp');
+
+		// ======== add UI images ========
 		leftKeyUp = this.add.sprite(centerX - 115 + 250, this.world.height - 120, 'leftKeyUp');
 		leftKeyUp.scale.setTo(0.25, 0.25);
 		leftKeyUp.visible = true;
 
-		// rightKeyUp = this.add.sprite(centerX + 560, 110, 'rightKeyUp');
 		rightKeyUp = this.add.sprite(centerX + 48 + 250, this.world.height - 120, 'rightKeyUp');
 		rightKeyUp.scale.setTo(0.25, 0.25);
 		rightKeyUp.visible = true;
 
-		// upKeyUp = this.add.sprite(centerX + 480, 35, 'upKeyUp');
 		upKeyUp = this.add.sprite(centerX - 300, this.world.height - 120, 'upKeyLetterWUnpressed');
 		upKeyUp.scale.setTo(0.25, 0.25);
 		upKeyUp.visible = true;
 
-		// leftKeyDown = this.add.sprite(centerX + 395, 123, 'leftKeyDown');
 		leftKeyDown = this.add.sprite(centerX - 115 + 250, this.world.height - 107, 'leftKeyDown');
 		leftKeyDown.scale.setTo(0.25, 0.25);
 		leftKeyDown.visible = false;
 
-		// rightKeyDown = this.add.sprite(centerX + 560, 123, 'rightKeyDown');
 		rightKeyDown = this.add.sprite(centerX + 48 + 250, this.world.height - 107, 'rightKeyDown');
 		rightKeyDown.scale.setTo(0.25, 0.25);
 		rightKeyDown.visible = false;
 
-		// upKeyDown = this.add.sprite(centerX + 480, 48, 'upKeyDown');
 		upKeyDown = this.add.sprite(centerX - 300, this.world.height - 107, 'upKeyLetterWPressed');
 		upKeyDown.scale.setTo(0.25, 0.25);
 		upKeyDown.visible = false;
 
-		// thrustUI = this.add.sprite(centerX + 480, 15, 'thrust');
 		thrustUI = this.add.sprite(centerX - 300, this.world.height - 40, 'thrust');
 		thrustUI.scale.setTo(0.25, 0.25);
 
-		// rotateRightUI = this.add.sprite(centerX + 560, 190, 'rotateR');
 		rotateRightUI = this.add.sprite(centerX + 48 + 250, this.world.height - 40, 'rotateR');
 		rotateRightUI.scale.setTo(0.25, 0.25);
 
-		// rotateLeftUI = this.add.sprite(centerX + 360, 190, 'rotateL');
 		rotateLeftUI = this.add.sprite(centerX - 152 + 250, this.world.height - 40, 'rotateL');
 		rotateLeftUI.scale.setTo(0.25, 0.25);
 
@@ -124,17 +126,21 @@ LunarAdventure.Multiplayer.prototype = {
     rightIndicator.anchor.set(0.5);
     rightIndicator.rotation = -1.5;
 
-		// Arrow tweens
-    this.add.tween(leftIndicator).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 3, true)
-    this.add.tween(rightIndicator).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 3, true)
-		this.add.tween(landingArrow).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true)
+		// arrow tweens
+    this.add.tween(leftIndicator).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 3, true);
+    this.add.tween(rightIndicator).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None, true, 0, 3, true);
+		this.add.tween(landingArrow).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
 
-		// set boundaries on left and right of the screen
-		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
-		customBounds = { left: null, right: null, top: null, bottom: null };
-
-		// initial angle for landing pad position
-		this.landingPadAngle = 1.5;
+		// render UI elements on top of other elements
+		this.world.bringToTop(leftKeyUp);
+		this.world.bringToTop(leftKeyDown);
+		this.world.bringToTop(rightKeyUp);
+		this.world.bringToTop(rightKeyDown);
+		this.world.bringToTop(upKeyUp);
+		this.world.bringToTop(upKeyDown);
+		this.world.bringToTop(thrustUI);
+		this.world.bringToTop(rotateRightUI);
+		this.world.bringToTop(rotateLeftUI);
 
 
 		// ======== make collision groups ========
@@ -145,16 +151,7 @@ LunarAdventure.Multiplayer.prototype = {
 		boundsCollisionGroup = this.physics.p2.createCollisionGroup();
 
 
-		// ======== create ship ========
-		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
-		ship.scale.setTo(0.06, 0.06);
-		this.physics.p2.enable(ship, false);
-
-		// create bounds on sides of screen
-		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
-
 		// ======== generate obstacles! ========
-
 		// create groups for each of the obstacle categories
 		smallObstacles = this.add.group();
 		smallObstacles.enableBody = true;
@@ -177,34 +174,60 @@ LunarAdventure.Multiplayer.prototype = {
 		this.generateMediumObstacles();
 		this.generateLargeObstacles();
 
-
-		// ======== create terrain ========
-		terrain = this.add.sprite(centerX, centerY, 'terrain');
-		terrain.anchor.set(0.5)
-		this.physics.p2.enable(terrain, false)
-		terrain.body.static = true;
-		terrain.body.clearShapes();
-		terrain.body.loadPolygon('tracedTerrain', 'terrain');
+		// generate waves of obstacles
+		this.sendObstacleWaves();
 
 
-		// ======== create landing pad  ========
+		// ======== create ship, terrain, and landing pad ========
+		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
+		ship.scale.setTo(0.06, 0.06);
+		this.physics.p2.enable(ship, false);
+
 		landingPad = this.add.sprite(centerX, 2000, 'landingPad');
 		landingPad.scale.setTo(0.2, 0.2);
 		this.physics.p2.enable(landingPad, false);
 		landingPad.body.static = true;
 
+		// initial angle for landing pad position
+		this.landingPadAngle = 1.5;
 
-		// ======== create virtual boundary  ========
+		terrain = this.add.sprite(centerX, centerY, 'terrain');
+		terrain.anchor.set(0.5);
+		this.physics.p2.enable(terrain, false);
+		terrain.body.static = true;
+		terrain.body.clearShapes();
+		terrain.body.loadPolygon('tracedTerrain', 'terrain');
+
+		// set terrain bounce
+		var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
+		var terrainMaterial = this.game.physics.p2.createMaterial('terrainMaterial', terrain.body);
+		var terrainContactMaterial = this.game.physics.p2.createContactMaterial(shipMaterial, terrainMaterial);
+		terrainContactMaterial.friction = 0.3;
+		terrainContactMaterial.restitution = 1.3;
+		terrainContactMaterial.stiffness = 1e7;
+		terrainContactMaterial.relaxation = 3;
+		terrainContactMaterial.frictionStiffness = 1e7;
+		terrainContactMaterial.frictionRelaxation = 3;
+		terrainContactMaterial.surfaceVelocity = 0;
+
+
+		// ======== boundaries  ========
 		boundaryL = this.add.sprite(width/10, 0, 'boundary');
 		boundaryL.scale.setTo(width/1800, height/700);
 		this.physics.p2.enable(boundaryL);
 		boundaryL.body.static = true;
 
-
 		boundaryR = this.add.sprite(width/10*8.9, 0, 'boundary');
-		boundaryR.scale.setTo(width/1800, height/700)
+		boundaryR.scale.setTo(width/1800, height/700);
 		this.physics.p2.enable(boundaryR);
 		boundaryR.body.static = true;
+
+		// create bounds on bounds of screen
+		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
+
+		// set boundaries on left and right of the screen
+		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
+		customBounds = { left: null, right: null, top: null, bottom: null };
 
 
 		// ======== set collision groups ========
@@ -225,62 +248,26 @@ LunarAdventure.Multiplayer.prototype = {
 		// ship and obstacle collision
 		ship.body.collides(obstaclesCollisionGroup, this.hitObstacle, this);
 
-
 		// ship and boundary collistion
 		boundaryL.body.collides(shipCollisionGroup);
 		boundaryR.body.collides(shipCollisionGroup);
 		ship.body.collides(boundsCollisionGroup, null, this);
 
-		// setting terrain bounce
-		var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
-		var terrainMaterial = this.game.physics.p2.createMaterial('terrainMaterial', terrain.body);
-		var terrainContactMaterial = this.game.physics.p2.createContactMaterial(shipMaterial, terrainMaterial);
-		terrainContactMaterial.friction = 0.3;
-		terrainContactMaterial.restitution = 1.3;
-		terrainContactMaterial.stiffness = 1e7;
-		terrainContactMaterial.relaxation = 3;
-		terrainContactMaterial.frictionStiffness = 1e7;
-		terrainContactMaterial.frictionRelaxation = 3;
-		terrainContactMaterial.surfaceVelocity = 0;
 
-		//timer
-		me = this;
-		me.startTime = new Date()
-		me.timeElapsed = 0;
-		me.createTimer();
-
-		me.gameTimer = this.game.time.events.loop(100, function() {
-			me.updateTimer();
-		});
-
-		//particle effects for time penalties
-		//putting this in another location and grabbing ships position slows game down too much
-
-		//emitter for 5 sec penalty
+		// ======== particle effects for time penalties ========
+		// emitter for 5 sec penalty
 		fivePenaltyEmitter = this.game.add.emitter(220,32,5000);
 		fivePenaltyEmitter.makeParticles('penalty5');
 		fivePenaltyEmitter.minParticleScale = 0.1;
 		fivePenaltyEmitter.maxParticleScale = 0.1;
 		fivePenaltyEmitter.gravity = 50;
-		//emitter for 10 sec penalty
+
+		// emitter for 10 sec penalty
 		tenPenaltyEmitter = this.game.add.emitter(230,32,5000);
 		tenPenaltyEmitter.makeParticles('penalty10');
 		tenPenaltyEmitter.minParticleScale = 0.1;
 		tenPenaltyEmitter.maxParticleScale = 0.1;
 		tenPenaltyEmitter.gravity = 50;
-
-		this.world.bringToTop(leftKeyUp);
-		this.world.bringToTop(leftKeyDown);
-		this.world.bringToTop(rightKeyUp);
-		this.world.bringToTop(rightKeyDown);
-		this.world.bringToTop(upKeyUp);
-		this.world.bringToTop(upKeyDown);
-		this.world.bringToTop(thrustUI);
-		this.world.bringToTop(rotateRightUI);
-		this.world.bringToTop(rotateLeftUI);
-
-		// generate waves of obstacles
-		this.sendObstacleWaves();
 	},
 
 	createTimer: function() {
@@ -296,51 +283,51 @@ LunarAdventure.Multiplayer.prototype = {
 		let timeDifference = me.startTime.getTime() - currentTime.getTime();
 
 		//time elapsed in seconds
-		timeElapsedNoRound = Math.abs(timeDifference / 1000)
+		timeElapsedNoRound = Math.abs(timeDifference / 1000);
 
 		//add penalty for hitting obstacles
-		timeElapsedNoRound += penalty
+		timeElapsedNoRound += penalty;
 
-		timeString = timeElapsedNoRound.toString()
+		timeString = timeElapsedNoRound.toString();
 
 		//returns floating pt number
-		floatNum = parseFloat(Math.round(timeString * 100) / 100).toFixed(2)
+		floatNum = parseFloat(Math.round(timeString * 100) / 100).toFixed(2);
 		result = floatNum;
 
 		//make sure we always show 2 decimal points
 		if (result.length === 5) {
-			result = result.slice(0,5)
+			result = result.slice(0, 5);
 		}
 		else if (result.length === 6) {
-			result = result.slice(0,6)
+			result = result.slice(0, 6);
 		}
 		else if (result.length === 7) {
-			result = result.slice(0,7)
+			result = result.slice(0, 7);
 		}
 		else if (result.length === 8) {
-			result = result.slice(0,8)
+			result = result.slice(0, 8);
 		}
 
 		me.timeLabel.text = result;
 
-		//make time text globally accessible
+		// make time text globally accessible
 		globalTime = me.timeLabel.text;
 	},
 
 	// landing pad rotation functions
-	rotateLandingPadRight: function(radius, startX, startY){
+	rotateLandingPadRight: function(radius, startX, startY) {
 		var x = startX + Math.cos(this.landingPadAngle) * radius;
 		var y = startY + Math.sin(this.landingPadAngle) * radius;
 		landingPad.body.x = x;
 		landingPad.body.y = y;
-		if(this.landingPadAngle <= 360){
+		if(this.landingPadAngle <= 360) {
 			this.landingPadAngle += 0.003;
 		} else {
 				this.landingPadAngle = 0;
 		}
 	},
 
-	rotateLandingPadLeft: function(radius, startX, startY){
+	rotateLandingPadLeft: function(radius, startX, startY) {
 		var x = startX + Math.cos(this.landingPadAngle) * radius;
 		var y = startY + Math.sin(this.landingPadAngle) * radius;
 		landingPad.body.x = x;
@@ -352,18 +339,18 @@ LunarAdventure.Multiplayer.prototype = {
 		}
 	},
 
-	rotateLandingArrow: function(radius, startX, startY){
+	rotateLandingArrow: function(radius, startX, startY) {
 		landingArrow.x = landingPad.body.x - 32;
 		landingArrow.y = landingPad.body.y - 85;
 	},
 
-	setVulnerablity: function(){
-    if(this.lifeCounter === 3){
+	setVulnerablity: function() {
+    if(this.lifeCounter === 3) {
       this.fullHealth.alpha = 1;
     } else if (this.lifeCounter === 2) {
       this.fullHealth.alpha = 0;
       this.twoHealth.alpha = 1;
-    } else if(this.lifeCounter === 1) {
+    } else if (this.lifeCounter === 1) {
       this.fullHealth.alpha = 0;
       this.twoHealth.alpha = 0;
       this.oneHealth.alpha = 1;
@@ -401,7 +388,6 @@ LunarAdventure.Multiplayer.prototype = {
       this.twoHealth.alpha = 0;
       this.oneHealth.alpha = 0;
 
-
       if(this.lifeCounter === 0) {
         // change key
         // cursor to change (left, right, up)
@@ -427,8 +413,8 @@ LunarAdventure.Multiplayer.prototype = {
             collisionToggle = false;
           }
         }
-          cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
 
+				cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
 
         // assign new key icons
         if (cursor === 'left') {
@@ -466,12 +452,12 @@ LunarAdventure.Multiplayer.prototype = {
           upKeyDown.visible = false;
         }
 
-      //add penalty for when you hit obstacle
+      	// add penalty for when you hit obstacle
         penalty += 5;
         console.log('hit obstacle! 5 seconds added!');
 
-        //penalty emitter
-        fivePenaltyEmitter.start(true, 1000, null, 1)
+        // penalty emitter
+        fivePenaltyEmitter.start(true, 1000, null, 1);
       }
     }
     this.invulnerable = true;
@@ -498,31 +484,31 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	generateSmallObstacles: function(amount, startX, startY, velocityX, velocityY) {
-			for (var i = 0; i < amount; i++) {
-				var obstacle = smallObstacles.create(startX, startY, 'smallObstacle', this.rnd.pick(frames));
-				obstacle.body.setCircle(25);
-				obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-				obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+		for (var i = 0; i < amount; i++) {
+			var obstacle = smallObstacles.create(startX, startY, 'smallObstacle', this.rnd.pick(frames));
+			obstacle.body.setCircle(25);
+			obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+			obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
-				this.game.physics.p2.enable(obstacle, false);
-				obstacle.body.static = true;
-				obstacle.body.velocity.y = velocityY;
-				obstacle.body.velocity.x = velocityX;
-			}
+			this.game.physics.p2.enable(obstacle, false);
+			obstacle.body.static = true;
+			obstacle.body.velocity.y = velocityY;
+			obstacle.body.velocity.x = velocityX;
+		}
 	},
 
 	generateTinyObstacles: function(amount, startX, startY, velocityX, velocityY) {
-			for (var i = 0; i < amount; i++) {
-				var obstacle = smallObstacles.create(startX, startY, 'tinyObstacle', this.rnd.pick(frames));
-				obstacle.body.setCircle(8);
-				obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-				obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
+		for (var i = 0; i < amount; i++) {
+			var obstacle = smallObstacles.create(startX, startY, 'tinyObstacle', this.rnd.pick(frames));
+			obstacle.body.setCircle(8);
+			obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
+			obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
-				this.game.physics.p2.enable(obstacle, false);
-				obstacle.body.static = true;
-				obstacle.body.velocity.y = velocityY;
-				obstacle.body.velocity.x = velocityX;
-			}
+			this.game.physics.p2.enable(obstacle, false);
+			obstacle.body.static = true;
+			obstacle.body.velocity.y = velocityY;
+			obstacle.body.velocity.x = velocityX;
+		}
 	},
 
 	generateMediumObstacles: function(amount, startX, startY, velocityX, velocityY) {
@@ -583,7 +569,6 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	update: function() {
-
     if(this.invulnerable){
       if(this.toggle){
 
@@ -615,7 +600,6 @@ LunarAdventure.Multiplayer.prototype = {
     }
 
 		if (ship.body) {
-
 			//move time to middle of screen
 			timerText.destroy()
 			timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
@@ -649,7 +633,6 @@ LunarAdventure.Multiplayer.prototype = {
 				upKeyUp.visible = true;
 				upKeyDown.visible = false;
 			}
-
 
 			if (ship.body.rotation < -3.15) { ship.body.rotation = 3.15; }
 			if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }

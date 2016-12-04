@@ -21,7 +21,7 @@ LunarAdventure.SingleCrash.prototype = {
 			let yVal = gameHeight/3 + 30;
 			for (var i = 0; i < highScores.length; i++) {
 				this.game.debug.text(`${highScores[i].time}s   -   ${highScores[i].name}`, gameWidth/2 - 85, yVal);
-				yVal += 30
+				yVal += 30;
 			}
 
 			this.game.add.text(gameWidth/2.3 - 45, gameHeight - 150, "Press spacebar to play again", fontStyle);
@@ -46,10 +46,10 @@ LunarAdventure.SingleCrash.prototype = {
 
 		// on desktop, press spacebar to play again
 		if (this.game.device.desktop && tempCursors.spacebar.isDown) {
-			this.game.state.start('MainMenu')
+			this.game.state.start('MainMenu');
 		// on mobile, tap to play again
 		} else if (!this.game.device.desktop && this.game.input.activePointer.justPressed()) {
-			this.game.state.start('MMainMenu')
+			this.game.state.start('MMainMenu');
 		}
 	}
 };
