@@ -27,6 +27,7 @@
     "phaser": "^2.6.2",
     "phaser-input": "^1.2.6",
     "sequelize": "^3.27.0",
+    "supertest": "^2.0.1",
     "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
