@@ -81,23 +81,27 @@ app.get('/totalTimesPlayed', (req, res, next) => {
 });
 
 function startServer() {
-	http.listen(PORT);
-	console.log('Listening on port', PORT);
-	db.sync({force: false})
-	.then(() => {
-		console.log('Database successfully synced');
-		GamesPlayed.findById(1)
-		.then(game => {
-			if (!game) {
-				GamesPlayed.create({
-					singleCount: 0,
-					multiCount: 0
-				})
-				.catch(err => console.error(err))
-			}
-		})
-		.catch((err) => console.error('Problem syncing database', err))
-	});
+
+	// Module.parent checks if we're already listening (like in tests) to prevent EADDRINUSE error
+	if (!module.parent) {
+		http.listen(PORT);
+		console.log('Listening on port', PORT);
+		db.sync({force: false})
+		.then(() => {
+			console.log('Database successfully synced');
+			GamesPlayed.findById(1)
+			.then(game => {
+				if (!game) {
+					GamesPlayed.create({
+						singleCount: 0,
+						multiCount: 0
+					})
+					.catch(err => console.error(err))
+				}
+			})
+			.catch((err) => console.error('Problem syncing database', err))
+		});
+	}	
 }
 
 startServer();
@@ -108,6 +112,8 @@ app.use((err, req, res, next) => {
 });
 
 app.use((req, res) => res.sendStatus(404));
+
+module.exports = app;
 
 
 // SOCKET SETUP
