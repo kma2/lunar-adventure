@@ -282,29 +282,25 @@ LunarAdventure.Multiplayer.prototype = {
 		let currentTime = new Date();
 		let timeDifference = me.startTime.getTime() - currentTime.getTime();
 
-		//time elapsed in seconds
+		// time elapsed in seconds
 		timeElapsedNoRound = Math.abs(timeDifference / 1000);
 
-		//add penalty for hitting obstacles
+		// add penalty for hitting obstacles
 		timeElapsedNoRound += penalty;
-
 		timeString = timeElapsedNoRound.toString();
 
-		//returns floating pt number
+		// returns floating pt number
 		floatNum = parseFloat(Math.round(timeString * 100) / 100).toFixed(2);
 		result = floatNum;
 
-		//make sure we always show 2 decimal points
+		// make sure we always show 2 decimal points
 		if (result.length === 5) {
 			result = result.slice(0, 5);
-		}
-		else if (result.length === 6) {
+		} else if (result.length === 6) {
 			result = result.slice(0, 6);
-		}
-		else if (result.length === 7) {
+		} else if (result.length === 7) {
 			result = result.slice(0, 7);
-		}
-		else if (result.length === 8) {
+		} else if (result.length === 8) {
 			result = result.slice(0, 8);
 		}
 
@@ -320,7 +316,8 @@ LunarAdventure.Multiplayer.prototype = {
 		var y = startY + Math.sin(this.landingPadAngle) * radius;
 		landingPad.body.x = x;
 		landingPad.body.y = y;
-		if(this.landingPadAngle <= 360) {
+
+		if (this.landingPadAngle <= 360) {
 			this.landingPadAngle += 0.003;
 		} else {
 				this.landingPadAngle = 0;
@@ -332,6 +329,7 @@ LunarAdventure.Multiplayer.prototype = {
 		var y = startY + Math.sin(this.landingPadAngle) * radius;
 		landingPad.body.x = x;
 		landingPad.body.y = y;
+
 		if(this.landingPadAngle <= 360){
 			this.landingPadAngle -= 0.003;
 		} else {
@@ -345,7 +343,7 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	setVulnerablity: function() {
-    if(this.lifeCounter === 3) {
+    if (this.lifeCounter === 3) {
       this.fullHealth.alpha = 1;
     } else if (this.lifeCounter === 2) {
       this.fullHealth.alpha = 0;
@@ -366,58 +364,49 @@ LunarAdventure.Multiplayer.prototype = {
     ship.tint = 0xFFFFFF;
   },
 
+	// if the ship is not invulnerable upon hitting terrain, it will crash
 	hitTerrain: function(body1, body2) {
-		if(!this.invulnerable) {
+		if (!this.invulnerable) {
 			endGameTime = globalTime;
-				let posX = ship.x;
-				let posY = ship.y;
-				ship.destroy();
-				explosion = this.add.sprite(posX - 30, posY, 'explosion')
-				explosion.scale.setTo(0.05, 0.05);
-				this.game.time.events.add(Phaser.Timer.SECOND * .5, this.gameOverCrash, this);
+			let posX = ship.x;
+			let posY = ship.y;
+			ship.destroy();
+			explosion = this.add.sprite(posX - 30, posY, 'explosion');
+			explosion.scale.setTo(0.05, 0.05);
+			this.game.time.events.add(Phaser.Timer.SECOND * .5, this.gameOverCrash, this);
     }
-    console.log("PHEW! You were invulnerable!");
 	},
 
 	hitObstacle: function(body1, body2) {
     // change key
     if(!this.invulnerable){
       this.lifeCounter--;
-      console.log("LIFE COUNTER IS", this.lifeCounter);
       this.fullHealth.alpha = 0;
       this.twoHealth.alpha = 0;
       this.oneHealth.alpha = 0;
 
-      if(this.lifeCounter === 0) {
-        // change key
-        // cursor to change (left, right, up)
-        var cursor = cursorArray[Math.floor(Math.random() * 3)]
-
-        // new key
-        var newKey = keyboardArray[Math.floor(Math.random() * 26)]
-
-        console.log("THIS IS THE CURSOR", cursor)
-        console.log("IS NOW....")
-        console.log("THIS IS NEW KEY", newKey)
-
+			// change key
+      if (this.lifeCounter === 0) {
+        var cursorToChange = cursorArray[Math.floor(Math.random() * 3)];
+        var newKey = keyboardArray[Math.floor(Math.random() * 26)];
         var collisionToggle = true;
 
-        while(collisionToggle){
+        while (collisionToggle) {
           if (cursors.left.keyCode === Phaser.KeyCode[newKey]) {
-            newKey = keyboardArray[Math.floor(Math.random() * 26)]
+            newKey = keyboardArray[Math.floor(Math.random() * 26)];
           } else if (cursors.right.keyCode === Phaser.KeyCode[newKey]){
-            newKey = keyboardArray[Math.floor(Math.random() * 26)]
+            newKey = keyboardArray[Math.floor(Math.random() * 26)];
           } else if (cursors.up.keyCode === Phaser.KeyCode[newKey]){
-            newKey = keyboardArray[Math.floor(Math.random() * 26)]
+            newKey = keyboardArray[Math.floor(Math.random() * 26)];
           } else {
             collisionToggle = false;
           }
         }
 
-				cursors[cursor] = this.input.keyboard.addKey(Phaser.KeyCode[newKey])
+				cursors[cursorToChange] = this.input.keyboard.addKey(Phaser.KeyCode[newKey]);
 
         // assign new key icons
-        if (cursor === 'left') {
+        if (cursorToChange === 'left') {
           leftKeyUp.destroy();
           leftKeyDown.destroy();
 
@@ -428,7 +417,7 @@ LunarAdventure.Multiplayer.prototype = {
           leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, `leftKeyLetter${newKey}Pressed`);
           leftKeyDown.scale.setTo(0.25, 0.25);
           leftKeyDown.visible = false;
-        } else if ( cursor === 'right') {
+        } else if ( cursorToChange === 'right') {
           rightKeyUp.destroy();
           rightKeyDown.destroy();
 
@@ -452,11 +441,8 @@ LunarAdventure.Multiplayer.prototype = {
           upKeyDown.visible = false;
         }
 
-      	// add penalty for when you hit obstacle
+      	// add penalty for when ship hits obstacle
         penalty += 5;
-        console.log('hit obstacle! 5 seconds added!');
-
-        // penalty emitter
         fivePenaltyEmitter.start(true, 1000, null, 1);
       }
     }
@@ -468,15 +454,15 @@ LunarAdventure.Multiplayer.prototype = {
 			endGameTime = globalTime
 			// if ship lands carefully, the landing is successful
 			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
-				console.log('ship landing successful');
-				ship.body = null; // disables the ship from moving
+				// disable ship from moving
+				ship.body = null;
 				this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverSuccess, this);
+			// else, ship crashes
 			} else {
-				console.log('ship landing unsuccessful');
 				let posX = ship.x;
 				let posY = ship.y;
 				ship.destroy();
-				explosion = this.add.sprite(posX - 30, posY, 'explosion')
+				explosion = this.add.sprite(posX - 30, posY, 'explosion');
 				explosion.scale.setTo(0.05, 0.05);
 				this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverCrash, this);
 			}
@@ -541,19 +527,17 @@ LunarAdventure.Multiplayer.prototype = {
 
 	sendObstacleWaves: function() {
 		waveOne = this.game.time.events.loop(6000, () => {
-			this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 400 + Math.random() * 300, -40 + Math.random() * -60, -20 + Math.random() * -50
-			);
-			this.generateTinyObstacles(1, Math.random() * -100, 400 + Math.random() * 300, 40 + Math.random() * 60, -20 + Math.random() * -50
-			);
+			this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 400 + Math.random() * 300, -40 + Math.random() * -60, -20 + Math.random() * -50);
+			this.generateTinyObstacles(1, Math.random() * -100, 400 + Math.random() * 300, 40 + Math.random() * 60, -20 + Math.random() * -50);
 		});
+
 		waveTwo = this.game.time.events.loop(10000, () => {
-			this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 100 + Math.random() * 400, -60 + Math.random() * -50, -30 + Math.random() * -30
-			);
-			this.generateSmallObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 50, + Math.random() * -30
-			);
+			this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 100 + Math.random() * 400, -60 + Math.random() * -50, -30 + Math.random() * -30);
+			this.generateSmallObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 50, + Math.random() * -30);
 			this.generateMediumObstacles(1, this.world.width + Math.random() * 100, 200 + Math.random() * 400, -60 + Math.random() * -100, -20 + Math.random() * -30);
 			this.generateMediumObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 100, + Math.random() * -30);
 		});
+
 		waveThree = this.game.time.events.loop(30000, () => {
 			this.generateLargeObstacles(1, this.world.width + 250, 400 + Math.random() * 200, -80, -40 + Math.random() * -20);
 			this.generateLargeObstacles(1, -1000, 800 + Math.random() * 200, 80, -40 + Math.random() * -20);
@@ -569,9 +553,8 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	update: function() {
-    if(this.invulnerable){
-      if(this.toggle){
-
+    if (this.invulnerable) {
+      if (this.toggle){
         // ship flash
         let shipTween = this.game.add.tween(ship).to({tint: 0x00FFFF}, 200, "Linear", true);
         shipTween.repeat(11);
@@ -580,15 +563,14 @@ LunarAdventure.Multiplayer.prototype = {
         let invulnerableTween = this.game.add.tween(invulnerableUI).from({alpha : 1}, 200, "Linear", true);
         invulnerableTween.repeat(11);
 
-        // HEALTHBAR UI
-        if(this.lifeCounter === 2){
+        // update healthbar UI
+        if (this.lifeCounter === 2) {
           let fullHealthTween = this.game.add.tween(fullHealth).from({alpha : 1}, 200, "Linear", true);
           fullHealthTween.repeat(11);
-        } else if(this.lifeCounter === 1) {
+        } else if (this.lifeCounter === 1) {
           let twoHealthTween = this.game.add.tween(twoHealth).from({alpha : 1}, 200, "Linear", true);
           twoHealthTween.repeat(11);
         } else if (this.lifeCounter === 0) {
-          console.log("HELLO!!!")
           let oneHealthTween = this.game.add.tween(oneHealth).from({alpha : 1}, 200, "Linear", true);
           oneHealthTween.repeat(11);
         }
@@ -600,7 +582,7 @@ LunarAdventure.Multiplayer.prototype = {
     }
 
 		if (ship.body) {
-			//move time to middle of screen
+			// update the timer
 			timerText.destroy()
 			timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
 
@@ -609,21 +591,20 @@ LunarAdventure.Multiplayer.prototype = {
 				leftKeyUp.visible = false;
 				leftKeyDown.visible = true;
 				ship.body.rotateLeft(100);
-			}
 			// right key, rotate ship
-			else if (cursors.right.isDown){
+			} else if (cursors.right.isDown){
 				rightKeyUp.visible = false;
 				rightKeyDown.visible = true;
 				ship.body.rotateRight(100);
-			}
 			// stop rotating if key is not pressed
-			else {
+			} else {
 				leftKeyUp.visible = true;
 				leftKeyDown.visible = false;
 				rightKeyUp.visible = true;
 				rightKeyDown.visible = false;
 				ship.body.setZeroRotation();
 			}
+
 			// up key, accelerate
 			if (cursors.up.isDown){
 				upKeyUp.visible = false;
