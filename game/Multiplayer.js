@@ -5,6 +5,7 @@ LunarAdventure.Multiplayer = function(){};
 LunarAdventure.Multiplayer.prototype = {
 
 	create: function() {
+
 		// update cooperative game count
 		fetch('/incrementGame/Cooperative', {
 			method: 'PUT'
@@ -37,7 +38,7 @@ LunarAdventure.Multiplayer.prototype = {
 		divide = 15;
 		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
 		// initial angle for landing pad position
-		centerX = gameWidth/2;
+		centerX = gameWidth * 0.5;
 		centerY = gameHeight + 500;
 
 
@@ -58,7 +59,7 @@ LunarAdventure.Multiplayer.prototype = {
 		shipCollisionGroup = this.physics.p2.createCollisionGroup();
 		landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
 		obstaclesCollisionGroup = this.physics.p2.createCollisionGroup();
-		boundsCollisionGroup = this.physics.p2.createCollisionGroup();
+		// boundsCollisionGroup = this.physics.p2.createCollisionGroup();
 
 
 		// ======== generate obstacles ========
@@ -83,7 +84,7 @@ LunarAdventure.Multiplayer.prototype = {
 
 
 		// ======== create ship, terrain, and landing pad ========
-		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
+		ship = this.add.sprite(gameWidth * 0.5, gameHeight * 0.2, 'ship');
 		ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
 
@@ -116,16 +117,16 @@ LunarAdventure.Multiplayer.prototype = {
 
 
 		// ======== boundaries  ========
-		boundaryL = this.add.sprite(-1, 0, 'boundary');
-		boundaryL.scale.setTo(width/1000000, height);
-		this.physics.p2.enable(boundaryL, true);
-		boundaryL.body.static = true;
+		// boundaryL = this.add.sprite(-1, 0, 'boundary');
+		// boundaryL.scale.setTo(width/1000000, height);
+		// this.physics.p2.enable(boundaryL, true);
+		// boundaryL.body.static = true;
 
 
-		boundaryR = this.add.sprite(width, 0, 'boundary');
-		boundaryR.scale.setTo(width/1000000, height)
-		this.physics.p2.enable(boundaryR, true);
-		boundaryR.body.static = true;
+		// boundaryR = this.add.sprite(width, 0, 'boundary');
+		// boundaryR.scale.setTo(width/1000000, height)
+		// this.physics.p2.enable(boundaryR, true);
+		// boundaryR.body.static = true;
 
 		// create bounds on bounds of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
@@ -268,14 +269,14 @@ LunarAdventure.Multiplayer.prototype = {
 		let timeDifference = me.startTime.getTime() - currentTime.getTime();
 
 		// time elapsed in seconds
-		timeElapsedNoRound = Math.abs(timeDifference / 1000);
+		timeElapsedNoRound = Math.abs(timeDifference * 0.001);
 
 		// add penalty for hitting obstacles
 		timeElapsedNoRound += penalty;
 		timeString = timeElapsedNoRound.toString();
 
 		// returns floating pt number
-		floatNum = parseFloat(Math.round(timeString * 100) / 100).toFixed(2);
+		floatNum = parseFloat(Math.round(timeString * 100) * 0.01).toFixed(2);
 		result = floatNum;
 
 		// display two decimal points
@@ -357,7 +358,7 @@ LunarAdventure.Multiplayer.prototype = {
 			ship.destroy();
 			explosion = this.add.sprite(posX - 30, posY, 'explosion');
 			explosion.scale.setTo(0.05, 0.05);
-			this.game.time.events.add(Phaser.Timer.SECOND * .5, this.gameOverCrash, this);
+			this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.gameOverCrash, this);
     }
 	},
 
