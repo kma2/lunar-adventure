@@ -1,23 +1,15 @@
 var LunarAdventure = LunarAdventure || {};
 
-//loading the game assets
 LunarAdventure.Preload = function(){};
 
 LunarAdventure.Preload.prototype = {
 	preload: function() {
-
-		// loading progress bar
-		// this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 128, 'preloadbar');
-		// this.preloadBar.anchor.setTo(0.5);
-		// this.load.setPreloadSprite(this.preloadBar);
-
 		// Load the Google WebFont Loader script
     this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 
-		//load game assets
+		// load game assets
 		this.load.image('astronaut', 'images/TheAstronautWhite.png');
 		this.load.image('logo', 'images/logo.png');
-		// this.load.image('ship', 'images/rocket.png');
 		this.load.image('ship', 'images/new_rocket.png');
 		this.load.image('explosion', 'images/explosion.png');
 		this.load.physics('tracedTerrain', 'terrainPolygon.json');
@@ -54,9 +46,10 @@ LunarAdventure.Preload.prototype = {
 		this.load.image('rotateL', 'images/rotateLeftUI.png');
 		this.load.image('rotateR', 'images/rotateRightUI.png');
 
-		// Mobile
+		// mobile
 		this.load.image('Mcontroler', 'images/Mcontroler.png');
 	},
+
 	loadKeyImage: function(arr) {
 		arr.forEach(char => {
 			this.load.image(`upKeyLetter${char}Pressed`, `images/keyUI/${char}UpPressed.png`);
@@ -65,13 +58,14 @@ LunarAdventure.Preload.prototype = {
 			this.load.image(`rightKeyLetter${char}Unpressed`, `images/keyUI/${char}RightUnpressed.png`);
 			this.load.image(`leftKeyLetter${char}Pressed`, `images/keyUI/${char}LeftPressed.png`);
 			this.load.image(`leftKeyLetter${char}Unpressed`, `images/keyUI/${char}LeftUnpressed.png`);
-		})
+		});
 	},
+
 	create: function() {
-	this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-	this.game.scale.pageAlignVertically = true;
-	this.game.scale.pageAlignHorizontally = true;
-	if (this.game.device.desktop) this.state.start('MainMenu');
-	else this.state.start('MMainMenu');
+		this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		this.game.scale.pageAlignVertically = true;
+		this.game.scale.pageAlignHorizontally = true;
+		if (this.game.device.desktop) this.state.start('MainMenu');
+		else this.state.start('MMainMenu');
 	}
 };
