@@ -1,19 +1,19 @@
 LunarAdventure.MainMenu = function(){};
 
-let putHasRun = false, submitBtnClicked = false, userName, input = null, achievedHighScore = false;
+// global variables
+let putHasRun, submitBtnClicked, userName, formInput, achievedHighScore;
 
 LunarAdventure.MainMenu.prototype = {
 	create: function() {
 
 		gameWidth = this.world.width;
 		gameHeight = this.world.height;
-		putHasRun = false, submitBtnClicked = false, userName, input = null, achievedHighScore = false;
+		putHasRun = false, submitBtnClicked = false, userName, formInput = null, achievedHighScore = false;
 		centerX = gameWidth/2
 		centerY = gameHeight + 500
 		cursors = this.input.keyboard.createCursorKeys();
 
 		this.physics.startSystem(Phaser.Physics.P2JS);
-
 		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
 
 		astronaut = this.add.sprite(width/2.2 + 15, height/5, 'astronaut');
@@ -31,7 +31,6 @@ LunarAdventure.MainMenu.prototype = {
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
 		let style = { font: '16pt Arial', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 410 };
-
 
 		let singlePlayer = this.game.add.text(width/2.6, height/2.3, 'Single player', style);
 		singlePlayer.inputEnabled = true;

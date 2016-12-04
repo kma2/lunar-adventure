@@ -23,7 +23,7 @@ LunarAdventure.SingleSuccess.prototype = {
 
 				// input form
 				this.game.add.plugin(Fabrique.Plugins.InputField);
-				input = this.game.add.inputField(gameWidth/2.6 - 14, gameHeight/3.2, {
+				formInput = this.game.add.inputField(gameWidth/2.6 - 14, gameHeight/3.2, {
 					font: '18px Arial',
 					fill: '#212121',
 					fontWeight: 'normal',
@@ -83,7 +83,7 @@ LunarAdventure.SingleSuccess.prototype = {
 
 				// remove madeLeaderboardMessage, input form, and submit button
 				madeLeaderboardMessage.destroy();
-				input.destroy();
+				formInput.destroy();
 				submitBtn.destroy();
 				this.game.add.text(gameWidth/2.5, gameHeight/3 - 60, `You're on the leaderboard!`, fontStyle);
 
@@ -101,8 +101,8 @@ LunarAdventure.SingleSuccess.prototype = {
 	update: function() {
 		terrain.body.rotation -= 0.003;
 
-		if (putHasRun !== true && input !== null) {
-			userName = input.value;
+		if (putHasRun !== true && formInput !== null) {
+			userName = formInput.value;
 
 			// add the user's userName and time to db
 			// then display the updated leaderboard
