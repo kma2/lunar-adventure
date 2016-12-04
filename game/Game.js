@@ -132,8 +132,8 @@ LunarAdventure.Game.prototype = {
 		this.add.tween(landingArrow).to({ alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true)
 
 		// set boundaries on left and right of the screen
-		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
-		customBounds = { left: null, right: null, top: null, bottom: null };
+		// var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
+		// customBounds = { left: null, right: null, top: null, bottom: null };
 
 		// initial angle for landing pad position
 		this.landingPadAngle = 1.5;

@@ -212,30 +212,30 @@ LunarAdventure.Multiplayer.prototype = {
 
 
 		// ======== boundaries  ========
-		boundaryL = this.add.sprite(width/10, 0, 'boundary');
-		boundaryL.scale.setTo(width/1800, height/700);
-		this.physics.p2.enable(boundaryL);
-		boundaryL.body.static = true;
+		// boundaryL = this.add.sprite(width/10, 0, 'boundary');
+		// boundaryL.scale.setTo(width/1800, height/700);
+		// this.physics.p2.enable(boundaryL);
+		// boundaryL.body.static = true;
 
-		boundaryR = this.add.sprite(width/10*8.9, 0, 'boundary');
-		boundaryR.scale.setTo(width/1800, height/700);
-		this.physics.p2.enable(boundaryR);
-		boundaryR.body.static = true;
+		// boundaryR = this.add.sprite(width/10*8.9, 0, 'boundary');
+		// boundaryR.scale.setTo(width/1800, height/700);
+		// this.physics.p2.enable(boundaryR);
+		// boundaryR.body.static = true;
 
 		// create bounds on bounds of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
 		// set boundaries on left and right of the screen
-		var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
-		customBounds = { left: null, right: null, top: null, bottom: null };
+		// var bounds = new Phaser.Rectangle(gameWidth/divide, 0, gameWidth/divide * (divide-2), gameHeight);
+		// customBounds = { left: null, right: null, top: null, bottom: null };
 
 
 		// ======== set collision groups ========
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
-		boundaryL.body.setCollisionGroup(boundsCollisionGroup);
-		boundaryR.body.setCollisionGroup(boundsCollisionGroup);
+		// boundaryL.body.setCollisionGroup(boundsCollisionGroup);
+		// boundaryR.body.setCollisionGroup(boundsCollisionGroup);
 
 		// ship and terrain collision
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
@@ -249,9 +249,9 @@ LunarAdventure.Multiplayer.prototype = {
 		ship.body.collides(obstaclesCollisionGroup, this.hitObstacle, this);
 
 		// ship and boundary collistion
-		boundaryL.body.collides(shipCollisionGroup);
-		boundaryR.body.collides(shipCollisionGroup);
-		ship.body.collides(boundsCollisionGroup, null, this);
+		// boundaryL.body.collides(shipCollisionGroup);
+		// boundaryR.body.collides(shipCollisionGroup);
+		// ship.body.collides(boundsCollisionGroup, null, this);
 
 
 		// ======== particle effects for time penalties ========
@@ -272,9 +272,7 @@ LunarAdventure.Multiplayer.prototype = {
 
 	createTimer: function() {
 		let me = this;
-		//this fixes issue with timer appearing in some place other than upper left corner
 		me.timeLabel = {};
-		// me.timeLabel = me.game.add.text(500, 500, "", {font: "100px Arial", fill: "#fff"});
 	},
 
 	updateTimer: function() {
