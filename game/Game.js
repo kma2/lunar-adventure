@@ -155,6 +155,8 @@ LunarAdventure.Game.prototype = {
 		// create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
+		// setBoundsToWorld: function (left, right, top, bottom, setCollisionGroup)
+
 		// ======== generate obstacles! ========
 
 		// create groups for each of the obstacle categories
@@ -193,24 +195,24 @@ LunarAdventure.Game.prototype = {
 
 
 		// ======== create virtual boundary  ========
-		boundaryL = this.add.sprite(width/10, 0, 'boundary');
-		boundaryL.scale.setTo(width/1800, height/700);
-		this.physics.p2.enable(boundaryL);
-		boundaryL.body.static = true;
+		// boundaryL = this.add.sprite(width/10, 0, 'boundary');
+		// boundaryL.scale.setTo(width/1800, height/700);
+		// this.physics.p2.enable(boundaryL);
+		// boundaryL.body.static = true;
 
 
-		boundaryR = this.add.sprite(width/10*8.9, 0, 'boundary');
-		boundaryR.scale.setTo(width/1800, height/700)
-		this.physics.p2.enable(boundaryR);
-		boundaryR.body.static = true;
+		// boundaryR = this.add.sprite(width/10*8.9, 0, 'boundary');
+		// boundaryR.scale.setTo(width/1800, height/700)
+		// this.physics.p2.enable(boundaryR);
+		// boundaryR.body.static = true;
 
 
 		// ======== set collision groups ========
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
-		boundaryL.body.setCollisionGroup(boundsCollisionGroup);
-		boundaryR.body.setCollisionGroup(boundsCollisionGroup);
+		// boundaryL.body.setCollisionGroup(boundsCollisionGroup);
+		// boundaryR.body.setCollisionGroup(boundsCollisionGroup);
 
 		// ship and terrain collision
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
@@ -225,9 +227,9 @@ LunarAdventure.Game.prototype = {
 
 
 		// ship and boundary collistion
-		boundaryL.body.collides(shipCollisionGroup);
-		boundaryR.body.collides(shipCollisionGroup);
-		ship.body.collides(boundsCollisionGroup, null, this);
+		// boundaryL.body.collides(shipCollisionGroup);
+		// boundaryR.body.collides(shipCollisionGroup);
+		// ship.body.collides(boundsCollisionGroup, null, this);
 
 		// setting terrain bounce
 		var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
