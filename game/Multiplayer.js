@@ -20,11 +20,11 @@ LunarAdventure.Multiplayer.prototype = {
 		gameWidth = this.world.width;
 		gameHeight = this.world.height;
 		divide = 15;
-		tilesprite = this.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
+    this.background = this.game.add.image(-100,0,'background');
 		this.invulnerable = true;
     this.toggle = true;
     this.lifeCounter = 3;
-		
+
 		cursors = {
 			up: this.input.keyboard.addKey(Phaser.Keyboard.W),
 			left: this.input.keyboard.addKey(Phaser.Keyboard.LEFT),
@@ -144,8 +144,9 @@ LunarAdventure.Multiplayer.prototype = {
 
 		// ======== create ship ========
 		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
-		ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
+    ship.body.clearShapes();
+		ship.body.loadPolygon('tracedShip', 'ship');
 
 		// create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
@@ -186,7 +187,6 @@ LunarAdventure.Multiplayer.prototype = {
 
 		// ======== create landing pad  ========
 		landingPad = this.add.sprite(centerX, 2000, 'landingPad');
-		landingPad.scale.setTo(0.2, 0.2);
 		this.physics.p2.enable(landingPad, false);
 		landingPad.body.static = true;
 
@@ -630,21 +630,17 @@ LunarAdventure.Multiplayer.prototype = {
 			if (ship.body.rotation < -3.15) { ship.body.rotation = 3.15; }
 			if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }
 
-			let radius = 820;
+			let radius = 835;
 
 			// terrain spins when rocket nears the edges
 			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
 				terrain.body.rotation += 0.003;
 				this.rotateLandingPadRight(radius, centerX, centerY);
 				this.rotateLandingArrow();
-				tilesprite.tilePosition.x += 0.6;
-				tilesprite.tilePosition.y -= 0.3;
 			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
 				this.rotateLandingPadLeft(radius, centerX, centerY);
 				this.rotateLandingArrow();
 				terrain.body.rotation -= 0.003;
-				tilesprite.tilePosition.x -= 0.6;
-				tilesprite.tilePosition.y -= 0.3;
 			}
 
     }

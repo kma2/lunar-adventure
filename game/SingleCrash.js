@@ -25,7 +25,7 @@ LunarAdventure.SingleCrash.prototype = {
 		.catch(err => console.error('error retrieving scores', err))
 
 		this.physics.startSystem(Phaser.Physics.P2JS);
-		this.background = this.game.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
+  this.background = this.game.add.image(-100,0,'background');
 
 		// creating static terrain
 		terrain = this.add.sprite(centerX, centerY, 'terrain');

@@ -14,21 +14,22 @@ LunarAdventure.Preload.prototype = {
 		//load game assets
 		this.load.image('astronaut', 'images/TheAstronautWhite.png');
 		this.load.image('logo', 'images/logo.png');
-		// this.load.image('ship', 'images/rocket.png');
 		this.load.image('ship', 'images/new_rocket.png');
+    this.load.physics('tracedShip', 'rocketCollisionBox.json');
 		this.load.image('explosion', 'images/explosion.png');
-		this.load.physics('tracedTerrain', 'terrainPolygon.json');
-		this.load.image('terrain', 'images/terrain2.png');
+		this.load.physics('tracedTerrain', 'PlanetColissionBox.json');
+		this.load.image('terrain', 'images/FinalPlanet.png');
 		this.load.image('starfield', 'images/starfield.png');
+    this.load.image('background', 'images/lunarBackground.png')
 		this.load.image('landingPad', 'images/landingPad.png');
 		this.load.image('crash', 'images/crash_message.png');
 		this.load.image('success', 'images/success_message.png');
 		this.load.image('submitBtn', 'images/submitButton.png');
 
 		// obstacles
-		this.load.image('tinyObstacle', 'images/tinyObstacle.png');
-		this.load.image('smallObstacle', 'images/smallObstacle.png');
-		this.load.image('mediumObstacle', 'images/mediumObstacle.png');
+		this.load.image('tinyObstacle', 'images/SmallAsteroid.png');
+		this.load.image('smallObstacle', 'images/MediumAsteroid.png');
+		this.load.image('mediumObstacle', 'images/LargeAsteroid.png');
 		this.load.image('largeObstacle', 'images/largeObstacle.png');
 		this.load.image('penalty10', 'images/penalty10.png');
 		this.load.image('penalty5', 'images/penalty5.png')
@@ -50,6 +51,13 @@ LunarAdventure.Preload.prototype = {
 		this.load.image('thrust', 'images/thrustUI.png');
 		this.load.image('rotateL', 'images/rotateLeftUI.png');
 		this.load.image('rotateR', 'images/rotateRightUI.png');
+
+    // HEALTHBAR UI
+    this.load.image('fullHealth', 'images/fullHealthBar.png');
+    this.load.image('twoHealth', 'images/twoHealthBar.png');
+    this.load.image('oneHealth', 'images/oneHealthBar.png');
+    this.load.image('emptyHealth', 'images/emptyHealthBar.png');
+    this.load.image('invulnerable', 'images/Invulnerable.png');
 	},
 	loadKeyImage: function(arr) {
 		arr.forEach(char => {

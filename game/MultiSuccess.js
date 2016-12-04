@@ -53,7 +53,7 @@ LunarAdventure.MultiSuccess.prototype = {
 
 		this.physics.startSystem(Phaser.Physics.P2JS);
 
-		this.background = this.game.add.tileSprite(0, 0, gameWidth, gameHeight, 'starfield');
+  this.background = this.game.add.image(-100,0,'background');
 
 
 		// creating static terrain

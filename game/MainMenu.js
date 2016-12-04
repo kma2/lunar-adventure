@@ -11,12 +11,14 @@ LunarAdventure.MainMenu.prototype = {
 		centerX = gameWidth/2
 		centerY = gameHeight + 500
 		cursors = this.input.keyboard.createCursorKeys();
+    this.time.advancedTiming = true;
 
 
 		this.physics.startSystem(Phaser.Physics.P2JS);
 
 		// this.background = this.game.add.tileSprite(0, 0, width, height, 'starfield');
-		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
+    this.background = this.game.add.image(-100,0,'background');
+		// this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
 
 
 		// astronaut = this.add.sprite(width/2 - 50, height/4.5, 'astronaut');
@@ -62,8 +64,9 @@ LunarAdventure.MainMenu.prototype = {
 
 		// ======== create ship ========
 		ship = this.add.sprite(gameWidth/3.3, gameHeight/2.6, 'ship');
-		ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
+    ship.body.clearShapes();
+		ship.body.loadPolygon('tracedShip', 'ship');
 
 
 		// ======== make collision groups ========
@@ -178,8 +181,7 @@ LunarAdventure.MainMenu.prototype = {
 
 	update: function() {
 		terrain.body.rotation -= 0.003;
-		this.background.tilePosition.x += 0.2;
-		this.background.tilePosition.y -= 0.2;
+    this.game.debug.text(this.time.fps, gameWidth/2, 20, '#00ff00')
 
 		if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown) {
 			this.physics.p2.gravity.y = 70;
