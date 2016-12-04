@@ -2,7 +2,7 @@ var LunarAdventure = LunarAdventure || {};
 
 LunarAdventure.Game = function(){};
 
-let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0;
+let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0, rotateRight = false;
 
 LunarAdventure.Game.prototype = {
 
@@ -146,8 +146,8 @@ LunarAdventure.Game.prototype = {
 		shipCollisionGroup = this.physics.p2.createCollisionGroup();
 		landingPadCollisionGroup = this.physics.p2.createCollisionGroup();
 		obstaclesCollisionGroup = this.physics.p2.createCollisionGroup();
-		boundsCollisionGroup = this.physics.p2.createCollisionGroup();
-
+		// leftBoundsCollisionGroup = this.physics.p2.createCollisionGroup();
+		// rightBoundsCollisionroup = this.physics.p2.createCollisionGroup();
 
 		// ======== create ship ========
 		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
@@ -197,24 +197,24 @@ LunarAdventure.Game.prototype = {
 
 
 		// ======== create virtual boundary  ========
-		boundaryL = this.add.sprite(-1, 0, 'boundary');
-		boundaryL.scale.setTo(width/1000000, height);
-		this.physics.p2.enable(boundaryL, true);
-		boundaryL.body.static = true;
+		// boundaryL = this.add.sprite(-1, 0, 'boundary');
+		// boundaryL.scale.setTo(width/1000000, height);
+		// this.physics.p2.enable(boundaryL, true);
+		// boundaryL.body.static = true;
 
 
-		boundaryR = this.add.sprite(width, 0, 'boundary');
-		boundaryR.scale.setTo(width/1000000, height)
-		this.physics.p2.enable(boundaryR, true);
-		boundaryR.body.static = true;
+		// boundaryR = this.add.sprite(width, 0, 'boundary');
+		// boundaryR.scale.setTo(width/1000000, height)
+		// this.physics.p2.enable(boundaryR, true);
+		// boundaryR.body.static = true;
 
 
 		// ======== set collision groups ========
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
 		ship.body.setCollisionGroup(shipCollisionGroup);
 		landingPad.body.setCollisionGroup(landingPadCollisionGroup);
-		// boundaryL.body.setCollisionGroup(boundsCollisionGroup);
-		// boundaryR.body.setCollisionGroup(boundsCollisionGroup);
+		// boundaryL.body.setCollisionGroup(leftBoundsCollisionGroup);
+		// boundaryR.body.setCollisionGroup(rightBoundsCollisionGroup);
 
 		// ship and terrain collision
 		terrain.body.collides([terrainCollisionGroup, shipCollisionGroup]);
@@ -232,6 +232,9 @@ LunarAdventure.Game.prototype = {
 		// boundaryL.body.collides(shipCollisionGroup);
 		// boundaryR.body.collides(shipCollisionGroup);
 		// ship.body.collides(boundsCollisionGroup, null, this);
+		// ship.body.collides(leftBoundsCollisionGroup, this.rotateTerrainRight, this);
+		// ship.body.collides(rightBoundsCollisionGroup, this.rotateTerrainLeft, this);
+
 
 		// setting terrain bounce
 		var shipMaterial = this.game.physics.p2.createMaterial('shipMaterial', ship.body);
@@ -327,6 +330,27 @@ LunarAdventure.Game.prototype = {
 
 		//make time text globally accessible
 		globalTime = me.timeLabel.text;
+	},
+
+	rotateTerrainLeft: function() {
+		let radius = 820
+		this.rotateLandingPadLeft(radius, centerX, centerY);
+		this.rotateLandingArrow();
+		terrain.body.rotation -= 0.003;
+		tilesprite.tilePosition.x -= 0.6;
+		tilesprite.tilePosition.y -= 0.3;
+	},
+
+	rotateTerrainRight: function() {
+		console.log('inside rotate right')
+		console.log('rotate right is:', rotateRight)
+		rotateRight = true;
+		// let radius = 820
+		// terrain.body.rotation += 0.003;
+		// this.rotateLandingPadRight(radius, centerX, centerY);
+		// this.rotateLandingArrow();
+		// tilesprite.tilePosition.x += 0.6;
+		// tilesprite.tilePosition.y -= 0.3;
 	},
 
 	// landing pad rotation functions
@@ -662,20 +686,59 @@ LunarAdventure.Game.prototype = {
 
 			let radius = 820;
 
+
+			// HAVE TO THINK OF SOME WAY TO ROTATE SMOOTHLY OR DETECT THAT I'M STILL IN CONTACT
+			// WITH VIRTUAL WORLD BOUND SPRITE - WONT ROTATE SMOOTHYLY OTHERWISE. WILL BE SMALL ROTATIONS
+				console.log('ship body', ship.body.x)
+				console.log('ship world', ship.world.x)
+
+				// check if any edge part of ship is less than or equal to world bound then rotate
+				// messing up slightly now because of the box collision group of rocket
+				if (ship.body.x <= 27.5) {
+					terrain.body.rotation += 0.003;
+					this.rotateLandingPadRight(radius, centerX, centerY);
+					this.rotateLandingArrow();
+					tilesprite.tilePosition.x += 0.6;
+					tilesprite.tilePosition.y -= 0.3;
+
+					//add angular velocity so terrain continues to rotate slightly for smoother feel
+					terrain.body.angularVelocity += 0.002;
+				}
+					//remove velocity once away from bound
+					if (ship.body.x <= 45 || ship.body.x >= 27.5) {
+						terrain.body.angularVelocity = 0;		
+					}
+
+			// 1253 - 1256 for right side of screen`
+				if (ship.body.x >= 1252) {
+					this.rotateLandingPadLeft(radius, centerX, centerY);
+					this.rotateLandingArrow();
+					terrain.body.rotation -= 0.003;
+					tilesprite.tilePosition.x -= 0.6;
+					tilesprite.tilePosition.y -= 0.3;
+
+				// add angular velocity so terrain continues to rotate slightly for smoother feel
+					terrain.body.angularVelocity += 0.002;
+				}
+					// remove velocity once away from bound
+					if (ship.body.x <= 1252 || ship.body.x >= 1236) {
+						terrain.body.angularVelocity = 0;		
+					}
+
 			// terrain spins when rocket nears the edges
-			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-				terrain.body.rotation += 0.003;
-				this.rotateLandingPadRight(radius, centerX, centerY);
-				this.rotateLandingArrow();
-				tilesprite.tilePosition.x += 0.6;
-				tilesprite.tilePosition.y -= 0.3;
-			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
-				this.rotateLandingPadLeft(radius, centerX, centerY);
-				this.rotateLandingArrow();
-				terrain.body.rotation -= 0.003;
-				tilesprite.tilePosition.x -= 0.6;
-				tilesprite.tilePosition.y -= 0.3;
-			}
+			// if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
+			// 	terrain.body.rotation += 0.003;
+			// 	this.rotateLandingPadRight(radius, centerX, centerY);
+			// 	this.rotateLandingArrow();
+			// 	tilesprite.tilePosition.x += 0.6;
+			// 	tilesprite.tilePosition.y -= 0.3;
+			// } else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
+				// this.rotateLandingPadLeft(radius, centerX, centerY);
+				// this.rotateLandingArrow();
+				// terrain.body.rotation -= 0.003;
+				// tilesprite.tilePosition.x -= 0.6;
+				// tilesprite.tilePosition.y -= 0.3;
+			// }
 
     }
 	}
