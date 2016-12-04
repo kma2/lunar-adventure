@@ -212,15 +212,16 @@ LunarAdventure.Multiplayer.prototype = {
 
 
 		// ======== boundaries  ========
-		// boundaryL = this.add.sprite(width/10, 0, 'boundary');
-		// boundaryL.scale.setTo(width/1800, height/700);
-		// this.physics.p2.enable(boundaryL);
-		// boundaryL.body.static = true;
+		boundaryL = this.add.sprite(-1, 0, 'boundary');
+		boundaryL.scale.setTo(width/1000000, height);
+		this.physics.p2.enable(boundaryL, true);
+		boundaryL.body.static = true;
 
-		// boundaryR = this.add.sprite(width/10*8.9, 0, 'boundary');
-		// boundaryR.scale.setTo(width/1800, height/700);
-		// this.physics.p2.enable(boundaryR);
-		// boundaryR.body.static = true;
+
+		boundaryR = this.add.sprite(width, 0, 'boundary');
+		boundaryR.scale.setTo(width/1000000, height)
+		this.physics.p2.enable(boundaryR, true);
+		boundaryR.body.static = true;
 
 		// create bounds on bounds of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
