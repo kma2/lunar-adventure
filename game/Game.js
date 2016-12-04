@@ -6,8 +6,8 @@ let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty 
 
 LunarAdventure.Game.prototype = {
 
-	create: function() {
 
+	create: function() {
 		//update the game count
 		fetch('/incrementGame/SinglePlayer', {
 			method: 'PUT'
@@ -31,6 +31,37 @@ LunarAdventure.Game.prototype = {
     this.toggle = true;
     this.lifeCounter = 3;
     this.time.advancedTiming = true;
+
+
+// CREATE PATH
+    this.bmd = null;
+  // points arrays - one for x and one for y
+    this.points = {
+      'x': [-100, 500, gameWidth +100],
+      'y': [-100, 300, -100]
+    };
+
+    // motion path
+    this.increment = 3 / gameWidth;
+    this.i = 0;
+    this.timer1Stopped = true;
+    this.timer1 = null;
+
+    // Somewhere to draw to
+    this.bmd = this.add.bitmapData(gameWidth, gameHeight);
+    this.bmd.addToWorld();
+    // Draw the path
+    for (var j = 0; j < 1; j += this.increment) {
+      var posx = this.math.catmullRomInterpolation(this.points.x, j);
+      var posy = this.math.catmullRomInterpolation(this.points.y, j);
+      this.bmd.rect(posx, posy, 3, 3, 'rgba(245, 0, 0, 1)');
+    }
+
+    // follow the motion path by using the plot function
+    test = this.add.sprite(0, 0, "tinyObstacle");
+    test.anchor.setTo(0.5, 0.5);
+
+
 
     keyboardArray = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'];
 
@@ -275,8 +306,6 @@ LunarAdventure.Game.prototype = {
 		this.world.bringToTop(rotateRightUI);
 		this.world.bringToTop(rotateLeftUI);
 
-		// generate waves of obstacles
-		this.sendObstacleWaves();
 	},
 
 	createTimer: function() {
@@ -299,6 +328,22 @@ LunarAdventure.Game.prototype = {
 		//make time text globally accessible
 		globalTime = me.timeLabel.text;
 	},
+
+  plotLeft: function () {
+
+    var posx = this.math.catmullRomInterpolation(this.points.x, this.i);
+    var posy = this.math.catmullRomInterpolation(this.points.y, this.i);
+    test.x = posx;
+    test.y = posy;
+    this.i += this.increment;
+    if (posx > gameWidth) {
+      this.timer1.stop();
+      this.timer1.destroy();
+      this.i = 0;
+      this.timer1Stopped = true;
+    }
+
+  },
 
 	// landing pad rotation functions
 	rotateLandingPadRight: function(radius, startX, startY){
@@ -470,83 +515,7 @@ LunarAdventure.Game.prototype = {
 		}
 	},
 
-	generateSmallObstacles: function(amount, startX, startY, velocityX, velocityY) {
-		for (var i = 0; i < amount; i++) {
-			var obstacle = smallObstacles.create(startX, startY, 'smallObstacle', this.rnd.pick(frames));
-			obstacle.body.setCircle(25);
-			obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-			obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
 
-			this.game.physics.p2.enable(obstacle, false);
-			obstacle.body.static = true;
-			obstacle.body.velocity.y = velocityY;
-			obstacle.body.velocity.x = velocityX;
-		}
-	},
-
-	generateTinyObstacles: function(amount, startX, startY, velocityX, velocityY) {
-		for (var i = 0; i < amount; i++) {
-			var obstacle = smallObstacles.create(startX, startY, 'tinyObstacle', this.rnd.pick(frames));
-			obstacle.body.setCircle(8);
-			obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-			obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
-
-			this.game.physics.p2.enable(obstacle, false);
-			obstacle.body.static = true;
-			obstacle.body.velocity.y = velocityY;
-			obstacle.body.velocity.x = velocityX;
-		}
-	},
-
-	generateMediumObstacles: function(amount, startX, startY, velocityX, velocityY) {
-		for (var i = 0; i < amount; i++) {
-				var obstacle = mediumObstacles.create(startX, startY, 'mediumObstacle', this.rnd.pick(frames));
-				obstacle.body.setCircle(52);
-				obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-				obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
-
-				this.game.physics.p2.enable(obstacle, false);
-				obstacle.body.static = true;
-				obstacle.body.velocity.y = velocityY;
-				obstacle.body.velocity.x = velocityX;
-		}
-	},
-
-	generateLargeObstacles: function(amount, startX, startY, velocityX, velocityY) {
-		for (var i = 0; i < amount; i++) {
-			var obstacle = largeObstacles.create(startX, startY, 'largeObstacle', this.rnd.pick(frames));
-
-			obstacle.body.setCircle(180);
-			obstacle.body.setCollisionGroup(obstaclesCollisionGroup);
-			obstacle.body.collides([obstaclesCollisionGroup, shipCollisionGroup]);
-
-			this.game.physics.p2.enable(obstacle, false);
-			obstacle.body.static = true;
-			obstacle.body.velocity.y = velocityY;
-			obstacle.body.velocity.x = velocityX;
-		}
-	},
-
-	sendObstacleWaves: function() {
-		waveOne = this.game.time.events.loop(8000, () => {
-			this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 400 + Math.random() * 300, -40 + Math.random() * -60, -20 + Math.random() * -50
-			);
-			this.generateTinyObstacles(1, Math.random() * -100, 400 + Math.random() * 300, 40 + Math.random() * 60, -20 + Math.random() * -50
-			);
-		});
-		waveTwo = this.game.time.events.loop(12000, () => {
-			this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 100 + Math.random() * 400, -60 + Math.random() * -50, -30 + Math.random() * -30
-			);
-			this.generateSmallObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 50, + Math.random() * -30
-			);
-			this.generateMediumObstacles(1, this.world.width + Math.random() * 100, 200 + Math.random() * 400, -60 + Math.random() * -100, -20 + Math.random() * -30);
-			this.generateMediumObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 100, + Math.random() * -30);
-		});
-		waveThree = this.game.time.events.loop(36000, () => {
-			this.generateLargeObstacles(1, this.world.width + 250, 400 + Math.random() * 200, -80, -40 + Math.random() * -20);
-			this.generateLargeObstacles(1, -1000, 800 + Math.random() * 200, 80, -40 + Math.random() * -20);
-		});
-	},
 
 	gameOverCrash: function() {
 			successGlobalTime = globalTime;
@@ -558,6 +527,15 @@ LunarAdventure.Game.prototype = {
 	},
 
 	update: function() {
+
+    // test motion path
+    if (this.timer1Stopped) {
+      this.timer1Stopped = false;
+      this.timer1 = this.game.time.create(true);
+      this.timer1.loop(.01, this.plotLeft, this);
+      this.timer1.start();
+    }
+      test.rotation += 0.02;
 
     if(this.invulnerable){
       if(this.toggle){
