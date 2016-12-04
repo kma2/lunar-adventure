@@ -8,6 +8,8 @@ LunarAdventure.Game.prototype = {
 
 	create: function() {
 
+		console.log(this.game.worldRight)
+
 		// update the game count
 		fetch('/incrementGame/SinglePlayer', {
 			method: 'PUT'
@@ -195,16 +197,16 @@ LunarAdventure.Game.prototype = {
 
 
 		// ======== create virtual boundary  ========
-		// boundaryL = this.add.sprite(width/10, 0, 'boundary');
-		// boundaryL.scale.setTo(width/1800, height/700);
-		// this.physics.p2.enable(boundaryL);
-		// boundaryL.body.static = true;
+		boundaryL = this.add.sprite(-1, 0, 'boundary');
+		boundaryL.scale.setTo(width/1000000, height);
+		this.physics.p2.enable(boundaryL, true);
+		boundaryL.body.static = true;
 
 
-		// boundaryR = this.add.sprite(width/10*8.9, 0, 'boundary');
-		// boundaryR.scale.setTo(width/1800, height/700)
-		// this.physics.p2.enable(boundaryR);
-		// boundaryR.body.static = true;
+		boundaryR = this.add.sprite(width, 0, 'boundary');
+		boundaryR.scale.setTo(width/1000000, height)
+		this.physics.p2.enable(boundaryR, true);
+		boundaryR.body.static = true;
 
 
 		// ======== set collision groups ========
