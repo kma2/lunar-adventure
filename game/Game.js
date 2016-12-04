@@ -689,23 +689,63 @@ LunarAdventure.Game.prototype = {
 
 			// HAVE TO THINK OF SOME WAY TO ROTATE SMOOTHLY OR DETECT THAT I'M STILL IN CONTACT
 			// WITH VIRTUAL WORLD BOUND SPRITE - WONT ROTATE SMOOTHYLY OTHERWISE. WILL BE SMALL ROTATIONS
-				console.log('ship body', ship.body.x)
-				console.log('ship world', ship.world.x)
+				// console.log('ship body', ship.body.x)
+				// console.log('ship world', ship.world.x)
+				// console.log('landing pad pos:', landingPad.body.y)
+
+				// is landing pad visible?
+				if (landingPad.body.y <= gameHeight) {
+					//only rotate planet if hit edge of screen
+					if (ship.body.x <= 27.5) {
+						terrain.body.rotation += 0.003;
+						this.rotateLandingPadRight(radius, centerX, centerY);
+						this.rotateLandingArrow();
+						tilesprite.tilePosition.x += 0.6;
+						tilesprite.tilePosition.y -= 0.3;
+
+						//add angular velocity so terrain continues to rotate slightly for smoother feel
+						terrain.body.angularVelocity += 0.002;
+					}
+					//remove velocity once away from bound
+					//was 45 but moving further out
+					if (ship.body.x <= 45 || ship.body.x >= 27.5) {
+						terrain.body.angularVelocity = 0;		
+					}
+				} else {
+						//otherwise rotate planet if near arrows
+						if (ship.body.x <= 120) {
+							terrain.body.rotation += 0.003;
+							this.rotateLandingPadRight(radius, centerX, centerY);
+							this.rotateLandingArrow();
+							tilesprite.tilePosition.x += 0.6;
+							tilesprite.tilePosition.y -= 0.3;
+
+							//add angular velocity so terrain continues to rotate slightly for smoother feel
+							terrain.body.angularVelocity += 0.002;
+						}
+							//remove velocity once away from bound
+						//was 45 but moving further out
+						if (ship.body.x <= 140 || ship.body.x >= 100) {
+							terrain.body.angularVelocity = 0;		
+						}
+					}
 
 				// check if any edge part of ship is less than or equal to world bound then rotate
 				// messing up slightly now because of the box collision group of rocket
-				if (ship.body.x <= 27.5) {
-					terrain.body.rotation += 0.003;
-					this.rotateLandingPadRight(radius, centerX, centerY);
-					this.rotateLandingArrow();
-					tilesprite.tilePosition.x += 0.6;
-					tilesprite.tilePosition.y -= 0.3;
+				//was 27.5 for edge of screen - move further out
+				// if (ship.body.x <= 120) {
+				// 	terrain.body.rotation += 0.003;
+				// 	this.rotateLandingPadRight(radius, centerX, centerY);
+				// 	this.rotateLandingArrow();
+				// 	tilesprite.tilePosition.x += 0.6;
+				// 	tilesprite.tilePosition.y -= 0.3;
 
-					//add angular velocity so terrain continues to rotate slightly for smoother feel
-					terrain.body.angularVelocity += 0.002;
-				}
+				// 	//add angular velocity so terrain continues to rotate slightly for smoother feel
+				// 	terrain.body.angularVelocity += 0.002;
+				// }
 					//remove velocity once away from bound
-					if (ship.body.x <= 45 || ship.body.x >= 27.5) {
+					//was 45 but moving further out
+					if (ship.body.x <= 140 || ship.body.x >= 100) {
 						terrain.body.angularVelocity = 0;		
 					}
 
