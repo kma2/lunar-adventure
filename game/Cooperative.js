@@ -422,10 +422,10 @@ LunarAdventure.Cooperative.prototype = {
         }
 
       }
+	  	// add penalty for when ship hits obstacle
+	    penalty += 5;
+	    fivePenaltyEmitter.start(true, 1000, null, 1);
     }
-  	// add penalty for when ship hits obstacle
-    penalty += 5;
-    fivePenaltyEmitter.start(true, 1000, null, 1);
     this.invulnerable = true;
 	},
 

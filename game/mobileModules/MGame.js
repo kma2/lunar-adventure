@@ -20,7 +20,7 @@ LunarAdventure.MGame.prototype = {
     this.lifeCounter = 3;
 
 		// initial angle for landing pad position
-		centerX = gameWidth/2
+		centerX = gameWidth * 0.5
 		centerY = gameHeight + 500
 
 		// initial angle for landing pad position
@@ -36,7 +36,7 @@ LunarAdventure.MGame.prototype = {
 
 
 		// ======== create ship ========
-		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
+		ship = this.add.sprite(gameWidth * 0.5 , gameHeight * 0.2, 'ship');
 		ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
 
@@ -95,14 +95,14 @@ LunarAdventure.MGame.prototype = {
 
 
 		// ======== create virtual boundary  ========
-		boundaryL = this.add.sprite(width/10, 0, 'boundary');
-		boundaryL.scale.setTo(width/1800, height/700);
+		boundaryL = this.add.sprite(width * 0.1, 0, 'boundary');
+		boundaryL.scale.setTo(width * 0.000555556, height * 0.00142857);
 		this.physics.p2.enable(boundaryL);
 		boundaryL.body.static = true;
 
 
-		boundaryR = this.add.sprite(width/10*8.9, 0, 'boundary');
-		boundaryR.scale.setTo(width/1800, height/700)
+		boundaryR = this.add.sprite(width * 0.89, 0, 'boundary');
+		boundaryR.scale.setTo(width * 0.000555556, height * 0.001428571)
 		this.physics.p2.enable(boundaryR);
 		boundaryR.body.static = true;
 
@@ -152,6 +152,9 @@ LunarAdventure.MGame.prototype = {
 			me.updateTimer();
 		});
 
+		timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
+		timeElapsedBeforeLanding = 0, globalTime = 0, penalty = 0;
+
 		//particle effects for time penalties
 		//putting this in another location and grabbing ships position slows game down too much
 
@@ -161,12 +164,6 @@ LunarAdventure.MGame.prototype = {
 		fivePenaltyEmitter.minParticleScale = 0.1;
 		fivePenaltyEmitter.maxParticleScale = 0.1;
 		fivePenaltyEmitter.gravity = 50;
-		//emitter for 10 sec penalty
-		tenPenaltyEmitter = this.game.add.emitter(230,32,5000);
-		tenPenaltyEmitter.makeParticles('penalty10');
-		tenPenaltyEmitter.minParticleScale = 0.1;
-		tenPenaltyEmitter.maxParticleScale = 0.1;
-		tenPenaltyEmitter.gravity = 50;
 
 		this.world.bringToTop(controlerL);
 		this.world.bringToTop(controlerR);
@@ -179,9 +176,7 @@ LunarAdventure.MGame.prototype = {
 
 	createTimer: function() {
 		let me = this;
-		//this fixes issue with timer appearing in some place other than upper left corner
 		me.timeLabel = {};
-		// me.timeLabel = me.game.add.text(500, 500, "", {font: "100px Arial", fill: "#fff"});
 	},
 
 	updateTimer: function() {
@@ -190,10 +185,28 @@ LunarAdventure.MGame.prototype = {
 		let timeDifference = me.startTime.getTime() - currentTime.getTime();
 
 		//Time elapsed in seconds
-		me.timeElapsed = Math.abs(timeDifference / 1000);
+		timeElapsedNoRound = Math.abs(timeDifference * 0.001);
 
-		result = Math.floor(me.timeElapsed) + penalty;
+		timeElapsedNoRound += penalty;
+		timeString = timeElapsedNoRound.toString();
+
+		// returns floating pt number
+		floatNum = parseFloat(Math.round(timeString * 100) * 0.01).toFixed(2);
+		result = floatNum;
+
+		// display two decimal points
+		if (result.length === 5) {
+			result = result.slice(0, 5);
+		} else if (result.length === 6) {
+			result = result.slice(0, 6);
+		} else if (result.length === 7) {
+			result = result.slice(0, 7);
+		} else if (result.length === 8) {
+			result = result.slice(0, 8);
+		}
+
 		me.timeLabel.text = result;
+
 		//make time text globally accessible
 		globalTime = me.timeLabel.text;
 	},
@@ -282,19 +295,20 @@ LunarAdventure.MGame.prototype = {
           upKeyDown.visible = false;
         }
 
+      }
       //add penalty for when you hit obstacle
         penalty += 5;
         console.log('hit obstacle! 5 seconds added!');
 
         //penalty emitter
         fivePenaltyEmitter.start(true, 1000, null, 1)
-      }
     }
     this.invulnerable = true;
 	},
 
 	landedShip: function(body1, body2) {
 		if (ship.body) {
+			successGlobalTime = globalTime;
 			// if ship lands carefully, the landing is successful
 			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
 				successGlobalTime = globalTime
@@ -394,7 +408,6 @@ LunarAdventure.MGame.prototype = {
 	},
 
 	gameOverCrash: function() {
-			successGlobalTime = globalTime;
 			this.game.state.start('SingleCrash', true, false);
 	},
 
@@ -404,11 +417,9 @@ LunarAdventure.MGame.prototype = {
 
 	update: function() {
 		if (ship.body) {
-			// debug info in top left corner
-			this.game.debug.text('time elapsed: ' + globalTime + "s", 32, 32);
-			this.game.debug.text('velocity x: ' + Math.floor(ship.body.velocity.x), 32, 52);
-			this.game.debug.text('velocity y: ' + Math.floor(ship.body.velocity.y), 32, 72);
-			this.game.debug.text('angle: ' + Math.floor(ship.body.angle), 32, 92);
+			// update the timer
+			timerText.destroy()
+			timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
 
 			if (cursors.left.isDown) {
 				console.log(ship.body.angle)
