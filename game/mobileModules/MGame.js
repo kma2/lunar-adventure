@@ -37,7 +37,7 @@ LunarAdventure.MGame.prototype = {
 
 		// ======== create ship ========
 		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
-		ship.scale.setTo(0.06, 0.06);
+		// ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
 
 		// create bounds on sides of screen
