@@ -6,14 +6,14 @@ Visit [lunar-adventure.herokuapp.com](http://lunar-adventure.herokuapp.com) to p
 
 Alternatively you can also download/clone this repo and follow these steps to start the app:
 
-#cd into the project directory
+##cd into the project directory
 
-#npm install
+##npm install
 
-To play:
-#npm start
+#To play:
+##npm start
 
-#visit localhost:3000 in your browser
+##visit localhost:3000 in your browser
 
-To run tests:
-#npm test
+#To run tests:
+##npm test
