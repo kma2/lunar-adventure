@@ -8,6 +8,8 @@ LunarAdventure.MGame.prototype = {
 
 	create: function() {
 
+		let controlFontStyle = { font: "40px Asap", fill: "#fff"};
+
 		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
@@ -36,8 +38,7 @@ LunarAdventure.MGame.prototype = {
 
 
 		// ======== create ship ========
-		ship = this.add.sprite(gameWidth * 0.5 , gameHeight * 0.2, 'ship');
-		ship.scale.setTo(0.06, 0.06);
+		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
 		this.physics.p2.enable(ship, false);
 
 		// create bounds on sides of screen
@@ -63,17 +64,6 @@ LunarAdventure.MGame.prototype = {
 		this.physics.p2.enable(mediumObstacles);
 		this.physics.p2.enable(largeObstacles);
 
-		// ======== create pad ========
-		controlerL = this.add.sprite(0, gameHeight - 160, 'Mcontroler');
-		controlerL.scale.setTo(0.7, 0.7);
-		// controlerL.inputEnabled = true;
-		// controlerL.events.onInputDown.add(this.left, this);
-
-		// ======== create pad ========
-		controlerR = this.add.sprite(gameWidth - 160, gameHeight - 160, 'Mcontroler');
-		controlerR.scale.setTo(0.7, 0.7);
-		// controlerR.inputEnabled = true;
-		// controlerR.events.onInputDown.add(this.right, this);
 
 		// create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
@@ -106,6 +96,24 @@ LunarAdventure.MGame.prototype = {
 		this.physics.p2.enable(boundaryR);
 		boundaryR.body.static = true;
 
+		// ======== create pad ========
+		
+		// control text
+		lThrustUI = this.add.sprite(46, gameHeight - 125, 'thrust');
+		lThrustUI.scale.setTo(0.5, 0.5);
+		controllerL = this.add.sprite(15, gameHeight - 215, 'Mcontroller');
+		controllerL.scale.setTo(0.9, 0.9);
+		// controlerL.inputEnabled = true;
+		// controlerL.events.onInputDown.add(this.left, this);
+
+		// ======== create pad ========
+		// control text
+		rThrustUI = this.add.sprite(gameWidth - 184, gameHeight - 125, 'thrust');
+		rThrustUI.scale.setTo(0.5, 0.5);
+		controllerR = this.add.sprite(gameWidth - 215, gameHeight - 215, 'Mcontroller');
+		controllerR.scale.setTo(0.9, 0.9);
+		// controlerR.inputEnabled = true;
+		// controlerR.events.onInputDown.add(this.right, this);
 
 		// ======== set collision groups ========
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
@@ -165,8 +173,8 @@ LunarAdventure.MGame.prototype = {
 		fivePenaltyEmitter.maxParticleScale = 0.1;
 		fivePenaltyEmitter.gravity = 50;
 
-		this.world.bringToTop(controlerL);
-		this.world.bringToTop(controlerR);
+		// this.world.bringToTop(controllerL);
+		// this.world.bringToTop(controllerR);
 
 		// generate waves of obstacles
 		this.sendObstacleWaves();
@@ -457,18 +465,91 @@ LunarAdventure.MGame.prototype = {
 
 			let radius = 820;
 
-			// terrain spins when rocket nears the edges
-			if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-				terrain.body.rotation += 0.003;
-				this.rotateLandingPadRight(radius, centerX, centerY);
-				tilesprite.tilePosition.x += 0.6;
-				tilesprite.tilePosition.y -= 0.3;
-			} else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
-				this.rotateLandingPadLeft(radius, centerX, centerY);
-				terrain.body.rotation -= 0.003;
-				tilesprite.tilePosition.x -= 0.6;
-				tilesprite.tilePosition.y -= 0.3;
+
+			// ======== terrain rotation ========
+
+			// if landing pad is visible, use screen edge:
+			if (landingPad.body.y <= gameHeight && landingPad.body.x <= 1054 && landingPad.body.x >= 170) {
+				boundaryL.destroy();
+				boundaryR.destroy();
+
+				// LEFT side of screen
+				if (ship.body.x <= 27.5) {
+					terrain.body.rotation += 0.003;
+					this.rotateLandingPadRight(radius, centerX, centerY);
+					this.rotateLandingArrow();
+
+					// add angular velocity so terrain continues to rotate slightly for smoother feel
+					terrain.body.angularVelocity += 0.002;
+				}
+
+				// remove velocity once away from bound
+				if (ship.body.x <= 45 || ship.body.x >= 27.5) {
+					terrain.body.angularVelocity = 0;
+				}
+
+				// RIGHT side of screen
+				if (ship.body.x >= 1252) {
+					this.rotateLandingPadLeft(radius, centerX, centerY);
+					this.rotateLandingArrow();
+					terrain.body.rotation -= 0.003;
+
+				// add angular velocity so terrain continues to rotate slightly for smoother feel
+					terrain.body.angularVelocity += 0.002;
+				}
+				// remove velocity once away from bound
+				if (ship.body.x <= 1252 || ship.body.x >= 1236) {
+					terrain.body.angularVelocity = 0;
+				}
+
+			// if landing pad is NOT visible, use larger area:
+			} else {
+				// LEFT SIDE OF SCREEN
+				// rotate planet if ship is close to arrows
+				// 170 is world bound
+				if (ship.body.x <= 260) {
+					terrain.body.rotation += 0.003;
+					this.rotateLandingPadRight(radius, centerX, centerY);
+					this.rotateLandingArrow();
+
+					// add angular velocity so terrain continues to rotate slightly for smoother feel
+					terrain.body.angularVelocity += 0.002;
+				}
+
+				// remove velocity once away from bound
+				if (ship.body.x <= 300 || ship.body.x >= 280) {
+					terrain.body.angularVelocity = 0;
+				}
+
+				// RIGHT SIDE OF SCREEN
+				if (ship.body.x >= 1029) {
+					terrain.body.rotation -= 0.003;
+					this.rotateLandingPadLeft(radius, centerX, centerY);
+					this.rotateLandingArrow();
+
+					//add angular velocity so terrain continues to rotate slightly for smoother feel
+					terrain.body.angularVelocity += 0.002;
+				}
+
+					// remove velocity once away from bound
+				if (ship.body.x <= 999 || ship.body.x >= 989) {
+					terrain.body.angularVelocity = 0;
+				}
 			}
+
+			// OLD TERRAIN ROTATION
+			// terrain spins when rocket nears the edges
+			// if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
+			// 	terrain.body.rotation += 0.003;
+			// 	this.rotateLandingPadRight(radius, centerX, centerY);
+			// 	tilesprite.tilePosition.x += 0.6;
+			// 	tilesprite.tilePosition.y -= 0.3;
+			// } else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
+			// 	this.rotateLandingPadLeft(radius, centerX, centerY);
+			// 	terrain.body.rotation -= 0.003;
+			// 	tilesprite.tilePosition.x -= 0.6;
+			// 	tilesprite.tilePosition.y -= 0.3;
+			// }
     }
 	},
 	right: function() {

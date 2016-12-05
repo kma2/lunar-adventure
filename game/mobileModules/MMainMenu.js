@@ -14,15 +14,11 @@ LunarAdventure.MMainMenu.prototype = {
 
 		this.physics.startSystem(Phaser.Physics.P2JS);
 
-		// this.background = this.game.add.tileSprite(0, 0, width, height, 'starfield');
 		this.background = this.game.add.tileSprite(0, 0, 1300, 900, 'starfield');
 
-
-		// astronaut = this.add.sprite(width/2 - 50, height/4.5, 'astronaut');
 		astronaut = this.add.sprite(width * 0.4545 + 20, height * 0.1667, 'astronaut');
 		astronaut.scale.setTo(0.5, 0.5);
 
-		// logo = this.add.sprite(width/2 - 240, height/2.5, 'logo');
 		logo = this.add.sprite(width * 0.3333 - 20, height * 0.3333, 'logo');
 		logo.scale.setTo(0.8, 0.8);
 
