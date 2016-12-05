@@ -199,6 +199,10 @@ LunarAdventure.Cooperative.prototype = {
     invulnerableUI.scale.setTo(0.25, 0.25);
     invulnerableUI.alpha = 0;
 
+		keyChangeWarning = this.add.sprite(gameWidth/2 - 170, gameHeight/2 - 50, 'newkeys');
+		keyChangeWarning.scale.setTo(1.2, 1.2);
+		keyChangeWarning.alpha = 0;
+
 
 		// ======== key control UI ========
 		leftKeyUp = this.add.sprite(centerX - 115 + 250, this.world.height - 120, 'leftKeyUp');
@@ -547,6 +551,12 @@ LunarAdventure.Cooperative.prototype = {
         let invulnerableTween = this.game.add.tween(invulnerableUI).from({alpha : 1}, 200, "Linear", true);
         invulnerableTween.repeat(11);
 
+				// flash key change warning message
+				if (globalTime !== 0 && this.lifeCounter === 0) {
+					let keyChangeTween = this.game.add.tween(keyChangeWarning).from({alpha : 1}, 200, "Linear", true);
+					keyChangeTween.repeat(8);
+				}
+
         // healthbar UI
         if (this.lifeCounter === 2) {
           let fullHealthTween = this.game.add.tween(fullHealth).from({alpha : 1}, 200, "Linear", true);
@@ -563,6 +573,7 @@ LunarAdventure.Cooperative.prototype = {
         this.time.events.add(Phaser.Timer.SECOND * 3, this.setVulnerablity, this);
       }
       invulnerableUI.alpha = 0;
+			keyChangeWarning.alpha = 0;
     }
 
 		if (ship.body) {
@@ -623,7 +634,7 @@ LunarAdventure.Cooperative.prototype = {
 
 				// remove velocity once away from bound
 				if (ship.body.x <= 45 || ship.body.x >= 27.5) {
-					terrain.body.angularVelocity = 0;		
+					terrain.body.angularVelocity = 0;
 				}
 
 				// RIGHT side of screen
@@ -639,7 +650,7 @@ LunarAdventure.Cooperative.prototype = {
 				}
 				// remove velocity once away from bound
 				if (ship.body.x <= 1252 || ship.body.x >= 1236) {
-					terrain.body.angularVelocity = 0;		
+					terrain.body.angularVelocity = 0;
 				}
 
 				// if landing pad is NOT visible, use larger area:
@@ -659,7 +670,7 @@ LunarAdventure.Cooperative.prototype = {
 					}
 						// remove velocity once away from bound
 					if (ship.body.x <= 140 || ship.body.x >= 100) {
-						terrain.body.angularVelocity = 0;		
+						terrain.body.angularVelocity = 0;
 					}
 
 					// RIGHT SIDE OF SCREEN
@@ -675,7 +686,7 @@ LunarAdventure.Cooperative.prototype = {
 					}
 						// remove velocity once away from bound
 					if (ship.body.x <= 1179.5 || ship.body.x >= 1139.5) {
-						terrain.body.angularVelocity = 0;		
+						terrain.body.angularVelocity = 0;
 					}
 				}
 
