@@ -119,16 +119,6 @@ LunarAdventure.Cooperative.prototype = {
 
 
 		// ======== boundaries  ========
-		// boundaryL = this.add.sprite(-1, 0, 'boundary');
-		// boundaryL.scale.setTo(width/1000000, height);
-		// this.physics.p2.enable(boundaryL, true);
-		// boundaryL.body.static = true;
-		//
-		// boundaryR = this.add.sprite(width, 0, 'boundary');
-		// boundaryR.scale.setTo(width/1000000, height)
-		// this.physics.p2.enable(boundaryR, true);
-		// boundaryR.body.static = true;
-
 		boundaryL = this.add.sprite(width/10, 0, 'boundary');
 		boundaryL.scale.setTo(width/1800, height/700);
 		this.physics.p2.enable(boundaryL);
@@ -211,6 +201,10 @@ LunarAdventure.Cooperative.prototype = {
     invulnerableUI = this.add.sprite(gameWidth - 200, 90, 'invulnerable');
     invulnerableUI.scale.setTo(0.25, 0.25);
     invulnerableUI.alpha = 0;
+
+		keyChangeWarning = this.add.sprite(gameWidth/2 - 170, gameHeight/2 - 50, 'newkeys');
+		keyChangeWarning.scale.setTo(1.2, 1.2);
+		keyChangeWarning.alpha = 0;
 
 
 		// ======== key control UI ========
@@ -560,6 +554,12 @@ LunarAdventure.Cooperative.prototype = {
         let invulnerableTween = this.game.add.tween(invulnerableUI).from({alpha : 1}, 200, "Linear", true);
         invulnerableTween.repeat(11);
 
+				// flash key change warning message
+				if (globalTime !== 0 && this.lifeCounter === 0) {
+					let keyChangeTween = this.game.add.tween(keyChangeWarning).from({alpha : 1}, 200, "Linear", true);
+					keyChangeTween.repeat(8);
+				}
+
         // healthbar UI
         if (this.lifeCounter === 2) {
           let fullHealthTween = this.game.add.tween(fullHealth).from({alpha : 1}, 200, "Linear", true);
@@ -576,6 +576,7 @@ LunarAdventure.Cooperative.prototype = {
         this.time.events.add(Phaser.Timer.SECOND * 3, this.setVulnerablity, this);
       }
       invulnerableUI.alpha = 0;
+			keyChangeWarning.alpha = 0;
     }
 
 		if (ship.body) {
