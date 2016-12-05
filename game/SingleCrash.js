@@ -15,12 +15,31 @@ LunarAdventure.SingleCrash.prototype = {
 			message = this.add.sprite(gameWidth/2 - 210, gameHeight/8, 'crash');
 			message.scale.setTo(0.6, 0.6);
 
-			this.game.add.text(gameWidth/3 - 20, gameHeight/3 - 60, `Better luck next time! Your journey was ${endGameTime} seconds.`, fontStyle);
+			this.game.add.text(gameWidth/3 - 30, gameHeight/3 - 75, `Better luck next time! Your journey was ${endGameTime} seconds.`, fontStyle);
 
-			// display leaderBoard
-			let yVal = gameHeight/3 + 30;
+			// leaderboard positioning
+			let yVal = gameHeight/3 + 70;
+
+			// rank
+			this.game.debug.text('RANK', gameWidth/2.6, gameHeight/3 + 30);
 			for (var i = 0; i < highScores.length; i++) {
-				this.game.debug.text(`${highScores[i].time}s   -   ${highScores[i].name}`, gameWidth/2 - 85, yVal);
+				this.game.debug.text(i + 1, gameWidth/2.6, yVal);
+				yVal += 30;
+			}
+
+			// time
+			yVal = gameHeight/3 + 70;
+			this.game.debug.text('TIME', gameWidth/2.2, gameHeight/3 + 30);
+			for (var i = 0; i < highScores.length; i++) {
+				this.game.debug.text(`${highScores[i].time}s`, gameWidth/2.2, yVal);
+				yVal += 30;
+			}
+
+			// name
+			yVal = gameHeight/3 + 70;
+			this.game.debug.text('NAME', gameWidth/1.85, gameHeight/3 + 30);
+			for (var i = 0; i < highScores.length; i++) {
+				this.game.debug.text(`${highScores[i].name}`, gameWidth/1.85, yVal);
 				yVal += 30;
 			}
 

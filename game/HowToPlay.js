@@ -15,23 +15,6 @@ LunarAdventure.HowToPlay.prototype = {
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
 
-		// ======== add assets and text ========
-		logo = this.add.sprite(width/3 - 20, height/8.4, 'logo');
-		logo.scale.setTo(0.8, 0.8);
-
-		// text style
-		let style = { font: '16pt Asap', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 420 };
-
-		// how to play
-		this.game.add.text(width/2.9, height/4.5, 'Objective:  Land safely on the landing pad while avoiding obstacles.', style);
-		this.game.add.text(width/2.9, height/3, 'Colliding with asteroids will cause a time penalty, but colliding with the terrain will destroy your ship!', style);
-		let backToMenu = this.game.add.text(width/2.25, height/2 + 20, 'back to menu', style);
-
-		// backToMenu click handler
-		backToMenu.inputEnabled = true;
-		backToMenu.events.onInputDown.add(this.showMainMenu, this);
-
-
 		// ======== create terrain & ship ========
 		terrain = this.add.sprite(width/2, height + 500, 'terrain');
 		terrain.anchor.set(0.5)
@@ -40,9 +23,26 @@ LunarAdventure.HowToPlay.prototype = {
 		terrain.body.clearShapes();
 		terrain.body.loadPolygon('tracedTerrain', 'terrain');
 
-		ship = this.add.sprite(gameWidth/3.3, gameHeight/6.2, 'ship');
-		ship.scale.setTo(0.06, 0.06);
+		ship = this.add.sprite(gameWidth/3.6, gameHeight/6.2, 'ship');
+		// ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
+
+
+		// ======== add assets and text ========
+		logo = this.add.sprite(width/3 - 20, height/8.4, 'logo');
+		logo.scale.setTo(0.8, 0.8);
+
+		// text style
+		let style = { font: '16pt Asap', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 440 };
+
+		// how to play
+		this.game.add.text(width/2.9, height/4.5, 'Objective:  Land safely on the landing pad while avoiding asteroids.', style);
+		this.game.add.text(width/2.9, height/3, 'Watch out! Colliding with asteroids will cause a time penalty. If you collide with too many asteroids, your keys will become scrambled! Hitting the terrain will destroy your ship.', style);
+		let backToMenu = this.game.add.text(width/2.25, height/2 + 30, 'back to menu', style);
+
+		// backToMenu click handler
+		backToMenu.inputEnabled = true;
+		backToMenu.events.onInputDown.add(this.showMainMenu, this);
 
 
 		// ======== make collision groups ========
@@ -132,8 +132,8 @@ LunarAdventure.HowToPlay.prototype = {
 
 	update: function() {
 		terrain.body.rotation -= 0.003;
-		this.background.tilePosition.x += 0.2;
-		this.background.tilePosition.y -= 0.2;
+		// this.background.tilePosition.x += 0.2;
+		// this.background.tilePosition.y -= 0.2;
 
 		// ======== key controls ========
 		if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown) {

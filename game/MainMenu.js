@@ -22,7 +22,7 @@ LunarAdventure.MainMenu.prototype = {
 
 
 		// ======== add assets and text ========
-		astronaut = this.add.sprite(width * 0.4545 + 15, height * 0.2, 'astronaut');
+		astronaut = this.add.sprite(width * 0.4545 + 20, height * 0.2, 'astronaut');
 		astronaut.scale.setTo(0.5, 0.5);
 
 		logo = this.add.sprite(width * 0.3333 - 20, height * 0.3333, 'logo');
@@ -53,8 +53,8 @@ LunarAdventure.MainMenu.prototype = {
 
 	update: function() {
 		terrain.body.rotation -= 0.003;
-		this.background.tilePosition.x += 0.2;
-		this.background.tilePosition.y -= 0.2;
+		// this.background.tilePosition.x += 0.2;
+		// this.background.tilePosition.y -= 0.2;
 
 	},
 
