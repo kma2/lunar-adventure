@@ -56,7 +56,7 @@ LunarAdventure.Preload.prototype = {
     this.load.image('invulnerable', 'images/Invulnerable.png');
 
 		// mobile
-		this.load.image('Mcontroler', 'images/Mcontroler.png');
+		this.load.image('Mcontroller', 'images/Mcontroller.png');
 	},
 
 	loadKeyImage: function(arr) {
