@@ -19,7 +19,7 @@ LunarAdventure.SingleSuccess.prototype = {
 
 			// player achieves a new high score
 			if (highScores.length < 8 || highScores[highScores.length-1].time > endGameTime) {
-				madeLeaderboardMessage = this.game.add.text(gameWidth/3.2, gameHeight/4 - 10, `Your time of ${endGameTime}s made it to the high score leaderboard`, fontStyle);
+				madeLeaderboardMessage = this.game.add.text(gameWidth/3.2 - 10, gameHeight/4 - 10, `Your time of ${endGameTime}s made it to the high score leaderboard`, fontStyle);
 
 				// input form
 				this.game.add.plugin(Fabrique.Plugins.InputField);
@@ -45,10 +45,29 @@ LunarAdventure.SingleSuccess.prototype = {
 			} else {
 				this.game.add.text(gameWidth/3 + 30, gameHeight/4, `Your time was ${endGameTime}s. Try to land faster next time!`, fontStyle);
 
-				// display leaderboard
-				let yVal = gameHeight/3 + 30;
+				// leaderboard positioning
+				let yVal = gameHeight/3 + 70;
+
+				// rank
+				this.game.debug.text('RANK', gameWidth/2.6, gameHeight/3 + 30);
 				for (var i = 0; i < highScores.length; i++) {
-					this.game.debug.text(`${highScores[i].time}s   -   ${highScores[i].name}`, gameWidth/2 - 85, yVal);
+					this.game.debug.text(i + 1, gameWidth/2.6, yVal);
+					yVal += 30;
+				}
+
+				// time
+				yVal = gameHeight/3 + 70;
+				this.game.debug.text('TIME', gameWidth/2.2, gameHeight/3 + 30);
+				for (var i = 0; i < highScores.length; i++) {
+					this.game.debug.text(`${highScores[i].time}s`, gameWidth/2.2, yVal);
+					yVal += 30;
+				}
+
+				// name
+				yVal = gameHeight/3 + 70;
+				this.game.debug.text('NAME', gameWidth/1.85, gameHeight/3 + 30);
+				for (var i = 0; i < highScores.length; i++) {
+					this.game.debug.text(`${highScores[i].name}`, gameWidth/1.85, yVal);
 					yVal += 30;
 				}
 			}
@@ -85,13 +104,32 @@ LunarAdventure.SingleSuccess.prototype = {
 				madeLeaderboardMessage.destroy();
 				formInput.destroy();
 				submitBtn.destroy();
-				this.game.add.text(gameWidth/2.5, gameHeight/3 - 60, `You're on the leaderboard!`, fontStyle);
+				this.game.add.text(gameWidth/2.5, gameHeight/3 - 75, `You're on the leaderboard!`, fontStyle);
 
-				// display leaderboard that includes the winning user's name and time
-				let yVal = gameHeight/3 + 30;
+				// leaderboard positioning
+				let yVal = gameHeight/3 + 70;
+
+				// rank
+				this.game.debug.text('RANK', gameWidth/2.6, gameHeight/3 + 30);
 				for (var i = 0; i < highScores.length; i++) {
-					this.game.debug.text(`${highScores[i].time}s   -   ${highScores[i].name}`, gameWidth/2 - 85, yVal);
-					yVal += 30
+					this.game.debug.text(i + 1, gameWidth/2.6, yVal);
+					yVal += 30;
+				}
+
+				// time
+				yVal = gameHeight/3 + 70;
+				this.game.debug.text('TIME', gameWidth/2.2, gameHeight/3 + 30);
+				for (var i = 0; i < highScores.length; i++) {
+					this.game.debug.text(`${highScores[i].time}s`, gameWidth/2.2, yVal);
+					yVal += 30;
+				}
+
+				// name
+				yVal = gameHeight/3 + 70;
+				this.game.debug.text('NAME', gameWidth/1.85, gameHeight/3 + 30);
+				for (var i = 0; i < highScores.length; i++) {
+					this.game.debug.text(`${highScores[i].name}`, gameWidth/1.85, yVal);
+					yVal += 30;
 				}
 			})
 			.catch(err => console.error(err))

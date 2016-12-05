@@ -353,15 +353,18 @@ LunarAdventure.Game.prototype = {
 
 	// if the ship is not invulnerable upon hitting terrain, it will crash
 	hitTerrain: function(body1, body2) {
-	    if (!this.invulnerable) {
-	    	endGameTime = globalTime;
-				let posX = ship.x;
-				let posY = ship.y;
-				ship.destroy();
-				explosion = this.add.sprite(posX - 30, posY, 'explosion');
-				explosion.scale.setTo(0.05, 0.05);
-				this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.gameOverCrash, this);
-	    }
+		endGameTime = globalTime;
+			this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverSuccess, this);
+		
+	    // if (!this.invulnerable) {
+	    // 	endGameTime = globalTime;
+			// 	let posX = ship.x;
+			// 	let posY = ship.y;
+			// 	ship.destroy();
+			// 	explosion = this.add.sprite(posX - 30, posY, 'explosion');
+			// 	explosion.scale.setTo(0.05, 0.05);
+			// 	this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.gameOverCrash, this);
+	    // }
 		},
 
 		hitObstacle: function(body1, body2) {
