@@ -16,6 +16,7 @@ LunarAdventure.Preload.prototype = {
 		this.load.image('terrain', 'images/terrain2.png');
 		this.load.image('starfield', 'images/starfield.png');
 		this.load.image('landingPad', 'images/landingPad.png');
+		this.load.image('newkeys', 'images/new_keys_message.png');
 		this.load.image('crash', 'images/crash_message.png');
 		this.load.image('success', 'images/success_message.png');
 		this.load.image('submitBtn', 'images/submitButton.png');
