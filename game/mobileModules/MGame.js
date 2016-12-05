@@ -490,6 +490,7 @@ LunarAdventure.MGame.prototype = {
 
 				// RIGHT side of screen
 				if (ship.body.x >= 1252) {
+					timerText = this.game.add.text(centerX - 60, 100, ship.body.x, fontStyle)
 					this.rotateLandingPadLeft(radius, centerX, centerY);
 					this.rotateLandingArrow();
 					terrain.body.rotation -= 0.003;
@@ -508,6 +509,7 @@ LunarAdventure.MGame.prototype = {
 				// rotate planet if ship is close to arrows
 				// 170 is world bound
 				if (ship.body.x <= 260) {
+					timerText = this.game.add.text(centerX - 60, 100, ship.body.x, fontStyle)
 					terrain.body.rotation += 0.003;
 					this.rotateLandingPadRight(radius, centerX, centerY);
 					this.rotateLandingArrow();
