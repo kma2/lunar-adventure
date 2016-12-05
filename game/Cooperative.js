@@ -367,7 +367,6 @@ LunarAdventure.Cooperative.prototype = {
     if(!this.invulnerable){
       this.lifeCounter--;
       this.fullHealth.alpha = 0;
-      this.twoHealth.alpha = 0;
       this.oneHealth.alpha = 0;
 
 			// change key
