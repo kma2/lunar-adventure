@@ -162,19 +162,11 @@ LunarAdventure.Cooperative.prototype = {
 
 		// ======== particle effects for time penalties ========
 		// emitter for 5 sec penalty
-		fivePenaltyEmitter = this.game.add.emitter(220,32,5000);
+		fivePenaltyEmitter = this.game.add.emitter(centerX + 50,32,5000);
 		fivePenaltyEmitter.makeParticles('penalty5');
 		fivePenaltyEmitter.minParticleScale = 0.1;
 		fivePenaltyEmitter.maxParticleScale = 0.1;
 		fivePenaltyEmitter.gravity = 50;
-
-		// emitter for 10 sec penalty
-		tenPenaltyEmitter = this.game.add.emitter(230,32,5000);
-		tenPenaltyEmitter.makeParticles('penalty10');
-		tenPenaltyEmitter.minParticleScale = 0.1;
-		tenPenaltyEmitter.maxParticleScale = 0.1;
-		tenPenaltyEmitter.gravity = 50;
-
 
 		// ======== health bar UI ========
     fullHealth = this.add.sprite(gameWidth - 200, 20, 'fullHealth');
@@ -429,11 +421,11 @@ LunarAdventure.Cooperative.prototype = {
           upKeyDown.visible = false;
         }
 
-      	// add penalty for when ship hits obstacle
-        penalty += 5;
-        fivePenaltyEmitter.start(true, 1000, null, 1);
       }
     }
+  	// add penalty for when ship hits obstacle
+    penalty += 5;
+    fivePenaltyEmitter.start(true, 1000, null, 1);
     this.invulnerable = true;
 	},
 
