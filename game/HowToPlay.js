@@ -33,12 +33,12 @@ LunarAdventure.HowToPlay.prototype = {
 		logo.scale.setTo(0.8, 0.8);
 
 		// text style
-		let style = { font: '16pt Asap', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 420 };
+		let style = { font: '16pt Asap', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 440 };
 
 		// how to play
 		this.game.add.text(width/2.9, height/4.5, 'Objective:  Land safely on the landing pad while avoiding obstacles.', style);
-		this.game.add.text(width/2.9, height/3, 'Colliding with asteroids will cause a time penalty, but colliding with the terrain will destroy your ship!', style);
-		let backToMenu = this.game.add.text(width/2.25, height/2 + 20, 'back to menu', style);
+		this.game.add.text(width/2.9, height/3, 'Watch out! Colliding with asteroids will cause a time penalty. If you collide with too many asteroids, your keys will become scrambled! Hitting the terrain will destroy your ship.', style);
+		let backToMenu = this.game.add.text(width/2.25, height/2 + 30, 'back to menu', style);
 
 		// backToMenu click handler
 		backToMenu.inputEnabled = true;
