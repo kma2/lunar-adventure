@@ -43,7 +43,7 @@ LunarAdventure.SingleSuccess.prototype = {
 
 			// player doesn't achieve a high score
 			} else {
-				this.game.add.text(gameWidth/3 + 30, gameHeight/4, `Your time was ${endGameTime}s. Try to land faster next time!`, fontStyle);
+				this.game.add.text(gameWidth/3, gameHeight/4, `Your time was ${endGameTime}s. Try to land faster next time!`, fontStyle);
 
 				// leaderboard positioning
 				let yVal = gameHeight/3 + 70;
