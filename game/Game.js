@@ -34,32 +34,50 @@ LunarAdventure.Game.prototype = {
 
 
 // CREATE PATH
+
+// Large Asteroid PATH
     this.bmd = null;
   // points arrays - one for x and one for y
-    this.points = {
-      'x': [-100, 500, gameWidth +100],
-      'y': [-100, 300, -100]
+    this.largePointsLeft = {
+      'x': [-200, gameWidth * 0.5, gameWidth - 50],
+      'y': [500, 300, -100]
+    };
+    this.largePointsRight = {
+      'x': [50, gameWidth * 0.5, gameWidth + 200],
+      'y': [-100, 300, 500]
     };
 
     // motion path
-    this.increment = 3 / gameWidth;
+    this.increment = 1.5 / gameWidth;
     this.i = 0;
     this.timer1Stopped = true;
     this.timer1 = null;
+
+    this.timer2Stopped = true;
+    this.timer2 = null;
 
     // Somewhere to draw to
     this.bmd = this.add.bitmapData(gameWidth, gameHeight);
     this.bmd.addToWorld();
     // Draw the path
     for (var j = 0; j < 1; j += this.increment) {
-      var posx = this.math.catmullRomInterpolation(this.points.x, j);
-      var posy = this.math.catmullRomInterpolation(this.points.y, j);
+      // LargeAsteroid Left Path
+      var posx = this.math.catmullRomInterpolation(this.largePointsLeft.x, j);
+      var posy = this.math.catmullRomInterpolation(this.largePointsLeft.y, j);
       this.bmd.rect(posx, posy, 3, 3, 'rgba(245, 0, 0, 1)');
+
+      // LargeASteroid Right Path
+      var posx2 = this.math.catmullRomInterpolation(this.largePointsRight.x, j);
+      var posy2 = this.math.catmullRomInterpolation(this.largePointsRight.y, j);
+      this.bmd.rect(posx2, posy2, 3, 3, 'rgba(245, 0, 0, 1)');
     }
 
     // follow the motion path by using the plot function
-    test = this.add.sprite(0, 0, "tinyObstacle");
-    test.anchor.setTo(0.5, 0.5);
+    LargeAsteroidLeft = this.add.sprite(0, 0, "mediumObstacle");
+    LargeAsteroidLeft.anchor.setTo(0.5, 0.5);
+
+    LargeAsteroidRight = this.add.sprite(0, 0, "mediumObstacle");
+    LargeAsteroidRight.anchor.setTo(0.5, 0.5);
 
 
 
@@ -331,16 +349,32 @@ LunarAdventure.Game.prototype = {
 
   plotLeft: function () {
 
-    var posx = this.math.catmullRomInterpolation(this.points.x, this.i);
-    var posy = this.math.catmullRomInterpolation(this.points.y, this.i);
-    test.x = posx;
-    test.y = posy;
+    let posx = this.math.catmullRomInterpolation(this.largePointsLeft.x, this.i);
+    let posy = this.math.catmullRomInterpolation(this.largePointsLeft.y, this.i);
+    LargeAsteroidLeft.x = posx;
+    LargeAsteroidLeft.y = posy;
     this.i += this.increment;
     if (posx > gameWidth) {
       this.timer1.stop();
       this.timer1.destroy();
       this.i = 0;
       this.timer1Stopped = true;
+    }
+
+  },
+
+  plotRight: function () {
+
+    let posx = this.math.catmullRomInterpolation(this.largePointsRight.x, this.i);
+    let posy = this.math.catmullRomInterpolation(this.largePointsRight.y, this.i);
+    LargeAsteroidRight.x = posx;
+    LargeAsteroidRight.y = posy;
+    this.i += this.increment;
+    if (posx < gameWidth) {
+      this.timer2.stop();
+      this.timer2.destroy();
+      this.i = 0;
+      this.timer2Stopped = true;
     }
 
   },
@@ -528,14 +562,22 @@ LunarAdventure.Game.prototype = {
 
 	update: function() {
 
-    // test motion path
+    // LargeAsteroidLeft motion path
     if (this.timer1Stopped) {
       this.timer1Stopped = false;
       this.timer1 = this.game.time.create(true);
       this.timer1.loop(.01, this.plotLeft, this);
       this.timer1.start();
     }
-      test.rotation += 0.02;
+    if (this.timer2Stopped) {
+      this.timer2Stopped = false;
+      this.timer2 = this.game.time.create(true);
+      this.timer2.loop(.01, this.plotRight, this);
+      this.timer2.start();
+    }
+
+      LargeAsteroidLeft.rotation += 0.02;
+      LargeAsteroidRight.rotation += 0.02;
 
     if(this.invulnerable){
       if(this.toggle){
