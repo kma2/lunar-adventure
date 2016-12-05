@@ -574,7 +574,7 @@ LunarAdventure.Game.prototype = {
 
     if(ship.body){
       if(ship.overlap(landingZone)){
-        if(Math.abs(ship.body.velocity.x) > 20 && Math.abs(ship.body.velocity.y) > 20){
+        if(Math.abs(ship.body.velocity.x) > 15 && Math.abs(ship.body.velocity.y) > 25){
           slowDown.alpha = 1;
         }else{
           slowDown.alpha = 0;

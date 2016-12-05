@@ -95,6 +95,10 @@ LunarAdventure.Cooperative.prototype = {
 		this.physics.p2.enable(landingPad, false);
 		landingPad.body.static = true;
 
+    landingZone = this.add.sprite(centerX, 2000, 'landingZone');
+    landingZone.anchor.set(0.5);
+    landingZone.alpha = 0;
+
 		// initial angle for landing pad position
 		this.landingPadAngle = 1.5;
 
@@ -173,11 +177,6 @@ LunarAdventure.Cooperative.prototype = {
     fullHealth.alpha = 1;
     this.fullHealth = fullHealth;
 
-    twoHealth = this.add.sprite(gameWidth - 190, 20, 'twoHealth');
-    twoHealth.scale.setTo(0.20, 0.15);
-    twoHealth.alpha = 1;
-    this.twoHealth = twoHealth;
-
     oneHealth = this.add.sprite(gameWidth - 190, 20, 'oneHealth');
     oneHealth.scale.setTo(0.20, 0.15);
     oneHealth.alpha = 1;
@@ -189,6 +188,15 @@ LunarAdventure.Cooperative.prototype = {
     invulnerableUI = this.add.sprite(gameWidth - 200, 90, 'invulnerable');
     invulnerableUI.scale.setTo(0.25, 0.25);
     invulnerableUI.alpha = 0;
+
+    swapKeyUI = this.add.sprite(gameWidth - 165, 110, 'swapKeys');
+    swapKeyUI.scale.setTo(0.25, 0.25);
+    swapKeyUI.alpha = 0;
+
+    slowDown = this.add.sprite(gameWidth * 0.5, gameHeight/2 - 80, 'slowDown');
+    slowDown.anchor.set(0.5);
+    slowDown.scale.setTo(0.25, 0.25);
+    slowDown.alpha = 0;
 
 		keyChangeWarning = this.add.sprite(gameWidth/2 - 170, gameHeight/2 - 50, 'newkeys');
 		keyChangeWarning.scale.setTo(1.2, 1.2);
@@ -320,23 +328,21 @@ LunarAdventure.Cooperative.prototype = {
 	rotateLandingArrow: function(radius, startX, startY) {
 		landingArrow.x = landingPad.body.x - 32;
 		landingArrow.y = landingPad.body.y - 85;
+    landingZone.x = landingPad.body.x;
+    landingZone.y = landingPad.body.y - 150;
 	},
 
 	setVulnerablity: function() {
-    if (this.lifeCounter === 3) {
+    if (this.lifeCounter === 2) {
       this.fullHealth.alpha = 1;
-    } else if (this.lifeCounter === 2) {
-      this.fullHealth.alpha = 0;
-      this.twoHealth.alpha = 1;
     } else if (this.lifeCounter === 1) {
       this.fullHealth.alpha = 0;
-      this.twoHealth.alpha = 0;
       this.oneHealth.alpha = 1;
     } else {
       this.fullHealth.alpha = 1;
-      this.twoHealth.alpha = 0;
       this.oneHealth.alpha = 0;
-      this.lifeCounter = 3;
+      this.lifeCounter = 2;
+      swapKeyUI.alpha = 0;
     }
 
     this.invulnerable = false;
@@ -549,15 +555,15 @@ LunarAdventure.Cooperative.prototype = {
 				}
 
         // healthbar UI
-        if (this.lifeCounter === 2) {
+        if(this.lifeCounter === 1){
           let fullHealthTween = this.game.add.tween(fullHealth).from({alpha : 1}, 200, "Linear", true);
           fullHealthTween.repeat(11);
-        } else if (this.lifeCounter === 1) {
-          let twoHealthTween = this.game.add.tween(twoHealth).from({alpha : 1}, 200, "Linear", true);
-          twoHealthTween.repeat(11);
-        } else if (this.lifeCounter === 0) {
+        } else if(this.lifeCounter === 0) {
           let oneHealthTween = this.game.add.tween(oneHealth).from({alpha : 1}, 200, "Linear", true);
           oneHealthTween.repeat(11);
+
+          let swapKeyTween = this.game.add.tween(swapKeyUI).from({alpha : 1}, 200, "Linear", true);
+          swapKeyTween.repeat(11);
         }
 
         this.toggle = false;
@@ -565,6 +571,16 @@ LunarAdventure.Cooperative.prototype = {
       }
       invulnerableUI.alpha = 0;
 			keyChangeWarning.alpha = 0;
+    }
+
+    if(ship.body){
+      if(ship.overlap(landingZone)){
+        if(Math.abs(ship.body.velocity.x) > 15 && Math.abs(ship.body.velocity.y) > 25){
+          slowDown.alpha = 1;
+        }else{
+          slowDown.alpha = 0;
+        }
+      }
     }
 
 		if (ship.body) {
