@@ -21,7 +21,7 @@ describe('Games Played Route', function() {
 
 			GamesPlayed.create({
 					singleCount: 1,
-					multiCount: 4
+					coopCount: 4
 			});
 		})
 
@@ -44,7 +44,7 @@ describe('Games Played Route', function() {
 
 			GamesPlayed.create({
 				singleCount: 1,
-				multiCount: 4
+				coopCount: 4
 			});
 		});
 
@@ -55,7 +55,7 @@ describe('Games Played Route', function() {
 			.expect(function (res) {
 				expect(res.body).to.be.an('object')
 				expect(res.body['Single Count']).to.equal(1)
-				expect(res.body['Multi Count']).to.equal(4)
+				expect(res.body['Coop Count']).to.equal(4)
 				expect(res.body['Total Count']).to.equal(5)
 			});
 		});

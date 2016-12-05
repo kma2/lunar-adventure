@@ -12,11 +12,11 @@ describe('Games Played model tests', function() {
 		// return db.sync({force: true});
 	});
 
-	describe('Single and Multi count', function() {
+	describe('Single and Coop count', function() {
 		it('returns an error if a string is passed in for count', function() {
 			let failCase = GamesPlayed.build({
 				singleCount: '',
-				multiCount: ''
+				coopCount: ''
 			});
 
 			return failCase.validate()
@@ -28,11 +28,11 @@ describe('Games Played model tests', function() {
 		it('creates a count if passed in properly', function() {
 			GamesPlayed.create({
 				singleCount: 1,
-				multiCount: 2
+				coopCount: 2
 			})
 			.then(result => {
 				expect(result.singleCount).to.equal(1);
-				expect(result.multiCount).to.equal(2);
+				expect(result.coopCount).to.equal(2);
 			})
 		});
 	});
@@ -42,12 +42,12 @@ describe('Games Played model tests', function() {
 		beforeEach('create an instance', function() {
 			GamesPlayed.create({
 				singleCount: 1,
-				multiCount: 4
+				coopCount: 4
 			})
 		});
 
 		describe('total count', function() {
-			it('returns the sum of single count and multi count', function() {
+			it('returns the sum of single count and coop count', function() {
 				GamesPlayed.findById(1)
 				.then(game => {
 					expect(game.totalCount).to.equal(5);
@@ -62,7 +62,7 @@ describe('Games Played model tests', function() {
 			it('increments single count by 1 each time it is called', function() {
 				GamesPlayed.create({
 					singleCount: 1,
-					multiCount: 1
+					coopCount: 1
 				})
 				.then(game => {
 					expect(game.singleCount).to.equal(1);
@@ -74,18 +74,18 @@ describe('Games Played model tests', function() {
 			});
 		});
 
-		describe('increment multi', function() {
-			it('increments multi count by 1 each time it is called', function() {
+		describe('increment coop', function() {
+			it('increments coop count by 1 each time it is called', function() {
 				GamesPlayed.create({
 					singleCount: 2,
-					multiCount: 2
+					coopCount: 2
 				})
 				.then(game => {
-					expect(game.multiCount).to.equal(2);
-					game.incrementMulti();
-					expect(game.multiCount).to.equal(3);
-					game.incrementMulti();
-					expect(game.multiCount).to.equal(4);
+					expect(game.coopCount).to.equal(2);
+					game.incrementCoop();
+					expect(game.coopCount).to.equal(3);
+					game.incrementCoop();
+					expect(game.coopCount).to.equal(4);
 				})
 			});
 		});

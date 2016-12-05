@@ -1,8 +1,8 @@
 var LunarAdventure = LunarAdventure || {};
 
-LunarAdventure.Multiplayer = function(){};
+LunarAdventure.Cooperative = function(){};
 
-LunarAdventure.Multiplayer.prototype = {
+LunarAdventure.Cooperative.prototype = {
 
 	create: function() {
 
@@ -10,7 +10,7 @@ LunarAdventure.Multiplayer.prototype = {
 		fetch('/incrementGame/Cooperative', {
 			method: 'PUT'
 		})
-		.catch(err => console.error('updating multi did not work', err));
+		.catch(err => console.error('updating co-op did not work', err));
 
 
 		// ======== set timer ========
@@ -529,11 +529,11 @@ LunarAdventure.Multiplayer.prototype = {
 	},
 
 	gameOverCrash: function() {
-		this.game.state.start('MultiCrash', true, false);
+		this.game.state.start('CoopCrash', true, false);
 	},
 
 	gameOverSuccess: function() {
-		this.game.state.start('MultiSuccess', true, false);
+		this.game.state.start('CoopSuccess', true, false);
 	},
 
 	update: function() {

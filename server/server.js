@@ -63,10 +63,10 @@ app.put('/incrementGame/:gameType', (req, res, next) => {
 	else if (req.params.gameType === 'Cooperative') {
 		GamesPlayed.findById(1)
 		.then(game => {
-			game.incrementMulti()
+			game.incrementCoop()
 			res.sendStatus(200)
 		})
-		.catch((err) => console.error("Problem updating multi", err))
+		.catch((err) => console.error("Problem updating coop", err))
 	}
 });
 
@@ -74,7 +74,7 @@ app.put('/incrementGame/:gameType', (req, res, next) => {
 app.get('/totalTimesPlayed', (req, res, next) => {
 	GamesPlayed.findById(1)
 	.then(game => {
-		let results = {'Single Count': game.singleCount, 'Multi Count': game.multiCount, 'Total Count': game.totalCount}
+		let results = {'Single Count': game.singleCount, 'Coop Count': game.coopCount, 'Total Count': game.totalCount}
 		res.json(results)
 	})
 	.catch(err => console.error('Problem getting total count', err))
@@ -86,7 +86,7 @@ function startServer() {
 	if (!module.parent) {
 		http.listen(PORT);
 		console.log('Listening on port', PORT);
-		db.sync({force: false})
+		db.sync({force: true})
 		.then(() => {
 			console.log('Database successfully synced');
 			GamesPlayed.findById(1)
@@ -94,7 +94,7 @@ function startServer() {
 				if (!game) {
 					GamesPlayed.create({
 						singleCount: 0,
-						multiCount: 0
+						coopCount: 0
 					})
 					.catch(err => console.error(err))
 				}

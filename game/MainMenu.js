@@ -42,9 +42,9 @@ LunarAdventure.MainMenu.prototype = {
 		singlePlayer.inputEnabled = true;
 		singlePlayer.events.onInputDown.add(this.startSinglePlayer, this);
 
-		let multiPlayer = this.game.add.text(width * 0.5405, height * 0.4348, 'Cooperative', style);
-		multiPlayer.inputEnabled = true;
-		multiPlayer.events.onInputDown.add(this.startMultiPlayer, this);
+		let cooperative = this.game.add.text(width * 0.5405, height * 0.4348, 'Cooperative', style);
+		cooperative.inputEnabled = true;
+		cooperative.events.onInputDown.add(this.startCooperative, this);
 
 		let howToPlay = this.game.add.text(width * 0.4545 + 15, height * 0.5, 'How to play', style);
 		howToPlay.inputEnabled = true;
@@ -62,8 +62,8 @@ LunarAdventure.MainMenu.prototype = {
 		this.game.state.start('Game');
 	},
 
-	startMultiPlayer: function() {
-		this.game.state.start('Multiplayer');
+	startCooperative: function() {
+		this.game.state.start('Cooperative');
 	},
 
 	showHowToPlay: function() {
