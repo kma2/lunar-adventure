@@ -394,22 +394,22 @@ LunarAdventure.Cooperative.prototype = {
           leftKeyUp.destroy();
           leftKeyDown.destroy();
 
-          leftKeyUp = this.add.sprite(centerX - 115, this.world.height - 120, `leftKeyLetter${newKey}Unpressed`);
+          leftKeyUp = this.add.sprite(centerX - 115 + 250, this.world.height - 120, `leftKeyLetter${newKey}Unpressed`);
           leftKeyUp.scale.setTo(0.25, 0.25);
           leftKeyUp.visible = true;
 
-          leftKeyDown = this.add.sprite(centerX - 115, this.world.height - 107, `leftKeyLetter${newKey}Pressed`);
+          leftKeyDown = this.add.sprite(centerX - 115 + 250, this.world.height - 107, `leftKeyLetter${newKey}Pressed`);
           leftKeyDown.scale.setTo(0.25, 0.25);
           leftKeyDown.visible = false;
         } else if ( cursorToChange === 'right') {
           rightKeyUp.destroy();
           rightKeyDown.destroy();
 
-          rightKeyUp = this.add.sprite(centerX + 48, this.world.height - 120, `rightKeyLetter${newKey}Unpressed`);
+          rightKeyUp = this.add.sprite(centerX + 48 + 250, this.world.height - 120, `rightKeyLetter${newKey}Unpressed`);
           rightKeyUp.scale.setTo(0.25, 0.25);
           rightKeyUp.visible = true;
 
-          rightKeyDown = this.add.sprite(centerX + 48, this.world.height - 107, `rightKeyLetter${newKey}Pressed`);
+          rightKeyDown = this.add.sprite(centerX + 48 + 250, this.world.height - 107, `rightKeyLetter${newKey}Pressed`);
           rightKeyDown.scale.setTo(0.25, 0.25);
           rightKeyDown.visible = false;
         } else {
@@ -623,7 +623,7 @@ LunarAdventure.Cooperative.prototype = {
 
 				// remove velocity once away from bound
 				if (ship.body.x <= 45 || ship.body.x >= 27.5) {
-					terrain.body.angularVelocity = 0;		
+					terrain.body.angularVelocity = 0;
 				}
 
 				// RIGHT side of screen
@@ -639,7 +639,7 @@ LunarAdventure.Cooperative.prototype = {
 				}
 				// remove velocity once away from bound
 				if (ship.body.x <= 1252 || ship.body.x >= 1236) {
-					terrain.body.angularVelocity = 0;		
+					terrain.body.angularVelocity = 0;
 				}
 
 				// if landing pad is NOT visible, use larger area:
@@ -659,7 +659,7 @@ LunarAdventure.Cooperative.prototype = {
 					}
 						// remove velocity once away from bound
 					if (ship.body.x <= 140 || ship.body.x >= 100) {
-						terrain.body.angularVelocity = 0;		
+						terrain.body.angularVelocity = 0;
 					}
 
 					// RIGHT SIDE OF SCREEN
@@ -675,7 +675,7 @@ LunarAdventure.Cooperative.prototype = {
 					}
 						// remove velocity once away from bound
 					if (ship.body.x <= 1179.5 || ship.body.x >= 1139.5) {
-						terrain.body.angularVelocity = 0;		
+						terrain.body.angularVelocity = 0;
 					}
 				}
 
