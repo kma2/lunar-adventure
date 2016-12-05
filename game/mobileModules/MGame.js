@@ -8,6 +8,8 @@ LunarAdventure.MGame.prototype = {
 
 	create: function() {
 
+		let controlFontStyle = { font: "40px Asap", fill: "#fff"};
+
 		this.physics.p2.gravity.y = 70;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
@@ -63,17 +65,6 @@ LunarAdventure.MGame.prototype = {
 		this.physics.p2.enable(mediumObstacles);
 		this.physics.p2.enable(largeObstacles);
 
-		// ======== create pad ========
-		controlerL = this.add.sprite(0, gameHeight - 160, 'Mcontroler');
-		controlerL.scale.setTo(0.7, 0.7);
-		// controlerL.inputEnabled = true;
-		// controlerL.events.onInputDown.add(this.left, this);
-
-		// ======== create pad ========
-		controlerR = this.add.sprite(gameWidth - 160, gameHeight - 160, 'Mcontroler');
-		controlerR.scale.setTo(0.7, 0.7);
-		// controlerR.inputEnabled = true;
-		// controlerR.events.onInputDown.add(this.right, this);
 
 		// create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
@@ -106,6 +97,24 @@ LunarAdventure.MGame.prototype = {
 		this.physics.p2.enable(boundaryR);
 		boundaryR.body.static = true;
 
+		// ======== create pad ========
+		
+		// control text
+		lThrustUI = this.add.sprite(46, gameHeight - 125, 'thrust');
+		lThrustUI.scale.setTo(0.5, 0.5);
+		controllerL = this.add.sprite(15, gameHeight - 215, 'Mcontroller');
+		controllerL.scale.setTo(0.9, 0.9);
+		// controlerL.inputEnabled = true;
+		// controlerL.events.onInputDown.add(this.left, this);
+
+		// ======== create pad ========
+		// control text
+		rThrustUI = this.add.sprite(gameWidth - 184, gameHeight - 125, 'thrust');
+		rThrustUI.scale.setTo(0.5, 0.5);
+		controllerR = this.add.sprite(gameWidth - 215, gameHeight - 215, 'Mcontroller');
+		controllerR.scale.setTo(0.9, 0.9);
+		// controlerR.inputEnabled = true;
+		// controlerR.events.onInputDown.add(this.right, this);
 
 		// ======== set collision groups ========
 		terrain.body.setCollisionGroup(terrainCollisionGroup);
@@ -165,8 +174,8 @@ LunarAdventure.MGame.prototype = {
 		fivePenaltyEmitter.maxParticleScale = 0.1;
 		fivePenaltyEmitter.gravity = 50;
 
-		this.world.bringToTop(controlerL);
-		this.world.bringToTop(controlerR);
+		// this.world.bringToTop(controllerL);
+		// this.world.bringToTop(controllerR);
 
 		// generate waves of obstacles
 		this.sendObstacleWaves();
