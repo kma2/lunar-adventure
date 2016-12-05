@@ -175,23 +175,23 @@ LunarAdventure.Game.prototype = {
 
 
 		// ======== health bar UI ========
-    fullHealth = this.add.sprite(gameWidth - 200, 20, 'fullHealth');
-    fullHealth.scale.setTo(0.25, 0.20);
+    fullHealth = this.add.sprite(gameWidth - 190, 20, 'fullHealth');
+    fullHealth.scale.setTo(0.20, 0.15);
     fullHealth.alpha = 1;
     this.fullHealth = fullHealth;
 
-    twoHealth = this.add.sprite(gameWidth - 200, 20, 'twoHealth');
-    twoHealth.scale.setTo(0.25, 0.20);
+    twoHealth = this.add.sprite(gameWidth - 190, 20, 'twoHealth');
+    twoHealth.scale.setTo(0.20, 0.15);
     twoHealth.alpha = 1;
     this.twoHealth = twoHealth;
 
-    oneHealth = this.add.sprite(gameWidth - 200, 20, 'oneHealth');
-    oneHealth.scale.setTo(0.25, 0.20);
+    oneHealth = this.add.sprite(gameWidth - 190, 20, 'oneHealth');
+    oneHealth.scale.setTo(0.20, 0.15);
     oneHealth.alpha = 1;
     this.oneHealth = oneHealth;
 
-    emptyHealth = this.add.sprite(gameWidth - 200, 20, 'emptyHealth');
-    emptyHealth.scale.setTo(0.25, 0.20);
+    emptyHealth = this.add.sprite(gameWidth - 190, 20, 'emptyHealth');
+    emptyHealth.scale.setTo(0.20, 0.15);
 
     invulnerableUI = this.add.sprite(gameWidth - 200, 90, 'invulnerable');
     invulnerableUI.scale.setTo(0.25, 0.25);
