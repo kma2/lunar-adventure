@@ -6,7 +6,7 @@ const GamesPlayed = db.define('gamesPlayed', {
 		type: Sequelize.INTEGER,
 		defaultValue: 0
 	},
-	multiCount: {
+	coopCount: {
 		type: Sequelize.INTEGER,
 		defaultValue: 0
 	}
@@ -15,18 +15,18 @@ const GamesPlayed = db.define('gamesPlayed', {
 	getterMethods: {
 		// total number of times the game has been played
 		totalCount: function () {
-			return this.singleCount + this.multiCount;
+			return this.singleCount + this.coopCount;
 		}
 	},
 	instanceMethods: {
-		// increment singlePlayer games played count
+		// increment Single Player games played count
 		incrementSingle: function() {
 			this.singleCount += 1;
 			this.save();
 		},
-		// increment multiplayer games played count
-		incrementMulti: function() {
-			this.multiCount += 1;
+		// increment Cooperative games played count
+		incrementCoop: function() {
+			this.coopCount += 1;
 			this.save();
 		}
 	}

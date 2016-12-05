@@ -1,8 +1,8 @@
-LunarAdventure.MultiSuccess = function(){};
+LunarAdventure.CoopSuccess = function(){};
 
 text = null;
 
-LunarAdventure.MultiSuccess.prototype = {
+LunarAdventure.CoopSuccess.prototype = {
 	create: function() {
 		// array of high scores
 		let highScores;
