@@ -82,11 +82,11 @@ LunarAdventure.Game.prototype = {
 
 		// ======== create ship, terrain, and landing pad ========
 		ship = this.add.sprite(gameWidth * 0.5, gameHeight * 0.2, 'ship');
-		ship.scale.setTo(0.06, 0.06);
+		// ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
 
 		landingPad = this.add.sprite(centerX, 2000, 'landingPad');
-		landingPad.scale.setTo(0.2, 0.2);
+		landingPad.scale.setTo(0.8, 0.8);
 		this.physics.p2.enable(landingPad, false);
 		landingPad.body.static = true;
 
@@ -616,8 +616,8 @@ LunarAdventure.Game.prototype = {
 					terrain.body.rotation += 0.003;
 					this.rotateLandingPadRight(radius, centerX, centerY);
 					this.rotateLandingArrow();
-					tilesprite.tilePosition.x += 0.6;
-					tilesprite.tilePosition.y -= 0.3;
+					// tilesprite.tilePosition.x += 0.6;
+					// tilesprite.tilePosition.y -= 0.3;
 
 					// add angular velocity so terrain continues to rotate slightly for smoother feel
 					terrain.body.angularVelocity += 0.002;
@@ -625,7 +625,7 @@ LunarAdventure.Game.prototype = {
 
 				// remove velocity once away from bound
 				if (ship.body.x <= 45 || ship.body.x >= 27.5) {
-					terrain.body.angularVelocity = 0;		
+					terrain.body.angularVelocity = 0;
 				}
 
 				// RIGHT side of screen
@@ -633,15 +633,15 @@ LunarAdventure.Game.prototype = {
 					this.rotateLandingPadLeft(radius, centerX, centerY);
 					this.rotateLandingArrow();
 					terrain.body.rotation -= 0.003;
-					tilesprite.tilePosition.x -= 0.6;
-					tilesprite.tilePosition.y -= 0.3;
+					// tilesprite.tilePosition.x -= 0.6;
+					// tilesprite.tilePosition.y -= 0.3;
 
 				// add angular velocity so terrain continues to rotate slightly for smoother feel
 					terrain.body.angularVelocity += 0.002;
 				}
 				// remove velocity once away from bound
 				if (ship.body.x <= 1252 || ship.body.x >= 1236) {
-					terrain.body.angularVelocity = 0;		
+					terrain.body.angularVelocity = 0;
 				}
 
 				// if landing pad is NOT visible, use larger area:
@@ -653,15 +653,15 @@ LunarAdventure.Game.prototype = {
 						terrain.body.rotation += 0.003;
 						this.rotateLandingPadRight(radius, centerX, centerY);
 						this.rotateLandingArrow();
-						tilesprite.tilePosition.x += 0.6;
-						tilesprite.tilePosition.y -= 0.3;
+						// tilesprite.tilePosition.x += 0.6;
+						// tilesprite.tilePosition.y -= 0.3;
 
 						//add angular velocity so terrain continues to rotate slightly for smoother feel
 						terrain.body.angularVelocity += 0.002;
 					}
 						// remove velocity once away from bound
 					if (ship.body.x <= 140 || ship.body.x >= 100) {
-						terrain.body.angularVelocity = 0;		
+						terrain.body.angularVelocity = 0;
 					}
 
 					// RIGHT SIDE OF SCREEN
@@ -669,15 +669,15 @@ LunarAdventure.Game.prototype = {
 						terrain.body.rotation -= 0.003;
 						this.rotateLandingPadLeft(radius, centerX, centerY);
 						this.rotateLandingArrow();
-						tilesprite.tilePosition.x -= 0.6;
-						tilesprite.tilePosition.y -= 0.3;
+						// tilesprite.tilePosition.x -= 0.6;
+						// tilesprite.tilePosition.y -= 0.3;
 
 						//add angular velocity so terrain continues to rotate slightly for smoother feel
 						terrain.body.angularVelocity += 0.002;
 					}
 						// remove velocity once away from bound
 					if (ship.body.x <= 1179.5 || ship.body.x >= 1139.5) {
-						terrain.body.angularVelocity = 0;		
+						terrain.body.angularVelocity = 0;
 					}
 				}
 

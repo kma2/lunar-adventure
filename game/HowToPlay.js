@@ -15,6 +15,19 @@ LunarAdventure.HowToPlay.prototype = {
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
 
+		// ======== create terrain & ship ========
+		terrain = this.add.sprite(width/2, height + 500, 'terrain');
+		terrain.anchor.set(0.5)
+		this.physics.p2.enable(terrain, false)
+		terrain.body.static = true;
+		terrain.body.clearShapes();
+		terrain.body.loadPolygon('tracedTerrain', 'terrain');
+
+		ship = this.add.sprite(gameWidth/3.6, gameHeight/6.2, 'ship');
+		// ship.scale.setTo(0.06, 0.06);
+		this.physics.p2.enable(ship, false);
+
+
 		// ======== add assets and text ========
 		logo = this.add.sprite(width/3 - 20, height/8.4, 'logo');
 		logo.scale.setTo(0.8, 0.8);
@@ -30,19 +43,6 @@ LunarAdventure.HowToPlay.prototype = {
 		// backToMenu click handler
 		backToMenu.inputEnabled = true;
 		backToMenu.events.onInputDown.add(this.showMainMenu, this);
-
-
-		// ======== create terrain & ship ========
-		terrain = this.add.sprite(width/2, height + 500, 'terrain');
-		terrain.anchor.set(0.5)
-		this.physics.p2.enable(terrain, false)
-		terrain.body.static = true;
-		terrain.body.clearShapes();
-		terrain.body.loadPolygon('tracedTerrain', 'terrain');
-
-		ship = this.add.sprite(gameWidth/3.3, gameHeight/6.2, 'ship');
-		ship.scale.setTo(0.06, 0.06);
-		this.physics.p2.enable(ship, false);
 
 
 		// ======== make collision groups ========
@@ -132,8 +132,8 @@ LunarAdventure.HowToPlay.prototype = {
 
 	update: function() {
 		terrain.body.rotation -= 0.003;
-		this.background.tilePosition.x += 0.2;
-		this.background.tilePosition.y -= 0.2;
+		// this.background.tilePosition.x += 0.2;
+		// this.background.tilePosition.y -= 0.2;
 
 		// ======== key controls ========
 		if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown) {

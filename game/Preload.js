@@ -13,8 +13,9 @@ LunarAdventure.Preload.prototype = {
 		this.load.image('ship', 'images/new_rocket.png');
 		this.load.image('explosion', 'images/explosion.png');
 		this.load.physics('tracedTerrain', 'terrainPolygon.json');
-		this.load.image('terrain', 'images/terrain2.png');
-		this.load.image('starfield', 'images/starfield.png');
+		this.load.image('terrain', 'images/terrain1.png');
+		this.load.image('starfield', 'images/background_blue.png');
+		// this.load.image('starfield', 'images/starfield.png');
 		this.load.image('landingPad', 'images/landingPad.png');
 		this.load.image('crash', 'images/crash_message.png');
 		this.load.image('success', 'images/success_message.png');
@@ -45,6 +46,13 @@ LunarAdventure.Preload.prototype = {
 		this.load.image('thrust', 'images/thrustUI.png');
 		this.load.image('rotateL', 'images/rotateLeftUI.png');
 		this.load.image('rotateR', 'images/rotateRightUI.png');
+
+		// HEALTHBAR UI
+    this.load.image('fullHealth', 'images/fullHealthBar.png');
+    this.load.image('twoHealth', 'images/twoHealthBar.png');
+    this.load.image('oneHealth', 'images/oneHealthBar.png');
+    this.load.image('emptyHealth', 'images/emptyHealthBar.png');
+    this.load.image('invulnerable', 'images/Invulnerable.png');
 
 		// mobile
 		this.load.image('Mcontroler', 'images/Mcontroler.png');
