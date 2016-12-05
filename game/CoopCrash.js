@@ -1,6 +1,6 @@
-LunarAdventure.MultiCrash = function(){};
+LunarAdventure.CoopCrash = function(){};
 
-LunarAdventure.MultiCrash.prototype = {
+LunarAdventure.CoopCrash.prototype = {
 	create: function() {
 		// array of high scores
 		let highScores;
