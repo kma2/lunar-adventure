@@ -435,7 +435,7 @@ LunarAdventure.Game.prototype = {
 		if (ship.body) {
 			endGameTime = globalTime
 			// if ship lands carefully, the landing is successful
-			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 15 && Math.abs(ship.body.velocity.y) < 25) {
+			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 15 && Math.abs(ship.body.velocity.y) < 30) {
 				// disables the ship from moving
 				ship.body = null;
 				this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverSuccess, this);
@@ -509,21 +509,36 @@ LunarAdventure.Game.prototype = {
 	},
 
 	sendObstacleWaves: function() {
-		waveOne = this.game.time.events.loop(6000, () => {
-			this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 400 + Math.random() * 300, -40 + Math.random() * -60, -20 + Math.random() * -50);
-			this.generateTinyObstacles(1, Math.random() * -100, 400 + Math.random() * 300, 40 + Math.random() * 60, -20 + Math.random() * -50);
+		waveOne = this.game.time.events.loop(2500, () => {
+			if (obstacleOriginDirection > 0.5) {
+				this.generateTinyObstacles(1, -20 + Math.random() * -100, 450 + Math.random() * 200, 60 + Math.random() * 60, -15 + Math.random() * -10);
+			} else {
+				this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 450 + Math.random() * 200, -60 + Math.random() * -60, -15 + Math.random() * -10);
+			}
 		});
 
-		waveTwo = this.game.time.events.loop(10000, () => {
-			this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 100 + Math.random() * 400, -60 + Math.random() * -50, -30 + Math.random() * -30);
-			this.generateSmallObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 50, + Math.random() * -30);
-			this.generateMediumObstacles(1, this.world.width + Math.random() * 100, 200 + Math.random() * 400, -60 + Math.random() * -100, -20 + Math.random() * -30);
-			this.generateMediumObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 100, + Math.random() * -30);
+		waveTwo = this.game.time.events.loop(3000, () => {
+			if (obstacleOriginDirection < 0.5) {
+				this.generateSmallObstacles(1, -80 + Math.random() * -100, 500 + Math.random() * 200,  50 + Math.random() * 60, -15 + Math.random() * -10);
+			} else {
+				this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 500 + Math.random() * 200, -50 + Math.random() * -60, -15 + Math.random() * -10);
+			}
 		});
 
-		waveThree = this.game.time.events.loop(30000, () => {
-			this.generateLargeObstacles(1, this.world.width + 250, 400 + Math.random() * 200, -80, -40 + Math.random() * -20);
-			this.generateLargeObstacles(1, -1000, 800 + Math.random() * 200, 80, -40 + Math.random() * -20);
+		waveThree = this.game.time.events.loop(5000, () => {
+			if (obstacleOriginDirection > 0.5) {
+				this.generateMediumObstacles(1, -100 + Math.random() * -100, 450 + Math.random() * 200, 50 + Math.random() * 50, -20 + Math.random() * -10);
+			} else {
+				this.generateMediumObstacles(1, this.world.width + Math.random() * 100, 450 + Math.random() * 200, -50 + Math.random() * -50, -20 + Math.random() * -10);
+			}
+		});
+
+		waveFour = this.game.time.events.loop(8000, () => {
+			if (obstacleOriginDirection > 0.5) {
+				this.generateLargeObstacles(1, -200 + Math.random() * -100, 250 + Math.random() * 100, 40 + Math.random() * 30, -20 + Math.random() * -10);
+			} else {
+				this.generateLargeObstacles(1, 200 + this.world.width + Math.random() * 100, 250 + Math.random() * 100, -40 + Math.random() * -30, -20 + Math.random() * -10);
+			}
 		});
 	},
 
@@ -536,6 +551,8 @@ LunarAdventure.Game.prototype = {
 	},
 
 	update: function() {
+		// randomly decide direction where obstacles come from
+		obstacleOriginDirection = Math.random();
 
     if(this.invulnerable){
       if(this.toggle){
@@ -686,28 +703,11 @@ LunarAdventure.Game.prototype = {
 					//add angular velocity so terrain continues to rotate slightly for smoother feel
 					terrain.body.angularVelocity += 0.002;
 				}
-
-					// remove velocity once away from bound
+				// remove velocity once away from bound
 				if (ship.body.x <= 999 || ship.body.x >= 989) {
 					terrain.body.angularVelocity = 0;
 				}
 			}
-
-			// OLD TERRAIN ROTATION
-			// terrain spins when rocket nears the edges
-			// if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-			// 	terrain.body.rotation += 0.003;
-			// 	this.rotateLandingPadRight(radius, centerX, centerY);
-			// 	this.rotateLandingArrow();
-			// 	// tilesprite.tilePosition.x += 0.6;
-			// 	// tilesprite.tilePosition.y -= 0.3;
-			// } else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
-			// 	this.rotateLandingPadLeft(radius, centerX, centerY);
-			// 	this.rotateLandingArrow();
-			// 	terrain.body.rotation -= 0.003;
-			// 	// tilesprite.tilePosition.x -= 0.6;
-			// 	// tilesprite.tilePosition.y -= 0.3;
-			// }
 
     }
 	}

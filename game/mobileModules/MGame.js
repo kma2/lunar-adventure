@@ -39,6 +39,7 @@ LunarAdventure.MGame.prototype = {
 
 		// ======== create ship ========
 		ship = this.add.sprite(gameWidth/2, gameHeight/5, 'ship');
+		ship.scale.setTo(1.5, 1.5);
 		this.physics.p2.enable(ship, false);
 
 		// create bounds on sides of screen
@@ -64,9 +65,9 @@ LunarAdventure.MGame.prototype = {
 		this.physics.p2.enable(mediumObstacles);
 		this.physics.p2.enable(largeObstacles);
 
-
 		// create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
+
 
 		// ======== create terrain ========
 		terrain = this.add.sprite(centerX, centerY, 'terrain');
@@ -97,7 +98,7 @@ LunarAdventure.MGame.prototype = {
 		boundaryR.body.static = true;
 
 		// ======== create pad ========
-		
+
 		// control text
 		lThrustUI = this.add.sprite(46, gameHeight - 125, 'thrust');
 		lThrustUI.scale.setTo(0.5, 0.5);
@@ -395,23 +396,36 @@ LunarAdventure.MGame.prototype = {
 	},
 
 	sendObstacleWaves: function() {
-		waveOne = this.game.time.events.loop(8000, () => {
-			this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 400 + Math.random() * 300, -40 + Math.random() * -60, -20 + Math.random() * -50
-			);
-			this.generateTinyObstacles(1, Math.random() * -100, 400 + Math.random() * 300, 40 + Math.random() * 60, -20 + Math.random() * -50
-			);
+		waveOne = this.game.time.events.loop(3000, () => {
+			if (obstacleOriginDirection > 0.5) {
+				this.generateTinyObstacles(1, -20 + Math.random() * -100, 450 + Math.random() * 200, 60 + Math.random() * 60, -15 + Math.random() * -10);
+			} else {
+				this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 450 + Math.random() * 200, -60 + Math.random() * -60, -15 + Math.random() * -10);
+			}
 		});
-		waveTwo = this.game.time.events.loop(12000, () => {
-			this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 100 + Math.random() * 400, -60 + Math.random() * -50, -30 + Math.random() * -30
-			);
-			this.generateSmallObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 50, + Math.random() * -30
-			);
-			this.generateMediumObstacles(1, this.world.width + Math.random() * 100, 200 + Math.random() * 400, -60 + Math.random() * -100, -20 + Math.random() * -30);
-			this.generateMediumObstacles(1, Math.random() * -100, + Math.random() * 400,  Math.random() * 100, + Math.random() * -30);
+
+		waveTwo = this.game.time.events.loop(4000, () => {
+			if (obstacleOriginDirection < 0.5) {
+				this.generateSmallObstacles(1, -80 + Math.random() * -100, 500 + Math.random() * 200,  50 + Math.random() * 40, -15 + Math.random() * -10);
+			} else {
+				this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 500 + Math.random() * 200, -50 + Math.random() * -40, -15 + Math.random() * -10);
+			}
 		});
-		waveThree = this.game.time.events.loop(36000, () => {
-			this.generateLargeObstacles(1, this.world.width + 250, 400 + Math.random() * 200, -80, -40 + Math.random() * -20);
-			this.generateLargeObstacles(1, -1000, 800 + Math.random() * 200, 80, -40 + Math.random() * -20);
+
+		waveThree = this.game.time.events.loop(7000, () => {
+			if (obstacleOriginDirection > 0.5) {
+				this.generateMediumObstacles(1, -100 + Math.random() * -100, 450 + Math.random() * 200, 40 + Math.random() * 30, -20 + Math.random() * -10);
+			} else {
+				this.generateMediumObstacles(1, this.world.width + Math.random() * 100, 450 + Math.random() * 200, -40 + Math.random() * -30, -20 + Math.random() * -10);
+			}
+		});
+
+		waveFour = this.game.time.events.loop(10000, () => {
+			if (obstacleOriginDirection > 0.5) {
+				this.generateLargeObstacles(1, -200 + Math.random() * -100, 250 + Math.random() * 100, 40 + Math.random() * 20, -15 + Math.random() * -10);
+			} else {
+				this.generateLargeObstacles(1, 200 + this.world.width + Math.random() * 100, 250 + Math.random() * 100, -40 + Math.random() * -20, -15 + Math.random() * -10);
+			}
 		});
 	},
 
@@ -424,6 +438,10 @@ LunarAdventure.MGame.prototype = {
 	},
 
 	update: function() {
+		// randomly decide direction where obstacles come from
+		obstacleOriginDirection = Math.random();
+
+
 		if (ship.body) {
 			// update the timer
 			timerText.destroy()
@@ -444,8 +462,8 @@ LunarAdventure.MGame.prototype = {
 				ship.body.thrust(200);
 			}
 
-			let p1 = this.game.input.pointer1
-			let p2 = this.game.input.pointer2
+			let p1 = this.game.input.pointer1;
+			let p2 = this.game.input.pointer2;
 			if (p1.active) {
 				if (p1.x < 160 && p1.y > gameHeight - 160) {
 					ship.body.thrust(600)
@@ -537,19 +555,6 @@ LunarAdventure.MGame.prototype = {
 				}
 			}
 
-			// OLD TERRAIN ROTATION
-			// terrain spins when rocket nears the edges
-			// if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-			// 	terrain.body.rotation += 0.003;
-			// 	this.rotateLandingPadRight(radius, centerX, centerY);
-			// 	tilesprite.tilePosition.x += 0.6;
-			// 	tilesprite.tilePosition.y -= 0.3;
-			// } else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
-			// 	this.rotateLandingPadLeft(radius, centerX, centerY);
-			// 	terrain.body.rotation -= 0.003;
-			// 	tilesprite.tilePosition.x -= 0.6;
-			// 	tilesprite.tilePosition.y -= 0.3;
-			// }
     }
 	},
 	right: function() {
