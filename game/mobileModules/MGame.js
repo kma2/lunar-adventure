@@ -427,7 +427,7 @@ LunarAdventure.MGame.prototype = {
 			// ======== terrain rotation ========
 
 			// if landing pad is visible, use screen edge:
-			if (landingPad.body.y <= gameHeight && landingPad.body.x <= 1054 && landingPad.body.x >= 170) {
+			if (landingPad.body.y <= gameHeight && landingPad.body.x <= 1094 && landingPad.body.x >= 130) {
 				boundaryL.destroy();
 				boundaryR.destroy();
 
