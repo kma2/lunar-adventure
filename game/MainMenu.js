@@ -2,6 +2,7 @@ LunarAdventure.MainMenu = function(){};
 
 // global variables
 let putHasRun, submitBtnClicked, userName, formInput, achievedHighScore;
+let authorizationHeader = 'Basic: ' + '5UmX^-6L]Vp/yOHx69e8Qbm2z%9t=E';
 
 LunarAdventure.MainMenu.prototype = {
 	create: function() {
