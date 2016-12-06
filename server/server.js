@@ -1,4 +1,4 @@
-// import modeules
+// import modules
 const bodyParser = require('body-parser');
 const {resolve} = require('path');
 const express = require('express');
@@ -12,6 +12,21 @@ const GamesPlayed = require('./db/models/gamesPlayed.js');
 const app = express();
 const http = require('http').Server(app);
 const PORT = process.env.PORT || 3000;
+
+const authorizationHeader = require('../public/Keys');
+
+// import API key generator
+// const uuid = require('node-uuid');
+
+// const keyPair = {
+// 	id: uuid.v4(),
+// 	secret: uuid.v4(),
+// };
+
+// HTTP Auth
+// const encodedData = new Buffer('apiKeyId:apiKeySecret').toString('base64');
+// const authorizationHeader = 'Basic: ' + encodedData;
+// let authorizationHeader = 'Basic: ' + '5UmX^-6L]Vp/yOHx69e8Qbm2z%9t=E';
 
 // set up bodyParser
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,6 +43,7 @@ app.get('/', (req, res, next) => {
 
 // get route for high scores
 app.get('/highScore/:gameType', (req, res, next) => {
+
 	Leaderboard.findAll({
 		where: {
 			gameType: req.params.gameType
@@ -41,6 +57,10 @@ app.get('/highScore/:gameType', (req, res, next) => {
 
 // post route for new high score
 app.post('/newHighScore/:gameType/:time', (req, res, next) => {
+	if (!req.headers.authorization) {
+		return res.json({error: "Unauthorized"})
+	}
+
 	Leaderboard.create({
 		name: req.body.name,
 		time: req.params.time,
@@ -52,6 +72,10 @@ app.post('/newHighScore/:gameType/:time', (req, res, next) => {
 
 // put route for updating the number of times game has been played
 app.put('/incrementGame/:gameType', (req, res, next) => {
+	if (!req.headers.authorization) {
+		return res.json({error: "Unauthorized"})
+	}
+
 	if (req.params.gameType === 'SinglePlayer') {
 		GamesPlayed.findById(1)
 		.then(game => {

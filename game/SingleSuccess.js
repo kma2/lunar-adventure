@@ -4,6 +4,7 @@ let text = null;
 
 LunarAdventure.SingleSuccess.prototype = {
 	create: function() {
+
 		// array of high scores
 		let highScores;
 
@@ -149,7 +150,8 @@ LunarAdventure.SingleSuccess.prototype = {
 				fetch(`/newHighScore/SinglePlayer/${endGameTime}`, {
 					method: 'POST',
 					headers: {
-						"Content-type": "application/json; charset=UTF-8"
+						"Content-type": "application/json; charset=UTF-8",
+						"authorization": authorizationHeader
 					},
 					body: JSON.stringify({
 						name: userName
