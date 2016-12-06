@@ -80,7 +80,7 @@ LunarAdventure.Preload.prototype = {
 
 		// check if device is desktop or mobile device
 		if (this.game.device.desktop) {
-			this.state.start('MMainMenu');
+			this.state.start('MainMenu');
 		} else {
 			this.state.start('MMainMenu');
 		}

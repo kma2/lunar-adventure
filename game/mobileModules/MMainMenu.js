@@ -39,8 +39,6 @@ LunarAdventure.MMainMenu.prototype = {
 
 	update: function() {
 		terrain.body.rotation -= 0.003;
-		this.background.tilePosition.x += 0.2;
-		this.background.tilePosition.y -= 0.2;
 
 		if (this.game.input.activePointer.justPressed()) this.game.state.start('MGame');
 	},
