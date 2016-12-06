@@ -8,7 +8,10 @@ LunarAdventure.Cooperative.prototype = {
 
 		// update cooperative game count
 		fetch('/incrementGame/Cooperative', {
-			method: 'PUT'
+			method: 'PUT',
+			headers: {
+				"authorization": authorizationHeader
+			}
 		})
 		.catch(err => console.error('updating co-op did not work', err));
 

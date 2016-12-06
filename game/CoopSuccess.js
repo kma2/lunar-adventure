@@ -151,7 +151,8 @@ LunarAdventure.CoopSuccess.prototype = {
 				fetch(`/newHighScore/Cooperative/${endGameTime}`, {
 					method: 'POST',
 					headers: {
-						"Content-type": "application/json; charset=UTF-8"
+						"Content-type": "application/json; charset=UTF-8",
+						"authorization": authorizationHeader
 					},
 					body: JSON.stringify({
 						name: userName

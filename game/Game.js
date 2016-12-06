@@ -10,7 +10,10 @@ LunarAdventure.Game.prototype = {
 
 		// update single player game count
 		fetch('/incrementGame/SinglePlayer', {
-			method: 'PUT'
+			method: 'PUT',
+			headers: {
+				'authorization': authorizationHeader
+			}
 		})
 		.catch(err => console.error('updating single did not work', err));
 
