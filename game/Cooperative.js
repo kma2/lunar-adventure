@@ -517,32 +517,32 @@ LunarAdventure.Cooperative.prototype = {
 			if (obstacleOriginDirection > 0.5) {
 				this.generateTinyObstacles(1, -20 + Math.random() * -100, 450 + Math.random() * 200, 60 + Math.random() * 60, -15 + Math.random() * -10);
 			} else {
-				this.generateTinyObstacles(1, this.world.width + Math.random() * 100, 450 + Math.random() * 200, -60 + Math.random() * -60, -15 + Math.random() * -10);
+				this.generateTinyObstacles(1, 20 + this.world.width + Math.random() * 100, 450 + Math.random() * 200, -60 + Math.random() * -60, -15 + Math.random() * -10);
 			}
 		});
 
-		waveTwo = this.game.time.events.loop(3000, () => {
+		waveTwo = this.game.time.events.loop(3500, () => {
 			if (obstacleOriginDirection < 0.5) {
-				this.generateSmallObstacles(1, -80 + Math.random() * -100, 500 + Math.random() * 200,  50 + Math.random() * 60, -15 + Math.random() * -10);
+				this.generateSmallObstacles(1, -20 + Math.random() * -50, 500 + Math.random() * 200,  50 + Math.random() * 60, -15 + Math.random() * -10);
 			} else {
-				this.generateSmallObstacles(1, this.world.width + Math.random() * 100, 500 + Math.random() * 200, -50 + Math.random() * -60, -15 + Math.random() * -10);
+				this.generateSmallObstacles(1, 20 + this.world.width + Math.random() * 50, 500 + Math.random() * 200, -50 + Math.random() * -60, -15 + Math.random() * -10);
 			}
 		});
 
 		waveThree = this.game.time.events.loop(5000, () => {
 			if (obstacleOriginDirection > 0.5) {
-				this.generateMediumObstacles(1, -100 + Math.random() * -100, 450 + Math.random() * 200, 50 + Math.random() * 50, -20 + Math.random() * -10);
+				this.generateMediumObstacles(1, -20 + Math.random() * -100, 450 + Math.random() * 200, 50 + Math.random() * 50, -20 + Math.random() * -10);
 			} else {
-				this.generateMediumObstacles(1, this.world.width + Math.random() * 100, 450 + Math.random() * 200, -50 + Math.random() * -50, -20 + Math.random() * -10);
+				this.generateMediumObstacles(1, 20 + this.world.width + Math.random() * 100, 450 + Math.random() * 200, -50 + Math.random() * -50, -20 + Math.random() * -10);
 			}
 		});
 
-		waveFour = this.game.time.events.loop(8000, () => {
-			if (obstacleOriginDirection > 0.5) {
-				this.generateLargeObstacles(1, -200 + Math.random() * -100, 250 + Math.random() * 100, 40 + Math.random() * 30, -20 + Math.random() * -10);
-			} else {
-				this.generateLargeObstacles(1, 200 + this.world.width + Math.random() * 100, 250 + Math.random() * 100, -40 + Math.random() * -30, -20 + Math.random() * -10);
-			}
+		waveFour = this.game.time.events.loop(10000, () => {
+				this.generateLargeObstacles(1, 200 + this.world.width + Math.random() * 100, 200 + Math.random() * 80, -40 + Math.random() * -30, -20 + Math.random() * -10);
+		});
+
+		waveFive = this.game.time.events.loop(10000, () => {
+			this.generateLargeObstacles(1, -200 + Math.random() * -100, 200 + Math.random() * 80, 40 + Math.random() * 30, -20 + Math.random() * -10);
 		});
 	},
 
@@ -646,7 +646,7 @@ LunarAdventure.Cooperative.prototype = {
 			// ======== terrain rotation ========
 
 			// if landing pad is visible, use screen edge:
-			if (landingPad.body.y <= gameHeight && landingPad.body.x <= 1054 && landingPad.body.x >= 170) {
+			if (landingPad.body.y <= gameHeight && landingPad.body.x <= 1094 && landingPad.body.x >= 130) {
 				boundaryL.destroy();
 				boundaryR.destroy();
 
