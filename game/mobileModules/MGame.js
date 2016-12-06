@@ -10,7 +10,7 @@ LunarAdventure.MGame.prototype = {
 
 		let controlFontStyle = { font: "40px Asap", fill: "#fff"};
 
-		this.physics.p2.gravity.y = 70;
+		this.physics.p2.gravity.y = 90;
 		this.physics.p2.setImpactEvents(true);
 		gameWidth = this.world.width;
 		gameHeight = this.world.height;
@@ -79,21 +79,21 @@ LunarAdventure.MGame.prototype = {
 
 		// ======== create landing pad  ========
 		landingPad = this.add.sprite(centerX, 2000, 'landingPad');
-		landingPad.scale.setTo(0.2, 0.2);
+		landingPad.scale.setTo(0.8, 0.8);
 		this.physics.p2.enable(landingPad, false);
 		landingPad.body.static = true;
 
 
 		// ======== create virtual boundary  ========
-		boundaryL = this.add.sprite(width * 0.1, 0, 'boundary');
-		boundaryL.scale.setTo(width * 0.000555556, height * 0.00142857);
-		this.physics.p2.enable(boundaryL);
+		boundaryL = this.add.sprite(120, 0, 'boundary');
+		boundaryL.scale.setTo(width * 0.00002778, height * 0.001929);
+		this.physics.p2.enable(boundaryL, true);
 		boundaryL.body.static = true;
 
 
-		boundaryR = this.add.sprite(width * 0.89, 0, 'boundary');
-		boundaryR.scale.setTo(width * 0.000555556, height * 0.001428571)
-		this.physics.p2.enable(boundaryR);
+		boundaryR = this.add.sprite(1160, 0, 'boundary');
+		boundaryR.scale.setTo(width * 0.00002778, height * 0.001929);
+		this.physics.p2.enable(boundaryR, true);
 		boundaryR.body.static = true;
 
 		// ======== create pad ========
@@ -429,21 +429,6 @@ LunarAdventure.MGame.prototype = {
 			timerText.destroy()
 			timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
 
-			if (cursors.left.isDown) {
-				console.log(ship.body.angle)
-				ship.body.rotateLeft(100);
-			}
-			else if (cursors.right.isDown){
-				console.log(ship.body.angle)
-				ship.body.rotateRight(100);
-			}
-			else {
-				ship.body.setZeroRotation();
-			}
-			if (cursors.up.isDown){
-				ship.body.thrust(200);
-			}
-
 			let p1 = this.game.input.pointer1
 			let p2 = this.game.input.pointer2
 			if (p1.active) {
@@ -455,13 +440,8 @@ LunarAdventure.MGame.prototype = {
 			}
 
 			gyro.startTracking(function(o) {
-				if (ship.body) {
-					ship.body.angle = o.beta * 2
-				}
+				if (ship.body) { ship.body.angle = o.beta * 2 }
 			});
-
-			if (ship.body.rotation < -3.15) { ship.body.rotation = 3.15; }
-			if (ship.body.rotation > 3.15) { ship.body.rotation = -3.15; }
 
 			let radius = 820;
 
@@ -490,13 +470,11 @@ LunarAdventure.MGame.prototype = {
 
 				// RIGHT side of screen
 				if (ship.body.x >= 1252) {
-					timerText = this.game.add.text(centerX - 60, 100, ship.body.x, fontStyle)
 					this.rotateLandingPadLeft(radius, centerX, centerY);
-					this.rotateLandingArrow();
-					terrain.body.rotation -= 0.003;
+					terrain.body.rotation -= 0.004;
 
 				// add angular velocity so terrain continues to rotate slightly for smoother feel
-					terrain.body.angularVelocity += 0.002;
+					terrain.body.angularVelocity += 0.004;
 				}
 				// remove velocity once away from bound
 				if (ship.body.x <= 1252 || ship.body.x >= 1236) {
@@ -509,13 +487,11 @@ LunarAdventure.MGame.prototype = {
 				// rotate planet if ship is close to arrows
 				// 170 is world bound
 				if (ship.body.x <= 260) {
-					timerText = this.game.add.text(centerX - 60, 100, ship.body.x, fontStyle)
 					terrain.body.rotation += 0.003;
 					this.rotateLandingPadRight(radius, centerX, centerY);
-					this.rotateLandingArrow();
 
 					// add angular velocity so terrain continues to rotate slightly for smoother feel
-					terrain.body.angularVelocity += 0.002;
+					terrain.body.angularVelocity += 0.003;
 				}
 
 				// remove velocity once away from bound
@@ -527,10 +503,9 @@ LunarAdventure.MGame.prototype = {
 				if (ship.body.x >= 1029) {
 					terrain.body.rotation -= 0.003;
 					this.rotateLandingPadLeft(radius, centerX, centerY);
-					this.rotateLandingArrow();
 
 					//add angular velocity so terrain continues to rotate slightly for smoother feel
-					terrain.body.angularVelocity += 0.002;
+					terrain.body.angularVelocity += 0.003;
 				}
 
 					// remove velocity once away from bound
@@ -538,24 +513,9 @@ LunarAdventure.MGame.prototype = {
 					terrain.body.angularVelocity = 0;
 				}
 			}
-
-			// OLD TERRAIN ROTATION
-			// terrain spins when rocket nears the edges
-			// if (ship.world.x <= gameWidth/divide + 250 && ship.body.rotation < 0) {
-			// 	terrain.body.rotation += 0.003;
-			// 	this.rotateLandingPadRight(radius, centerX, centerY);
-			// 	tilesprite.tilePosition.x += 0.6;
-			// 	tilesprite.tilePosition.y -= 0.3;
-			// } else if (ship.world.x >= gameWidth/divide * (divide-1) - 250 && ship.body.rotation > 0) {
-			// 	this.rotateLandingPadLeft(radius, centerX, centerY);
-			// 	terrain.body.rotation -= 0.003;
-			// 	tilesprite.tilePosition.x -= 0.6;
-			// 	tilesprite.tilePosition.y -= 0.3;
-			// }
     }
 	},
 	right: function() {
-		console.log(this.game.input.pointer1)
 		ship.body.rotateLeft(100);
 	},
 	left: function() {
