@@ -2,7 +2,7 @@ var LunarAdventure = LunarAdventure || {};
 
 LunarAdventure.Game = function(){};
 
-let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0;
+let timeElapsedBeforeLanding = 10, globalTime = 0, frames = [ 1, 0, 5], penalty = 0, velocityAtBound = 0;
 
 LunarAdventure.Game.prototype = {
 
@@ -583,6 +583,12 @@ LunarAdventure.Game.prototype = {
     }
 
 		if (ship.body) {
+		// console.log( Math.abs(ship.body.velocity.x))
+			// console.log(velocityAtBound);
+			// grab ship x velocity before hitting bound to preserve
+			if (ship.body.x >= 260 && ship.body.x <= 270 || ship.body.x <= 1029 && ship.body.x >= 1019) {
+				velocityAtBound = Math.abs(ship.body.velocity.x)
+			}
 
 			// update the timer
 			timerText.destroy()
@@ -665,6 +671,10 @@ LunarAdventure.Game.prototype = {
 				// rotate planet if ship is close to arrows
 				// 170 is world bound
 				if (ship.body.x <= 260) {
+					// reset x velocity to what it was when you hit the bound
+					// ship.body.velocity.x = velocityAtBound;
+					// console.log('bound', ship.body.velocity.x)
+
 					terrain.body.rotation += 0.003;
 					this.rotateLandingPadRight(radius, centerX, centerY);
 					this.rotateLandingArrow();
@@ -679,6 +689,10 @@ LunarAdventure.Game.prototype = {
 
 				// RIGHT SIDE OF SCREEN
 				if (ship.body.x >= 1029) {
+					// reset x velocity to what it was when you hit the bound
+					// ship.body.velocity.x = velocityAtBound;
+					// console.log('bound', ship.body.velocity.x)
+					
 					terrain.body.rotation -= 0.003;
 					this.rotateLandingPadLeft(radius, centerX, centerY);
 					this.rotateLandingArrow();
