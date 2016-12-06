@@ -129,8 +129,6 @@ LunarAdventure.Game.prototype = {
 		this.physics.p2.enable(boundaryR);
 		boundaryR.body.static = true;
 
-		this.game.add.text(centerX - 60, 100, width * 0.00002778, fontStyle)
-		
 		// create bounds on sides of screen
 		this.physics.p2.setBoundsToWorld(true, true, true, true, true);
 
