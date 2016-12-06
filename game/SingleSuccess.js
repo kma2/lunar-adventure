@@ -139,7 +139,7 @@ LunarAdventure.SingleSuccess.prototype = {
 	update: function() {
 		terrain.body.rotation -= 0.003;
 
-		if (putHasRun !== true && formInput !== null) {
+		if (putHasRun !== true && formInput) {
 			userName = formInput.value;
 
 			// add the user's userName and time to db
