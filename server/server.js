@@ -38,17 +38,11 @@ app.use(express.static(resolve(__dirname, '..', 'public')))
 .use(express.static(resolve(__dirname, '..', 'node_modules')));
 
 app.get('/', (req, res, next) => {
-	if (!req.headers.authorization) {
-		return res.json({error: "Unauthorized"})
-	}
 	res.sendFile(resolve(__dirname, '..','public', 'index.html'));
 });
 
 // get route for high scores
 app.get('/highScore/:gameType', (req, res, next) => {
-	if (!req.headers.authorization) {
-		return res.json({error: "Unauthorized"})
-	}
 
 	Leaderboard.findAll({
 		where: {
@@ -102,10 +96,6 @@ app.put('/incrementGame/:gameType', (req, res, next) => {
 
 // get route for getting total game count
 app.get('/totalTimesPlayed', (req, res, next) => {
-	if (!req.headers.authorization) {
-		return res.json({error: "Unauthorized"})
-	}
-
 	GamesPlayed.findById(1)
 	.then(game => {
 		let results = {'Single Count': game.singleCount, 'Coop Count': game.coopCount, 'Total Count': game.totalCount}
