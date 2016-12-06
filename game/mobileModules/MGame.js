@@ -89,13 +89,13 @@ LunarAdventure.MGame.prototype = {
 		// ======== create virtual boundary  ========
 		boundaryL = this.add.sprite(120, 0, 'boundary');
 		boundaryL.scale.setTo(width * 0.00002778, height * 0.001929);
-		this.physics.p2.enable(boundaryL, true);
+		this.physics.p2.enable(boundaryL);
 		boundaryL.body.static = true;
 
 
 		boundaryR = this.add.sprite(1160, 0, 'boundary');
 		boundaryR.scale.setTo(width * 0.00002778, height * 0.001929);
-		this.physics.p2.enable(boundaryR, true);
+		this.physics.p2.enable(boundaryR);
 		boundaryR.body.static = true;
 
 		// ======== create pad ========
@@ -376,6 +376,19 @@ LunarAdventure.MGame.prototype = {
 			timerText.destroy()
 			timerText = this.game.add.text(centerX - 60, 32, ('Time :  ' + globalTime + 's'), fontStyle)
 
+			// for debug
+			if (cursors.left.isDown) {
+				ship.body.rotateLeft(100);
+			} else if (cursors.right.isDown){
+				ship.body.rotateRight(100);
+			} else {
+				ship.body.setZeroRotation();
+			}
+			// up key, accelerate
+			if (cursors.up.isDown){
+				ship.body.thrust(200);
+			}
+
 			let p1 = this.game.input.pointer1
 			let p2 = this.game.input.pointer2
 			if (p1.active) {
@@ -386,9 +399,9 @@ LunarAdventure.MGame.prototype = {
 				}
 			}
 
-			gyro.startTracking(function(o) {
-				if (ship.body) { ship.body.angle = o.beta * 2 }
-			});
+			// gyro.startTracking(function(o) {
+			// 	if (ship.body) { ship.body.angle = o.beta * 2 }
+			// });
 
 			let radius = 820;
 
