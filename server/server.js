@@ -13,7 +13,9 @@ const app = express();
 const http = require('http').Server(app);
 const PORT = process.env.PORT || 3000;
 
-const authorizationHeader = require('../public/Keys');
+// const authorizationHeader = require('../public/Keys');
+
+let authorizationHeader = 'Basic: ' + '5UmX^-6L]Vp/yOHx69e8Qbm2z%9t=E';
 
 // import API key generator
 // const uuid = require('node-uuid');
