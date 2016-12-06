@@ -127,7 +127,7 @@ function startServer() {
 			})
 			.catch((err) => console.error('Problem syncing database', err))
 		});
-	}	
+	}
 }
 
 startServer();

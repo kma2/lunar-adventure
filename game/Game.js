@@ -438,7 +438,7 @@ LunarAdventure.Game.prototype = {
 		if (ship.body) {
 			endGameTime = globalTime
 			// if ship lands carefully, the landing is successful
-			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 15 && Math.abs(ship.body.velocity.y) < 40) {
+			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 40) {
 				// disables the ship from moving
 				ship.body = null;
 				this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverSuccess, this);
