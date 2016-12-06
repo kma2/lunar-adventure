@@ -10,7 +10,10 @@ const Leaderboard = db.define('leaderboard', {
 	},
 	time: {
 		type: Sequelize.DOUBLE,
-		allowNull: false
+		allowNull: false,
+		validate: {
+			min: 0,
+		},
 	},
 	gameType: {
 		type: Sequelize.ENUM('SinglePlayer', 'Cooperative'),
