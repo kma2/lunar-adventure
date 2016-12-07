@@ -90,7 +90,6 @@ LunarAdventure.Cooperative.prototype = {
 
 		// ======== create ship, terrain, and landing pad ========
 		ship = this.add.sprite(gameWidth * 0.5, gameHeight * 0.2, 'ship');
-		// ship.scale.setTo(0.06, 0.06);
 		this.physics.p2.enable(ship, false);
 
 		landingPad = this.add.sprite(centerX, 2000, 'landingPad');
@@ -167,12 +166,12 @@ LunarAdventure.Cooperative.prototype = {
 
 
 		// ======== particle effects for time penalties ========
-		// emitter for 5 sec penalty
 		fivePenaltyEmitter = this.game.add.emitter(centerX + 50,32,5000);
 		fivePenaltyEmitter.makeParticles('penalty5');
 		fivePenaltyEmitter.minParticleScale = 0.1;
 		fivePenaltyEmitter.maxParticleScale = 0.1;
 		fivePenaltyEmitter.gravity = 50;
+
 
 		// ======== health bar UI ========
 		fullHealth = this.add.sprite(gameWidth - 190, 20, 'fullHealth');
@@ -645,12 +644,12 @@ LunarAdventure.Cooperative.prototype = {
 
 			// ======== terrain rotation ========
 
-			// if landing pad is visible, use screen edge:
+			// if landing pad is visible, use screen edge
 			if (landingPad.body.y <= gameHeight && landingPad.body.x <= 1094 && landingPad.body.x >= 130) {
 				boundaryL.destroy();
 				boundaryR.destroy();
 
-				// LEFT side of screen
+				// left
 				if (ship.body.x <= 27.5) {
 					terrain.body.rotation += 0.003;
 					this.rotateLandingPadRight(radius, centerX, centerY);
@@ -665,13 +664,13 @@ LunarAdventure.Cooperative.prototype = {
 					terrain.body.angularVelocity = 0;
 				}
 
-				// RIGHT side of screen
+				// right
 				if (ship.body.x >= 1252) {
 					this.rotateLandingPadLeft(radius, centerX, centerY);
 					this.rotateLandingArrow();
 					terrain.body.rotation -= 0.003;
 
-				// add angular velocity so terrain continues to rotate slightly for smoother feel
+					// add angular velocity for smoother rotation
 					terrain.body.angularVelocity += 0.002;
 				}
 				// remove velocity once away from bound
@@ -679,10 +678,9 @@ LunarAdventure.Cooperative.prototype = {
 					terrain.body.angularVelocity = 0;
 				}
 
-			// if landing pad is NOT visible, use larger area:
+			// if landing pad is NOT visible, use larger area
 			} else {
-				// LEFT SIDE OF SCREEN
-				// rotate planet if ship is close to arrows
+				// left
 				// 170 is world bound
 				if (ship.body.x <= 260) {
 					terrain.body.rotation += 0.003;
@@ -697,7 +695,7 @@ LunarAdventure.Cooperative.prototype = {
 					terrain.body.angularVelocity = 0;
 				}
 
-				// RIGHT SIDE OF SCREEN
+				// right
 				if (ship.body.x >= 1029) {
 					terrain.body.rotation -= 0.003;
 					this.rotateLandingPadLeft(radius, centerX, centerY);

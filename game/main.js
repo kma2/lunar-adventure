@@ -12,7 +12,7 @@ WebFontConfig = {
   }
 };
 
-// setup global variables
+// global variables
 var textStyle = function(size, color) {
 	var color = color === 'black' ? "#444" : "#ddd"
 	return { font: `${size}px Arial`, fill: color, align: "center" }
