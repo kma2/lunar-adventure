@@ -254,7 +254,7 @@ LunarAdventure.MGame.prototype = {
 		ship.destroy();
 		explosion = this.add.sprite(posX - 30, posY, 'explosion')
 		explosion.scale.setTo(0.05, 0.05);
-		this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+		this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverCrash, this);
 	},
 
 	hitObstacle: function(body1, body2) {
@@ -266,7 +266,7 @@ LunarAdventure.MGame.prototype = {
 		if (ship.body) {
 			endGameTime = globalTime;
 			// if ship lands carefully, the landing is successful
-			if (ship.angle < 20 && ship.angle > -20 && Math.abs(ship.body.velocity.x) < 20 && Math.abs(ship.body.velocity.y) < 20) {
+			if (ship.angle < 25 && ship.angle > -25 && Math.abs(ship.body.velocity.x) < 25 && Math.abs(ship.body.velocity.y) < 50) {
 				endGameTime = globalTime
 				console.log('ship landing successful');
 				ship.body = null; // disables the ship from moving
@@ -280,7 +280,7 @@ LunarAdventure.MGame.prototype = {
 				console.log(ship.body)
 				explosion = this.add.sprite(posX - 30, posY, 'explosion')
 				explosion.scale.setTo(0.05, 0.05);
-				this.game.time.events.add(Phaser.Timer.SECOND * 1, this.gameOverCrash, this);
+				this.game.time.events.add(Phaser.Timer.SECOND, this.gameOverCrash, this);
 			}
 		}
 	},
