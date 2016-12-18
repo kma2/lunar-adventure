@@ -132,8 +132,6 @@ LunarAdventure.HowToPlay.prototype = {
 
 	update: function() {
 		terrain.body.rotation -= 0.003;
-		// this.background.tilePosition.x += 0.2;
-		// this.background.tilePosition.y -= 0.2;
 
 		// ======== key controls ========
 		if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown) {

@@ -1,8 +1,8 @@
 {
   "name": "Lunar-Adventure",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "A modern twist on the classic Lunar Lander game",
+  "main": "server/server.js",
   "scripts": {
     "start": "nodemon server/server.js",
     "test": "mocha --watch tests/{*,**/*}.spec.js"

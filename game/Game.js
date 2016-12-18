@@ -366,7 +366,6 @@ LunarAdventure.Game.prototype = {
 		hitObstacle: function(body1, body2) {
 	    if(!this.invulnerable){
 	      this.lifeCounter--;
-	      console.log("LIFE COUNTER IS", this.lifeCounter);
 	      this.fullHealth.alpha = 0;
 	      this.oneHealth.alpha = 0;
 
@@ -684,7 +683,6 @@ LunarAdventure.Game.prototype = {
 			} else {
 				// LEFT SIDE OF SCREEN
 				// rotate planet if ship is close to arrows
-				// 170 is world bound
 				if (ship.body.x <= 260) {
 					terrain.body.rotation += 0.003;
 					this.rotateLandingPadRight(radius, centerX, centerY);
